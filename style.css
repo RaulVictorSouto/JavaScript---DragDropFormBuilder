@@ -1,0 +1,16 @@
+body {
+    background-color: #f8f9fa; 
+    color: #343a40; 
+}
+
+.drop-area {
+    min-height: 200px;
+    border: 2px dashed #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.table-container {
+    max-height: 700px; 
+    overflow-y: auto;
+}

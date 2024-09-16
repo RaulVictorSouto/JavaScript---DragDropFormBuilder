@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- Adicionando o arquivo CSS externo -->
+    <title>Form Builder</title>
+</head>
+<body class="bg-light text-dark">
+    <main class="container mt-5">
+        <h1 class="text-center">Drag and Drop</h1><br><br>
+        
+        <div class="row">
+            <div class="col-lg-9 mb-3">
+                <div class="table-container">
+                    <div class="drop-area" ondrop="drop(event)" ondragover="allowDrop(event)" id="box1">
+                        <table class="table table-bordered" id="dropTable">
+                            <tbody>
+                                <tr>
+                                    <td ondragenter="back()">
+                                        <p id="hop">Arraste um campo para esta área</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <ul class="list-group">
+                    <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='form-group'><label for='usr'>Nome:</label><input type='text' class='form-control' id='usr' name='username'></div>">Nome</li>
+                    <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='form-group'><label for='usr'>Texto:</label><input type='text' class='form-control' id='usr' name='username'></div>">Texto</li>
+                </ul>
+            </div>
+        </div>
+        <div class="fixed-bottom text-center mb-3">
+            <button class="btn btn-primary mx-2" onclick="addRow()">Adicionar Linha</button>
+            <button class="btn btn-secondary mx-2" onclick="addColumn()">Adicionar Coluna</button>
+        </div>
+    </main>
+
+    <script>
+        function back() {
+            document.getElementById("box1").style.background = "none";
+            document.getElementById("hop").style.display = "none";
+            document.getElementById("box1").style.border = "none";
+        }
+        
+        function allowDrop(g) {
+            g.preventDefault();
+        }
+
+        function drag(g) {
+            g.dataTransfer.setData("a", g.target.id);
+        }
+
+        function drop(g) {
+            g.preventDefault();
+            var data = g.dataTransfer.getData("a");
+            var getinput = document.getElementById(data).getAttribute('data-input');
+            var maindiv = g.target;
+            if (maindiv.tagName === 'TD') {
+                maindiv.innerHTML += getinput;
+            }
+        }
+
+        function addRow() {
+            var table = document.getElementById("dropTable").getElementsByTagName('tbody')[0];
+            var row = table.insertRow();
+            var cell = row.insertCell(0);
+            cell.ondrop = drop;
+            cell.ondragover = allowDrop;
+        }
+
+        function addColumn() {
+            var table = document.getElementById("dropTable");
+            var rows = table.rows;
+            for (var i = 0; i < rows.length; i++) {
+                var cell = rows[i].insertCell();
+                cell.addEventListener('drop', drop);
+                cell.addEventListener('dragover', allowDrop);
+            }
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
