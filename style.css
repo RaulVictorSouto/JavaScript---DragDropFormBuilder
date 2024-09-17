@@ -10,7 +10,27 @@ body {
     text-align: center;
 }
 
+.drop-area.dragover {
+    background-color: #f0f0f0;
+}
+
 .table-container {
     max-height: 700px; 
     overflow-y: auto;
+}
+
+.inline-element {
+    display: inline-block;
+    margin-right: 10px;
+    /* Remover width: 100% se não for necessário */
+    /* width: 100%; */ 
+}
+
+.btn-remove {
+    margin-top: 5px;
+}
+
+.conteudo {
+    display: flex; /* Usando flexbox para alinhar os elementos em linha */
+    flex-wrap: wrap; /* Permite que os elementos se movam para a linha seguinte se não houver espaço suficiente */
 }
