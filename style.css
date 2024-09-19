@@ -5,17 +5,19 @@
     flex-wrap: wrap;
 }
 
-.conteudo input {
-    flex: 1;
-}
-
 .conteudo_inserido{
     flex: 1;
-    display: inline-flex;
     flex-direction: column;
     padding: 5px;
     text-align: start;
+    align-items: baseline;
+    width: 100%;
 }
+
+.conteudo_inserido input{
+    flex: 1;
+}
+
 
 .drop-area {
     width: 100%; /* Define a largura da área de drop como 90% da tela */
@@ -45,7 +47,18 @@
     flex-wrap: wrap;
 }
 
+.components-container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 .container-fluid {
     width: 100%; /* Define a largura desejada */
     margin: 0 auto; /* Centraliza o container */
 }
+
+.remove-row-button{
+    margin-bottom: 10px;
+}
+
