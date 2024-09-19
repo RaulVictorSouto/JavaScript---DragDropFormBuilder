@@ -5,103 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <title>Form Builder</title>
-    <style>
-        .inline-element {
-            display: inline-block;
-            margin-right: 10px;
-        }
-    </style>
 </head>
 <body class="bg-light text-dark">
     <main class="container mt-5">
         <h1 class="text-center">Drag and Drop</h1><br><br>
-        
-        <div class="row">
-            <div class="col-lg-9 mb-3">
-                <div class="table-container">
-                    <div class="drop-area" id="box1">
-                        <table class="table table-bordered" id="dropTable">
-                            <tbody>
-                                <tr>
-                                    <td ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
-                                        <p id="hop">Arraste um campo para esta área</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+        <div class="container-fluid">
+            <div class="row justify-content-around">
+                <!-- Ajusta a largura da drop-area para 90% da tela -->
+                <div class="col-lg-10">
+                    <div class="drop-area" id="box1" ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
+                        <!-- A primeira row é criada automaticamente -->
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <ul class="list-group">
-                    <li class="list-group-item draggable-item" id="linha" draggable="true" ondragstart="drag(event)" data-type="row">Linha</li>
-                    <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div class='inline-element'><label for='nome'>Nome:</label><input type='text' class='form-control' id='nome' name='nome'></div></div>" data-type="input">Nome</li>
-                    <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div class='inline-element'><label for='texto'>Texto:</label><input type='text' class='form-control' id='texto' name='texto'></div></div>" data-type="input">Texto</li>
-                    <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div class='inline-element'><label for='email'>Email:</label><input type='email' class='form-control' id='email' name='email'></div></div>" data-type="input">Email</li>
-                    <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div class='inline-element'><label for='senha'>Senha:</label><input type='password' class='form-control' id='senha' name='senha'></div></div>" data-type="input">Senha</li>
-                </ul>
+                
+                <div class="col-lg-2">
+                    <button class="btn btn-primary mb-3" onclick="addRow()">Adicionar Linha</button>
+                    <ul class="list-group">
+                        <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='nome'>Nome:</label><input type='text' class='form-control' id='nome' name='nome'></div>" data-type="input">Nome</li>
+                        <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='texto'>Texto:</label><input type='text' class='form-control' id='texto' name='texto'></div>" data-type="input">Texto</li>
+                        <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='email'>Email:</label><input type='email' class='form-control' id='email' name='email'></div>" data-type="input">Email</li>
+                        <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='senha'>Senha:</label><input type='password' class='form-control' id='senha' name='senha'></div>" data-type="input">Senha</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </main>
 
-    <script>
-        function back() {
-            document.getElementById("box1").style.background = "none";
-            document.getElementById("hop").style.display = "none";
-            document.getElementById("box1").style.border = "none";
-        }
-
-        function allowDrop(event) {
-            event.preventDefault();
-            event.target.classList.add('dragover');
-        }
-
-        function drag(event) {
-            event.dataTransfer.setData("a", event.target.id);
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            event.target.classList.remove('dragover');
-            var data = event.dataTransfer.getData("a");
-            var elementType = document.getElementById(data).getAttribute('data-type');
-            var getinput = document.getElementById(data).getAttribute('data-input');
-            var maindiv = event.target;
-
-            if (elementType === "row") {
-                addRow(); // Cria uma nova linha
-            } else if (elementType === "input") {
-                if (maindiv.tagName === 'TD') {
-                    // Adiciona o input como um elemento flex na célula
-                    var newElement = document.createElement('div');
-                    newElement.innerHTML = getinput + getRemoveButton();
-                    maindiv.appendChild(newElement);
-                }
-            }
-        }
-
-        function addRow() {
-            var table = document.getElementById("dropTable").getElementsByTagName('tbody')[0];
-            var row = table.insertRow();
-            var cells = table.rows[0]?.cells.length || 1; // Obtém o número de células da primeira linha ou usa 1 se a tabela estiver vazia
-            for (var i = 0; i < cells; i++) {
-                var cell = row.insertCell();
-                cell.ondrop = drop;
-                cell.ondragover = allowDrop;
-            }
-        }
-
-        function getRemoveButton() {
-            return '<button class="btn btn-danger btn-sm btn-remove" onclick="removeComponent(this)">Remover</button>';
-        }
-
-        function removeComponent(button) {
-            var element = button.parentElement;
-            element.remove(); // Remove o elemento do DOM
-        }
-    </script>
-
+    <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
