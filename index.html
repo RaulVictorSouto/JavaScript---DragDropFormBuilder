@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Form Builder</title>
 </head>
@@ -15,19 +16,25 @@
         <div class="container-fluid">
             <div class="row justify-content-around">
                 <!-- Ajusta a largura da drop-area para 90% da tela -->
-                <div class="col-lg-9">
+                <div class="col-lg-10">
                     <div class="drop-area" id="box1" ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
                         <!-- A primeira row é criada automaticamente -->
                     </div>
                 </div>
                 
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <button class="btn btn-primary mb-3" onclick="addRow()">Adicionar Linha</button>
                     <ul class="list-group">
                         <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='nome'>Nome:</label><input type='text' class='form-control' id='nome' name='nome'></div>" data-type="input">Nome</li>
-                        <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='texto'>Texto:</label><input type='text' class='form-control' id='texto' name='texto'></div>" data-type="input">Texto</li>
                         <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='email'>Email:</label><input type='email' class='form-control' id='email' name='email'></div>" data-type="input">Email</li>
                         <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='senha'>Senha:</label><input type='password' class='form-control' id='senha' name='senha'></div>" data-type="input">Senha</li>
+                        <li class="list-group-item draggable-item" id="in5" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='dropdown'>Escolha uma opção:</label><select class='form-control' id='dropdown' name='dropdown'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option><option value='op3'>Opção 3</option></select></div>" data-type="select">Dropdown</li>
+                        <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='checkbox'>Marque se verdadeiro:</label><input type='checkbox' id='checkbox' name='checkbox'></div>" data-type="checkbox">Checkbox</li>
+                        <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='radioGroup'>Escolha uma opção:</label><div><input type='radio' id='radio1' name='radioGroup' value='1'> Opção 1</div><div><input type='radio' id='radio2' name='radioGroup' value='2'> Opção 2</div></div>" data-type="radio">Radio Buttons</li>
+                        <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='textarea'>Texto adicional:</label><textarea class='form-control' id='textarea' name='textarea'></textarea></div>" data-type="textarea">Área de Texto</li>
+                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='date'>Escolha uma data:</label><input type='date' class='form-control' id='date' name='date'></div>" data-type="date">Data</li>    
+                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='file'>Envio de arquivo:</label><input type='file' class='form-control' id='file' name='file'></div>" data-type="file">Upload de Arquivo</li>
+                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-success'>Enviar</button></div>" data-type="button">Botão</li>
                     </ul>
                 </div>
             </div>

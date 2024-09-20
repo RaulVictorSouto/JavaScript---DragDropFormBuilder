@@ -24,9 +24,7 @@ function drop(event) {
     var getinput = document.getElementById(data).getAttribute('data-input');
 
     // Identifica a linha onde o componente foi solto
-    var dropArea = document.getElementById("box1");
     var targetRow = event.target.closest('.form_row');
-
     if (!targetRow) {
         alert('Adicione uma linha primeiro!');
         return;
@@ -35,7 +33,7 @@ function drop(event) {
     // Adiciona o componente na linha correta
     var newElement = document.createElement('div');
     newElement.classList.add('conteudo_inserido');
-    newElement.innerHTML = getinput + getRemoveButton();
+    newElement.innerHTML = getinput + getEditButton() + getRemoveButton() + getMoveButton();
     targetRow.querySelector('.components-container').appendChild(newElement);
 }
 
@@ -54,7 +52,7 @@ function addRow() {
     // Cria o botão de remoção de linha
     var removeRowButton = document.createElement('button');
     removeRowButton.classList.add('btn', 'btn-danger', 'btn-sm', 'btn-remove', 'remove-row-button');
-    removeRowButton.innerHTML = 'X';
+    removeRowButton.innerHTML = '<i class="bi bi-x"></i>';
     removeRowButton.onclick = function() {
         removeRow(row);
     };
@@ -63,11 +61,15 @@ function addRow() {
     row.appendChild(removeRowButton);
     row.appendChild(componentsContainer);
     
+    // Definir eventos de "drop" na linha para que componentes possam ser movidos
+    row.ondrop = dropComponentInRow;
+    row.ondragover = allowDrop;
+
     dropArea.appendChild(row);
 }
 
 function getRemoveButton() {
-    return '<button class="btn btn-danger btn-sm btn-remove" onclick="removeComponent(this)">Remover</button>';
+    return '<button class="btn btn-danger btn-sm btn-remove bi bi-x" onclick="removeComponent(this)"></button>';
 }
 
 function removeComponent(button) {
@@ -80,7 +82,7 @@ function removeRow(row) {
 }
 
 function getEditButton() {
-    return '<button class="btn btn-info btn-sm btn-edit" onclick="editComponent(this)">Editar</button>';
+    return '<button class="btn btn-info btn-sm btn-edit bi bi-pencil-square" onclick="editComponent(this)"></button>';
 }
 
 function editComponent(button) {
@@ -109,22 +111,58 @@ function saveChanges() {
     $('#editComponentModal').modal('hide');
 }
 
-function drop(event) {
-    event.preventDefault();
-    event.target.classList.remove('dragover');
-    var data = event.dataTransfer.getData("a");
-    var getinput = document.getElementById(data).getAttribute('data-input');
-
-    var targetRow = event.target.closest('.form_row');
-    if (!targetRow) {
-        alert('Adicione uma linha primeiro!');
-        return;
-    }
-
-    // Adiciona o componente com os botões de editar e remover
-    var newElement = document.createElement('div');
-    newElement.classList.add('conteudo_inserido');
-    newElement.innerHTML = getinput + getEditButton() + getRemoveButton();
-    targetRow.querySelector('.components-container').appendChild(newElement);
+function getMoveButton() {
+    return '<button class="btn btn-warning btn-sm btn-move bi bi-arrows-move" onmousedown="moveComponent(this)" onmouseup="stopMove()"></button>';
 }
 
+function moveComponent(button) {
+    var element = button.parentElement;
+
+    // Definir o elemento como "arrastável"
+    element.setAttribute('draggable', 'true');
+    element.addEventListener('dragstart', dragComponent);
+
+    // Reduzir a opacidade do componente para indicar que ele está sendo movido
+    element.style.opacity = "0.5";
+    
+    // Armazenar referência ao elemento sendo movido
+    window.currentMovingElement = element;
+}
+
+function stopMove() {
+    // Interromper o arrasto
+    if (window.currentMovingElement) {
+        window.currentMovingElement.setAttribute('draggable', 'false');
+        window.currentMovingElement.style.opacity = "1";
+        window.currentMovingElement = null;
+    }
+}
+
+function dragComponent(event) {
+    event.dataTransfer.setData("component", window.currentMovingElement.innerHTML);
+}
+
+function dropComponentInRow(event) {
+    event.preventDefault();
+    event.target.classList.remove('dragover');
+
+    // Checar se o elemento está sendo movido
+    if (window.currentMovingElement) {
+        var targetRow = event.target.closest('.form_row');
+
+        if (!targetRow) {
+            alert('Adicione uma linha primeiro!');
+            return;
+        }
+
+        // Criar um novo elemento na nova linha com os mesmos dados
+        var newElement = document.createElement('div');
+        newElement.classList.add('conteudo_inserido');
+        newElement.innerHTML = window.currentMovingElement.innerHTML;
+        targetRow.querySelector('.components-container').appendChild(newElement);
+
+        // Remover o componente da linha anterior
+        window.currentMovingElement.remove();
+        window.currentMovingElement = null;
+    }
+}
