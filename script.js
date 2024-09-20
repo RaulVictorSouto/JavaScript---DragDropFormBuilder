@@ -78,3 +78,53 @@ function removeComponent(button) {
 function removeRow(row) {
     row.remove();
 }
+
+function getEditButton() {
+    return '<button class="btn btn-info btn-sm btn-edit" onclick="editComponent(this)">Editar</button>';
+}
+
+function editComponent(button) {
+    var element = button.parentElement;
+    var currentName = element.querySelector('label').innerText;
+
+    // Definir o nome atual no modal
+    document.getElementById('componentName').value = currentName;
+
+    // Abrir o modal de edição
+    $('#editComponentModal').modal('show');
+
+    // Salvar referência ao elemento sendo editado
+    window.currentEditingElement = element;
+}
+
+function saveChanges() {
+    var newName = document.getElementById('componentName').value;
+
+    // Atualizar o nome do componente
+    if (window.currentEditingElement) {
+        window.currentEditingElement.querySelector('label').innerText = newName;
+    }
+
+    // Fechar o modal
+    $('#editComponentModal').modal('hide');
+}
+
+function drop(event) {
+    event.preventDefault();
+    event.target.classList.remove('dragover');
+    var data = event.dataTransfer.getData("a");
+    var getinput = document.getElementById(data).getAttribute('data-input');
+
+    var targetRow = event.target.closest('.form_row');
+    if (!targetRow) {
+        alert('Adicione uma linha primeiro!');
+        return;
+    }
+
+    // Adiciona o componente com os botões de editar e remover
+    var newElement = document.createElement('div');
+    newElement.classList.add('conteudo_inserido');
+    newElement.innerHTML = getinput + getEditButton() + getRemoveButton();
+    targetRow.querySelector('.components-container').appendChild(newElement);
+}
+
