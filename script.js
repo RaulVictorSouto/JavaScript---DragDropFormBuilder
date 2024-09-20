@@ -97,6 +97,9 @@ function editComponent(button) {
     } else if (element.querySelector('button') && button !== element.querySelector('button')) {
         // Se for um botão
         targetElement = element.querySelector('button');
+    } else if (element.querySelector('select')) {
+        // Se for um dropdown, pegar o label correspondente
+        targetElement = element.querySelector('label');
     }
 
     // Se encontrou o elemento correto, continua com a edição
