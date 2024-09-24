@@ -51,14 +51,23 @@ function addRow() {
 
     // Cria o botão de remoção de linha
     var removeRowButton = document.createElement('button');
-    removeRowButton.classList.add('btn', 'btn-danger', 'btn-sm', 'btn-remove', 'remove-row-button');
+    removeRowButton.classList.add('btn', 'btn-secondary', 'btn-sm', 'btn-remove', 'remove-row-button');
     removeRowButton.innerHTML = '<i class="bi bi-x"></i>';
     removeRowButton.onclick = function() {
         removeRow(row);
     };
 
+    // Cria o botão de movimentação de linha
+    var moveRowButton = document.createElement('button');
+    moveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'btn-remove', 'remove-row-button');
+    moveRowButton.innerHTML = '<i class="bi bi-arrows-move"></i>';
+    moveRowButton.ondragstart = function(e) {
+        startDragRow(e, row);
+    };
+
     // Adiciona o botão de remoção à esquerda do contêiner de componentes
     row.appendChild(removeRowButton);
+    row.appendChild(moveRowButton);
     row.appendChild(componentsContainer);
     
     // Definir eventos de "drop" na linha para que componentes possam ser movidos
@@ -68,8 +77,43 @@ function addRow() {
     dropArea.appendChild(row);
 }
 
+//comandos para mover linhas
+let draggedRow = null;
+
+function startDragRow(e, row) {
+    draggedRow = row;
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function dropRow(e) {
+    e.preventDefault();
+    if (draggedRow) {
+        const allRows = [...document.querySelectorAll('.form_row')];
+        const afterElement = getDragAfterElement(allRows, e.clientY);
+        if (afterElement) {
+            afterElement.parentNode.insertBefore(draggedRow, afterElement);
+        } else {
+            e.target.appendChild(draggedRow);
+        }
+    }
+    draggedRow = null; // Limpa a variável após o drop
+}
+
+// Função para identificar o elemento após o qual a linha arrastada deve ser colocada
+function getDragAfterElement(rows, y) {
+    return rows.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2; // Calcula a posição do mouse em relação ao meio do elemento
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child }; // Se o offset é menor que o atual, atualiza
+        } else {
+            return closest; // Caso contrário, mantém o mais próximo encontrado
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element; // Inicializa com um valor baixo
+}
+
 function getRemoveButton() {
-    return '<button class="btn btn-danger btn-sm btn-remove bi bi-x" onclick="removeComponent(this)"></button>';
+    return '<button class="btn btn-secondary btn-sm btn-remove bi bi-x" onclick="removeComponent(this)"></button>';
 }
 
 function removeComponent(button) {
@@ -78,7 +122,7 @@ function removeComponent(button) {
 }
 
 function removeRow(row) {
-    row.remove();
+    row.parentNode.removeChild(row);
 }
 
 function getEditButton() {
@@ -131,7 +175,7 @@ function saveChanges() {
 
 
 function getMoveButton() {
-    return '<button class="btn btn-warning btn-sm btn-move bi bi-arrows-move" onmousedown="moveComponent(this)" onmouseup="stopMove()"></button>';
+    return '<button class="btn btn-info btn-sm btn-move bi bi-arrows-move" onmousedown="moveComponent(this)" onmouseup="stopMove()"></button>';
 }
 
 function moveComponent(button) {
