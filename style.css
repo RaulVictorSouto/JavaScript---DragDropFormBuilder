@@ -34,17 +34,21 @@
     border-color: #2196f3;
 }
 
-.btn-remove {
-    margin-top: 5px;
-    margin-right: 5px;
-}
-
 .form_row {
     margin-bottom: 10px;
     padding: 5px;
     border: 1px dashed #bbb;
     display: flex;
     flex-wrap: wrap;
+}
+
+.btn-remove {
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.btn-move{
+    margin-top: 5px;
 }
 
 .components-container{
@@ -67,6 +71,15 @@
     margin-right: 5px;
 }
 
-.btn-move{
+.buttons-container {
+    display: flex; /* Usando flexbox para alinhar os botões */
+    margin-bottom: 20px;
     margin-top: 5px;
 }
+
+.buttons-container .btn {
+    flex: 1; /* Faz com que todos os botões ocupem o mesmo espaço */
+    margin: 0 5px; /* Adiciona uma margem entre os botões */
+}
+
+

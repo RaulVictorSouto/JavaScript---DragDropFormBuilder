@@ -32,13 +32,6 @@ function drop(event) {
     targetRow.querySelector('.components-container').appendChild(newElement);
 }
 
-//comandos para mover linhas
-let draggedRow = null;
-
-function startDragRow(e, row) {
-    draggedRow = row;
-    e.dataTransfer.effectAllowed = 'move';
-}
 function dropRow(e) {
     e.preventDefault();
     if (draggedRow) {
