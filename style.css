@@ -82,4 +82,7 @@
     margin: 0 5px; /* Adiciona uma margem entre os botões */
 }
 
-
+.list-group{
+    max-height: 550px; 
+    overflow-y: auto; 
+}

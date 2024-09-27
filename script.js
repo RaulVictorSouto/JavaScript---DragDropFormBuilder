@@ -70,51 +70,6 @@ function getEditButton() {
     return '<button class="btn btn-info btn-sm btn-edit bi bi-pencil-square" onclick="editComponent(this)"></button>';
 }
 
-function editComponent(button) {
-    var element = button.parentElement;
-
-    // Verifica se o componente contém um botão, mas ignora os botões de editar/remover
-    var targetElement;
-
-    if (element.querySelector('input')) {
-        // Se for um campo de input, pegar o label correspondente
-        targetElement = element.querySelector('label');
-    } else if (element.querySelector('button') && button !== element.querySelector('button')) {
-        // Se for um botão
-        targetElement = element.querySelector('button');
-    } else if (element.querySelector('select')) {
-        // Se for um dropdown, pegar o label correspondente
-        targetElement = element.querySelector('label');
-    }
-
-    // Se encontrou o elemento correto, continua com a edição
-    if (targetElement) {
-        var currentName = targetElement.innerText;
-
-        // Definir o nome atual no modal
-        document.getElementById('componentName').value = currentName;
-
-        // Abrir o modal de edição
-        $('#editComponentModal').modal('show');
-
-        // Salvar referência ao elemento sendo editado
-        window.currentEditingElement = targetElement;
-    }
-}
-
-function saveChanges() {
-    var newName = document.getElementById('componentName').value;
-
-    // Atualizar o texto do componente (botão ou label)
-    if (window.currentEditingElement) {
-        window.currentEditingElement.innerText = newName;
-    }
-
-    // Fechar o modal
-    $('#editComponentModal').modal('hide');
-}
-
-
 function getMoveButton() {
     return '<button class="btn btn-info btn-sm btn-move bi bi-arrows-move" onmousedown="moveComponent(this)" onmouseup="stopMove()"></button>';
 }

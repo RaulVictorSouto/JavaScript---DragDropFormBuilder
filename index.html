@@ -25,55 +25,125 @@
                 <div class="col-lg-2">
                     <button class="btn btn-primary mb-3" onclick="addRow()">Adicionar Linha</button>
                     <ul class="list-group">
-                        <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='titulo'>Nome:</label></div>" data-type="input">Titulo</li>
-                        <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='email'>Email:</label><input type='email' class='form-control' id='email' name='email'></div>" data-type="input">Email</li>
-                        <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='senha'>Senha:</label><input type='password' class='form-control' id='senha' name='senha'></div>" data-type="input">Senha</li>
-                        <li class="list-group-item draggable-item" id="in5" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='dropdown'>Escolha uma opção:</label><select class='form-control' id='dropdown' name='dropdown'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option><option value='op3'>Opção 3</option></select></div>" data-type="select">Dropdown</li>
-                        <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='checkbox'>Marque se verdadeiro: </label><input type='checkbox' id='checkbox' name='checkbox'></div>" data-type="checkbox">Checkbox</li>
-                        <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='radioGroup'>Escolha uma opção:</label><div><input type='radio' id='radio1' name='radioGroup' value='1'> Opção 1</div><div><input type='radio' id='radio2' name='radioGroup' value='2'> Opção 2</div></div>" data-type="radio">Radio Buttons</li>
-                        <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='textarea'>Texto adicional:</label><textarea class='form-control' id='textarea' name='textarea'></textarea></div>" data-type="textarea">Área de Texto</li>
-                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='date'>Escolha uma data:</label><input type='date' class='form-control' id='date' name='date'></div>" data-type="date">Data</li>    
-                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='file'>Envio de arquivo:</label><input type='file' class='form-control' id='file' name='file'></div>" data-type="file">Upload de Arquivo</li>
-                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-success'>Enviar</button></div>" data-type="button">Botão</li>
+                        <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><h3>Título</h3></div>" data-type="title">Título</li>
+                        <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div style='height: 20px;'></div>" data-type="empty-space">Espaço Vazio</li>
+                        <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-primary'>Botão</button></div>" data-type="button">Botão</li>
+                        <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaTexto'>Texto:</label><input type='text' class='form-control' id='caixaTexto' name='texto'></div>" data-type="input">Caixa de Texto</li>
+                        <li class="list-group-item draggable-item" id="in5" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='switch'>Marque a opção: </label><input type='checkbox' class='switch' id='switch' name='switch'></div>" data-type="switch">Caixa de Marcação (Switch)</li>
+                        <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaSelecao'>Escolha uma opção:</label><select class='form-control' id='caixaSelecao' name='caixaSelecao'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option></select></div>" data-type="select">Caixa de Seleção</li>
+                        <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
+                        <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>
+                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numero'>Número:</label><input type='number' class='form-control' id='numero' name='numero'></div>" data-type="number">Campo de Número</li>
+                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='data'>Data:</label><input type='date' class='form-control' id='data' name='data'></div>" data-type="date">Campo de Data</li>
+                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='hora'>Hora:</label><input type='time' class='form-control' id='hora' name='hora'></div>" data-type="time">Campo de Hora</li>
+                        <li class="list-group-item draggable-item" id="in12" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='url'>URL:</label><input type='url' class='form-control' id='url' name='url'></div>" data-type="url">Campo de URL</li>
+                        <li class="list-group-item draggable-item" id="in13" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
+                        <li class="list-group-item draggable-item" id="in14" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
+                        <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
                     </ul>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal de Edição de Componente -->
-    <div class="modal fade" id="editComponentModal" tabindex="-1" aria-labelledby="editComponentLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editComponentLabel">Editar Componente</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm">
-                        <div class="form-group">
-                            <label for="componentId">Nome</label>
-                            <input type="text" class="form-control" id="componentId" readonly> <!-- Campo ID, somente leitura -->
-                        </div>
-                        <div class="form-group">
-                            <label for="componentName">Texto</label>
-                            <input type="text" class="form-control" id="componentName">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Salvar Alterações</button>
-                </div>
+  <!-- Modal de Edição de Componente -->
+<div class="modal fade" id="editComponentModal" tabindex="-1" aria-labelledby="editComponentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editComponentLabel">Editar Componente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="componentId">Nome</label>
+                        <input type="text" class="form-control" id="componentId" readonly> <!-- Campo ID, somente leitura -->
+                    </div>
+                    <div class="form-group">
+                        <label for="componentName">Texto</label>
+                        <input type="text" class="form-control" id="componentName">
+                    </div>
+
+                    <!-- Tamanho da Fonte -->
+                    <div class="form-group">
+                        <label for="fontSize">Tamanho da Fonte (px)</label>
+                        <input type="number" class="form-control" id="fontSize" min="8" max="72" step="1">
+                    </div>
+
+                    <!-- Cor da Fonte -->
+                    <div class="form-group">
+                        <label for="fontColor">Cor da Fonte</label>
+                        <input type="color" class="form-control" id="fontColor">
+                    </div>
+
+                    <!-- Negrito e Itálico -->
+                    <div class="form-group">
+                        <label for="fontWeight">Estilo da Fonte</label><br>
+                        <input type="checkbox" id="boldCheckbox"> Negrito
+                        <input type="checkbox" id="italicCheckbox"> Itálico
+                    </div>
+
+                    <!-- Cor de Fundo -->
+                    <div class="form-group">
+                        <label for="backgroundColor">Cor de Fundo</label>
+                        <input type="color" class="form-control" id="backgroundColor">
+                    </div>
+
+                    <!-- Largura da Borda -->
+                    <div class="form-group">
+                        <label for="borderWidth">Largura da Borda (px)</label>
+                        <input type="number" class="form-control" id="borderWidth" min="0" max="20" step="1">
+                    </div>
+
+                    <!-- Cor da Borda -->
+                    <div class="form-group">
+                        <label for="borderColor">Cor da Borda</label>
+                        <input type="color" class="form-control" id="borderColor">
+                    </div>
+
+                    <!-- Fonte, Alinhamento e Estilo da Borda já existentes -->
+                    <div class="form-group">
+                        <label for="fontSelect">Fonte</label>
+                        <select class="form-control" id="fontSelect">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="textAlignSelect">Alinhamento do Texto</label>
+                        <select class="form-control" id="textAlignSelect">
+                            <option value="left">Esquerda</option>
+                            <option value="center">Centro</option>
+                            <option value="right">Direita</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="borderStyleSelect">Estilo da Borda</label>
+                        <select class="form-control" id="borderStyleSelect">
+                            <option value="none">Sem Borda</option>
+                            <option value="solid">Sólida</option>
+                            <option value="dashed">Tracejada</option>
+                            <option value="dotted">Pontilhada</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Salvar Alterações</button>
             </div>
         </div>
     </div>
-
+</div>
 
     <script src="script.js"></script>
     <script src="scriptRow.js"></script>
+    <script src="editContent.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
