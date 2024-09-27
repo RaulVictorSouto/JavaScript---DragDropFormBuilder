@@ -14,6 +14,8 @@ function editComponent(button) {
     else if (element.querySelector('button') && button !== element.querySelector('button')) {
         // Se for um botão, define o botão como alvo
         targetElement = element.querySelector('button');
+        document.querySelector('.backgroundColor').value = '#007BFF';
+        document.querySelector('.fontColor').value = '#ffffff';
     } 
     // Verifica se o componente contém um campo de seleção (dropdown)
     else if (element.querySelector('select')) {
@@ -55,10 +57,13 @@ function saveChanges() {
     var fontSize = document.getElementById('fontSize').value + 'px'; // Tamanho da fonte
     var fontColor = document.getElementById('fontColor').value;      // Cor da fonte
     var backgroundColor = document.getElementById('backgroundColor').value;  // Cor de fundo
+    var isTransparent = document.getElementById('transparentCheckbox').checked; // Fundo Transparente
     var borderWidth = document.getElementById('borderWidth').value + 'px';   // Largura da borda
     var borderColor = document.getElementById('borderColor').value;   // Cor da borda
     var isBold = document.getElementById('boldCheckbox').checked;     // Negrito
     var isItalic = document.getElementById('italicCheckbox').checked; // Itálico
+    var isStrikethrough = document.getElementById('strikethroughCheckbox').checked; // Cortado
+
 
     // Atualiza o texto do componente (botão, label ou <h3>)
     if (window.currentEditingElement) {
@@ -74,8 +79,12 @@ function saveChanges() {
         window.currentEditingElement.style.color = fontColor;
 
         // Aplicar cor de fundo
-        window.currentEditingElement.style.backgroundColor = backgroundColor;
-
+        if (isTransparent === true) {
+            window.currentEditingElement.style.backgroundColor = 'transparent'; // Para um fundo transparente
+        } else {
+            window.currentEditingElement.style.backgroundColor = backgroundColor;
+        }
+        
         // Aplicar alinhamento de texto
         window.currentEditingElement.style.textAlign = selectedTextAlign;
 
@@ -87,6 +96,12 @@ function saveChanges() {
         // Aplicar negrito e itálico
         window.currentEditingElement.style.fontWeight = isBold ? 'bold' : 'normal';
         window.currentEditingElement.style.fontStyle = isItalic ? 'italic' : 'normal';
+
+        // Aplicar cortado (tachado) e sublinhado
+        window.currentEditingElement.style.textDecoration = '';
+        if (isStrikethrough) {
+            window.currentEditingElement.style.textDecoration += 'line-through ';
+        }
     }
 
     // Fechar o modal

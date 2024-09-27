@@ -76,7 +76,7 @@
                     <!-- Cor da Fonte -->
                     <div class="form-group">
                         <label for="fontColor">Cor da Fonte</label>
-                        <input type="color" class="form-control" id="fontColor">
+                        <input type="color" class="form-control fontColor" id="fontColor">
                     </div>
 
                     <!-- Negrito e Itálico -->
@@ -84,12 +84,16 @@
                         <label for="fontWeight">Estilo da Fonte</label><br>
                         <input type="checkbox" id="boldCheckbox"> Negrito
                         <input type="checkbox" id="italicCheckbox"> Itálico
+                        <input type="checkbox" id="strikethroughCheckbox"> Cortado (Tachado)<br>
                     </div>
 
                     <!-- Cor de Fundo -->
                     <div class="form-group">
                         <label for="backgroundColor">Cor de Fundo</label>
-                        <input type="color" class="form-control" id="backgroundColor">
+                        <input type="color" class="form-control backgroundColor" id="backgroundColor" value="#000">
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="transparentCheckbox"> Fundo Transparente
                     </div>
 
                     <!-- Largura da Borda -->
@@ -110,8 +114,20 @@
                         <select class="form-control" id="fontSelect">
                             <option value="Arial">Arial</option>
                             <option value="Times New Roman">Times New Roman</option>
+                            <option value="Helvetica">Helvética</option>
+                            <option value="Times">Times</option>
                             <option value="Courier New">Courier New</option>
                             <option value="Verdana">Verdana</option>
+                            <option value="Courier">Courier</option>
+                            <option value="Arial Narrow">Ariel Narrow</option>
+                            <option value="Candara">Candara</option>
+                            <option value="Geneva">Geneva</option>
+                            <option value="Calibri">Calibri</option>
+                            <option value="Optima">Optima</option>
+                            <option value="Cambria">Cambria</option>
+                            <option value="Garamond">Garamond</option>
+                            <option value="Perpetua">Perpetua</option>
+                            <option value="Monaco">Monaco</option>
                         </select>
                     </div>
                     <div class="form-group">
