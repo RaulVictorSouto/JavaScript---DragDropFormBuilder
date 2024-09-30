@@ -16,6 +16,7 @@ function editComponent(button) {
         targetElement = element.querySelector('button');
         document.querySelector('.backgroundColor').value = '#007BFF';
         document.querySelector('.fontColor').value = '#ffffff';
+        document.getElementById('transparentCheckbox').checked = false;
     } 
     // Verifica se o componente contém um campo de seleção (dropdown)
     else if (element.querySelector('select')) {
@@ -28,13 +29,38 @@ function editComponent(button) {
         targetElement = element.querySelector('h3');
     }
 
-    // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
-    if (targetElement) {
-        // Obtém o nome ou conteúdo atual (texto) do elemento que será editado
-        var currentName = targetElement.innerText;
+     // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
+     if (targetElement) {
+        // Preenche o nome/conteúdo do componente
+        document.getElementById('componentName').value = targetElement.innerText;
 
-        // Define o nome/conteúdo atual no campo de edição dentro do modal
-        document.getElementById('componentName').value = currentName;
+        // Preenche o ID atual do componente
+        document.getElementById('componentId').value = targetElement.id || '';
+
+        // Preenche os estilos de fonte, cor, etc.
+        document.getElementById('fontSize').value = parseInt(window.getComputedStyle(targetElement).fontSize); // Tamanho da fonte
+        document.getElementById('fontColor').value = window.getComputedStyle(targetElement).color; // Cor da fonte
+        document.getElementById('backgroundColor').value = window.getComputedStyle(targetElement).backgroundColor; // Cor de fundo
+
+        // Verifica se o fundo está transparente
+        if (window.getComputedStyle(targetElement).backgroundColor === 'transparent') {
+            document.getElementById('transparentCheckbox').checked = true;
+        } else {
+            document.getElementById('transparentCheckbox').checked = false;
+        }
+
+        // Verifica estilos como negrito, itálico, sublinhado, cortado
+        document.getElementById('boldCheckbox').checked = window.getComputedStyle(targetElement).fontWeight === 'bold';
+        document.getElementById('italicCheckbox').checked = window.getComputedStyle(targetElement).fontStyle === 'italic';
+        document.getElementById('strikethroughCheckbox').checked = window.getComputedStyle(targetElement).textDecoration.includes('line-through');
+
+        // Verifica o alinhamento de texto
+        document.getElementById('textAlignSelect').value = window.getComputedStyle(targetElement).textAlign;
+
+        // Verifica estilos de borda
+        document.getElementById('borderStyleSelect').value = window.getComputedStyle(targetElement).borderStyle;
+        document.getElementById('borderWidth').value = parseInt(window.getComputedStyle(targetElement).borderWidth);
+        document.getElementById('borderColor').value = window.getComputedStyle(targetElement).borderColor;
 
         // Abre o modal de edição usando Bootstrap
         $('#editComponentModal').modal('show');
@@ -47,7 +73,10 @@ function editComponent(button) {
 function saveChanges() {
     // Obtém o novo texto inserido pelo usuário
     var newName = document.getElementById('componentName').value;
-    
+
+    // Obtém o novo ID inserido pelo usuário
+    var newId = document.getElementById('componentId').value;
+
     // Obtém as opções de estilo escolhidas pelo usuário
     var selectedFont = document.getElementById('fontSelect').value;
     var selectedTextAlign = document.getElementById('textAlignSelect').value;
@@ -68,6 +97,11 @@ function saveChanges() {
     // Atualiza o texto do componente (botão, label ou <h3>)
     if (window.currentEditingElement) {
         window.currentEditingElement.innerText = newName;
+
+        // Atualiza o ID do componente, se o campo não estiver vazio
+        if (newId) {
+            window.currentEditingElement.id = newId;
+        }
 
         // Aplicar estilo de fonte
         window.currentEditingElement.style.fontFamily = selectedFont;
@@ -107,5 +141,3 @@ function saveChanges() {
     // Fechar o modal
     $('#editComponentModal').modal('hide');
 }
-
-
