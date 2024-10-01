@@ -1,3 +1,5 @@
+let elementCount = 0; // Contador global para IDs de elementos
+
 function back() {
     document.getElementById("box1").style.background = "none";
     document.getElementById("box1").style.border = "none";
@@ -30,12 +32,26 @@ function drop(event) {
     newElement.classList.add('conteudo_inserido');
     newElement.setAttribute('onmouseover', 'showControlButtons(this)');
     newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
-    newElement.innerHTML = getinput + getControlButtons()
-    targetRow.querySelector('.components-container').appendChild(newElement);
+    newElement.innerHTML = getinput + getControlButtons();
 
+    // Atribui IDs aos elementos internos
+    assignIDsToInnerElements(newElement);
+
+    targetRow.querySelector('.components-container').appendChild(newElement);
 }
 
-// Função para mostrar os botões quando o mouse está sobre o componente
+// Função para atribuir IDs aos elementos internos
+function assignIDsToInnerElements(conteudoInserido) {
+    var innerElements = conteudoInserido.querySelectorAll('.conteudo > *'); // Seleciona todos os elementos dentro da div 'conteudo'
+
+    for (var i = 0; i < innerElements.length; i++) {
+        if (!innerElements[i].id) { // Atribui um ID apenas se não tiver um
+            elementCount++; // Incrementa o contador para cada elemento que não possui ID
+            innerElements[i].id = 'elemento' + elementCount; // Atribui um ID único aos elementos internos
+        }
+    }
+}
+
 function showControlButtons(component) {
     var controlButtons = component.querySelector('.control-buttons');
     if (controlButtons) {
@@ -43,7 +59,6 @@ function showControlButtons(component) {
     }
 }
 
-// Função para ocultar os botões quando o mouse sai do componente
 function hideControlButtons(component) {
     var controlButtons = component.querySelector('.control-buttons');
     if (controlButtons) {
@@ -51,43 +66,18 @@ function hideControlButtons(component) {
     }
 }
 
-/*
-function dropRow(e) {
-    e.preventDefault();
-    if (draggedRow) {
-        const allRows = [...document.querySelectorAll('.form_row')];
-        const afterElement = getDragAfterElement(allRows, e.clientY);
-        if (afterElement) {
-            afterElement.parentNode.insertBefore(draggedRow, afterElement);
-        } else {
-            e.target.appendChild(draggedRow);
-        }
-    }
-    draggedRow = null; // Limpa a variável após o drop
-}
-*/
-
-// Função para identificar o elemento após o qual a linha arrastada deve ser colocada
-function getDragAfterElement(rows, y) {
-    return rows.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2; // Calcula a posição do mouse em relação ao meio do elemento
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child }; // Se o offset é menor que o atual, atualiza
-        } else {
-            return closest; // Caso contrário, mantém o mais próximo encontrado
-        }
-    }, { offset: Number.NEGATIVE_INFINITY }).element; // Inicializa com um valor baixo
-}
-
 function getRemoveButton() {
     return '<button class="btn btn-secondary btn-sm btn-remove bi bi-x" onclick="removeComponent(this)"></button>';
 }
 
 function removeComponent(button) {
-    // Subir até a div com a classe 'conteudo_inserido' e removê-la
     var conteudoInserido = button.closest('.conteudo_inserido');
     if (conteudoInserido) {
+        // Remover IDs dos elementos ao remover a div
+        var innerElements = conteudoInserido.querySelectorAll('.conteudo > *');
+        innerElements.forEach(function(element) {
+            element.id = ''; // Limpa o ID antes de remover, se necessário
+        });
         conteudoInserido.remove(); // Remove a div inteira
     }
 }
@@ -110,20 +100,13 @@ function getControlButtons() {
 
 function moveComponent(button) {
     var element = button.closest('.conteudo_inserido');
-
-    // Definir o elemento como "arrastável"
     element.setAttribute('draggable', 'true');
     element.addEventListener('dragstart', dragComponent);
-
-    // Reduzir a opacidade do componente para indicar que ele está sendo movido
     element.style.opacity = "0.5";
-
-    // Armazenar referência ao elemento sendo movido
     window.currentMovingElement = element;
 }
 
 function stopMove() {
-    // Interromper o arrasto
     if (window.currentMovingElement) {
         window.currentMovingElement.setAttribute('draggable', 'false');
         window.currentMovingElement.style.opacity = "1";
@@ -139,7 +122,6 @@ function dropComponentInRow(event) {
     event.preventDefault();
     event.target.classList.remove('dragover');
 
-    // Checar se o elemento está sendo movido
     if (window.currentMovingElement) {
         var targetRow = event.target.closest('.form_row');
 
@@ -152,6 +134,10 @@ function dropComponentInRow(event) {
         var newElement = document.createElement('div');
         newElement.classList.add('conteudo_inserido');
         newElement.innerHTML = window.currentMovingElement.innerHTML;
+
+        // Atribuir IDs aos elementos internos apenas se eles não tiverem
+        assignIDsToInnerElements(newElement); // Isso não deve adicionar novos IDs ao mover
+
         targetRow.querySelector('.components-container').appendChild(newElement);
 
         // Remover o componente da linha anterior
@@ -162,3 +148,4 @@ function dropComponentInRow(event) {
         newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
     }
 }
+
