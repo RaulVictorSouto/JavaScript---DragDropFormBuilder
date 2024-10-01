@@ -75,6 +75,7 @@ function getDragAfterElement(rows, y) {
         }
     }, { offset: Number.NEGATIVE_INFINITY }).element; // Inicializa com um valor baixo
 }
+
 function getRemoveButton() {
     return '<button class="btn btn-secondary btn-sm btn-remove bi bi-x" onclick="removeComponent(this)"></button>';
 }

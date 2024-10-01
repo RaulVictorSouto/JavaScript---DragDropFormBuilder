@@ -35,11 +35,16 @@
 }
 
 .form_row {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding: 5px;
     border: 1px dashed #bbb;
     display: flex;
     flex-wrap: wrap;
+    min-height: 60px;
+}
+
+.form_row:hover{
+    border: 2px dashed #B0C4DE;
 }
 
 .btn-remove {

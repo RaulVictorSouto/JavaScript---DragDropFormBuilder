@@ -67,10 +67,19 @@ function addRow() {
     // Adiciona o contêiner de botões à linha
     row.appendChild(buttonsContainer); // Adiciona o contêiner de botões à linha
     row.appendChild(componentsContainer); // Adiciona o contêiner de componentes à linha
+    buttonsContainer.style.display = 'none';
 
     // Define eventos de "drop" na linha para que componentes possam ser movidos
     row.ondrop = dropComponentInRow; // Define a função que lida com o evento de drop
     row.ondragover = allowDrop; // Define a função que permite o drag over
+
+        // Adiciona os eventos onmouseover e onmouseout para mostrar/esconder os botões
+    row.onmouseover = function() {
+       showButtons(buttonsContainer); // Mostra os botões ao passar o mouse sobre a linha
+    };
+    row.onmouseout = function() {
+        hideButtons(buttonsContainer); // Esconde os botões ao tirar o mouse da linha
+    };
 
     // Adiciona a nova linha à área de drop
     dropArea.appendChild(row);
@@ -79,4 +88,14 @@ function addRow() {
 // Função que remove uma linha
 function removeRow(row) {
     row.remove(); // Remove a linha do DOM
+}
+
+// Função para mostrar os botões
+function showButtons(buttonsContainer) {
+    buttonsContainer.style.display = 'block'; // Mostra os botões
+}
+
+// Função para esconder os botões
+function hideButtons(buttonsContainer) {
+    buttonsContainer.style.display = 'none'; // Esconde os botões
 }
