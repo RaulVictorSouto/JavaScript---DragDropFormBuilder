@@ -32,6 +32,7 @@ function drop(event) {
     newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
     newElement.innerHTML = getinput + getControlButtons()
     targetRow.querySelector('.components-container').appendChild(newElement);
+
 }
 
 // Função para mostrar os botões quando o mouse está sobre o componente
@@ -50,6 +51,7 @@ function hideControlButtons(component) {
     }
 }
 
+/*
 function dropRow(e) {
     e.preventDefault();
     if (draggedRow) {
@@ -63,6 +65,8 @@ function dropRow(e) {
     }
     draggedRow = null; // Limpa a variável após o drop
 }
+*/
+
 // Função para identificar o elemento após o qual a linha arrastada deve ser colocada
 function getDragAfterElement(rows, y) {
     return rows.reduce((closest, child) => {
@@ -153,5 +157,8 @@ function dropComponentInRow(event) {
         // Remover o componente da linha anterior
         window.currentMovingElement.remove();
         window.currentMovingElement = null;
+
+        newElement.setAttribute('onmouseover', 'showControlButtons(this)');
+        newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
     }
 }
