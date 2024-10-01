@@ -28,8 +28,26 @@ function drop(event) {
     // Adiciona o componente na linha correta
     var newElement = document.createElement('div');
     newElement.classList.add('conteudo_inserido');
-    newElement.innerHTML = getinput + getEditButton() + getRemoveButton() + getMoveButton();
+    newElement.setAttribute('onmouseover', 'showControlButtons(this)');
+    newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
+    newElement.innerHTML = getinput + getControlButtons()
     targetRow.querySelector('.components-container').appendChild(newElement);
+}
+
+// Função para mostrar os botões quando o mouse está sobre o componente
+function showControlButtons(component) {
+    var controlButtons = component.querySelector('.control-buttons');
+    if (controlButtons) {
+        controlButtons.style.display = 'block';
+    }
+}
+
+// Função para ocultar os botões quando o mouse sai do componente
+function hideControlButtons(component) {
+    var controlButtons = component.querySelector('.control-buttons');
+    if (controlButtons) {
+        controlButtons.style.display = 'none';
+    }
 }
 
 function dropRow(e) {
@@ -62,8 +80,11 @@ function getRemoveButton() {
 }
 
 function removeComponent(button) {
-    var element = button.parentElement;
-    element.remove();
+    // Subir até a div com a classe 'conteudo_inserido' e removê-la
+    var conteudoInserido = button.closest('.conteudo_inserido');
+    if (conteudoInserido) {
+        conteudoInserido.remove(); // Remove a div inteira
+    }
 }
 
 function getEditButton() {
@@ -74,8 +95,16 @@ function getMoveButton() {
     return '<button class="btn btn-info btn-sm btn-move bi bi-arrows-move" onmousedown="moveComponent(this)" onmouseup="stopMove()"></button>';
 }
 
+function getControlButtons() {
+    return '<div class="control-buttons" style="display: none">' + 
+               getEditButton() + 
+               getRemoveButton() + 
+               getMoveButton() + 
+           '</div>';
+}
+
 function moveComponent(button) {
-    var element = button.parentElement;
+    var element = button.closest('.conteudo_inserido');
 
     // Definir o elemento como "arrastável"
     element.setAttribute('draggable', 'true');

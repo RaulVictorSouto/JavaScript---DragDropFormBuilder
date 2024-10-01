@@ -1,6 +1,6 @@
 function editComponent(button) {
     // Obtém o elemento pai do botão clicado, que é o contêiner do componente
-    var element = button.parentElement;
+    var element = button.closest('.conteudo_inserido');
 
     // Inicializa uma variável para armazenar o elemento alvo que será editado (label, botão, ou <h3>)
     var targetElement;
@@ -14,9 +14,6 @@ function editComponent(button) {
     else if (element.querySelector('button') && button !== element.querySelector('button')) {
         // Se for um botão, define o botão como alvo
         targetElement = element.querySelector('button');
-        document.querySelector('.backgroundColor').value = '#007BFF';
-        document.querySelector('.fontColor').value = '#ffffff';
-        document.getElementById('transparentCheckbox').checked = false;
     } 
     // Verifica se o componente contém um campo de seleção (dropdown)
     else if (element.querySelector('select')) {
@@ -29,24 +26,35 @@ function editComponent(button) {
         targetElement = element.querySelector('h3');
     }
 
-     // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
-     if (targetElement) {
+    // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
+    if (targetElement) {
         // Preenche o nome/conteúdo do componente
         document.getElementById('componentName').value = targetElement.innerText;
 
         // Preenche o ID atual do componente
-        document.getElementById('componentId').value = targetElement.id || '';
+        document.getElementById('componentId').value = targetElement.id;
 
         // Preenche os estilos de fonte, cor, etc.
         document.getElementById('fontSize').value = parseInt(window.getComputedStyle(targetElement).fontSize); // Tamanho da fonte
         document.getElementById('fontColor').value = window.getComputedStyle(targetElement).color; // Cor da fonte
-        document.getElementById('backgroundColor').value = window.getComputedStyle(targetElement).backgroundColor; // Cor de fundo
 
-        // Verifica se o fundo está transparente
-        if (window.getComputedStyle(targetElement).backgroundColor === 'transparent') {
-            document.getElementById('transparentCheckbox').checked = true;
-        } else {
-            document.getElementById('transparentCheckbox').checked = false;
+        // Obtém a cor de fundo do elemento
+        var backgroundColor = window.getComputedStyle(targetElement).backgroundColor;
+
+        // Se o componente não for um botão, aplica a verificação de fundo transparente
+        if (element.querySelector('button') && button !== element.querySelector('button')) {
+            // Verifica se o fundo está transparente ou indefinido (pode ser 'rgba(0, 0, 0, 0)' ou 'transparent')
+            if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
+                // Marca o checkbox de fundo transparente
+                document.getElementById('transparentCheckbox').checked = true;
+            } else {
+                // Define a cor de fundo no modal, se estiver definida
+                document.getElementById('backgroundColor').value = '#007BFF';
+                document.getElementById('transparentCheckbox').checked = false;
+                document.getElementById('borderColor').value = '#007BFF';
+            }
+            // Define a cor da fonte padrão para botões
+            document.getElementById('fontColor').value = '#ffffff';
         }
 
         // Verifica estilos como negrito, itálico, sublinhado, cortado

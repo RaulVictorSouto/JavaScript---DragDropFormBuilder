@@ -90,3 +90,7 @@
 .botao-componente{
     width: 100%;
 }
+
+.control-buttons {
+    transition: display 0.2s ease-in-out;
+}
