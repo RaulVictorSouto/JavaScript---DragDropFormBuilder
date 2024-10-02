@@ -33,20 +33,28 @@
                         <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaSelecao'>Escolha uma opção:</label><select class='form-control' id='caixaSelecao' name='caixaSelecao'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option></select></div>" data-type="select">Caixa de Seleção</li>
                         <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
                         <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>
-                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numero'>Número:</label><input type='number' class='form-control' id='numero' name='numero'></div>" data-type="number">Campo de Número</li>
-                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='data'>Data:</label><input type='date' class='form-control' id='data' name='data'></div>" data-type="date">Campo de Data</li>
-                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='hora'>Hora:</label><input type='time' class='form-control' id='hora' name='hora'></div>" data-type="time">Campo de Hora</li>
-                        <li class="list-group-item draggable-item" id="in12" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='url'>URL:</label><input type='url' class='form-control' id='url' name='url'></div>" data-type="url">Campo de URL</li>
-                        <li class="list-group-item draggable-item" id="in13" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
-                        <li class="list-group-item draggable-item" id="in14" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
-                        <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
+                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroInteiro'>Número Inteiro:</label><input type='number' class='form-control' id='numeroInteiro' name='numeroInteiro' step='1' min='0'></div>" data-type="integer">Campo de Número Inteiro</li>
+                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroFloat'>Número com Ponto Flutuante:</label><input type='number' class='form-control' id='numeroFloat' name='numeroFloat' step='0.01' min='0'></div>" data-type="float">Campo de Número Float</li>
+                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='memorando'>Memorando:</label><textarea class='form-control' id='memorando' name='memorando' rows='5'></textarea></div>" data-type="textarea">Campo de Memorando</li>
+                        <li class="list-group-item draggable-item" id="in12" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='data'>Data:</label><input type='date' class='form-control' id='data' name='data'></div>" data-type="date">Campo de Data</li>
+                        <li class="list-group-item draggable-item" id="in13" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='hora'>Hora:</label><input type='time' class='form-control' id='hora' name='hora'></div>" data-type="time">Campo de Hora</li>
+                        <li class="list-group-item draggable-item" id="in14" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='url'>URL:</label><input type='url' class='form-control' id='url' name='url'></div>" data-type="url">Campo de URL</li>
+                        <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
+                        <li class="list-group-item draggable-item" id="in16" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
+                        <li class="list-group-item draggable-item" id="in17" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
+                        <li class="list-group-item draggable-item" id="in18" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='imagem'>Imagem:</label><input type='file' class='form-control' id='imagem' name='imagem' accept='image/*'></div>" data-type="file">Campo de Imagem</li>
+                        <li class="list-group-item draggable-item" id="in19" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Assinatura:</label><input type='text' class='form-control' id='assinatura' name='assinatura' style='font-style: italic;'></div>" data-type="text">Campo de Assinatura</li>
+                        <li class="list-group-item draggable-item" id="in20" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='html'>HTML:</label><textarea class='form-control' id='html' name='html' rows='5'></textarea></div>" data-type="textarea">Campo de HTML</li>
+                        <li class="list-group-item draggable-item" id="in21" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='button' class='btn btn-primary' id='digitalizar'>Digitalizar</button></div>" data-type="button">Botão Digitalizar</li>
+                        
                     </ul>
+                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm()">Editar Formulário</button>
                 </div>
             </div>
         </div>
     </main>
 
-  <!-- Modal de Edição de Componente -->
+<!-- Modal de Edição de Componente -->
 <div class="modal fade" id="editComponentModal" tabindex="-1" aria-labelledby="editComponentLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -157,9 +165,78 @@
     </div>
 </div>
 
+
+<!-- Modal de Edição de Formulário -->
+<div class="modal fade" id="editFormModal" tabindex="-1" aria-labelledby="editFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editComponentLabel">Editar Formulário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="componentName">Nome</label>
+                    <input type="text" class="form-control" id="componentName">
+                </div>
+                <div class="form-group">
+                    <label for="borderColor">Cor da Borda</label>
+                    <input type="color" class="form-control" id="borderColor">
+                </div>
+                <div class="form-group">
+                    <label for="borderWidth">Largura da Borda</label>
+                    <input type="number" class="form-control" id="borderWidth" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="borderRadius">Borda Circular</label>
+                    <input type="checkbox" id="borderRadius">
+                </div>
+                <div class="form-group">
+                    <label for="description">Descrição</label>
+                    <textarea class="form-control" id="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Padding</label>
+                    <div class="row">
+                        <div class="col">
+                            <label for="paddingTop">Superior</label>
+                            <input type="number" class="form-control" id="paddingTop" min="0">
+                        </div>
+                        <div class="col">
+                            <label for="paddingRight">Direita</label>
+                            <input type="number" class="form-control" id="paddingRight" min="0">
+                        </div>
+                        <div class="col">
+                            <label for="paddingBottom">Inferior</label>
+                            <input type="number" class="form-control" id="paddingBottom" min="0">
+                        </div>
+                        <div class="col">
+                            <label for="paddingLeft">Esquerda</label>
+                            <input type="number" class="form-control" id="paddingLeft" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="backgroundImage">Imagem de Fundo</label>
+                    <input type="file" class="form-control" id="backgroundImage" accept="image/*">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="saveFormChanges()">Salvar Mudanças</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
     <script src="script.js"></script>
     <script src="scriptRow.js"></script>
     <script src="editContent.js"></script>
+    <script src="editForm.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
