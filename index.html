@@ -19,7 +19,9 @@
                 <div class="col-lg-10">
                     <div class="drop-area" id="box1" ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
                         <!-- A primeira row é criada automaticamente -->
+                        
                     </div>
+                    
                 </div>
                 
                 <div class="col-lg-2">
@@ -52,7 +54,7 @@
                         <li class="list-group-item draggable-item" id="in25" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='button' class='btn btn-primary' id='digitalizar'>Digitalizar</button></div>" data-type="button">Botão Digitalizar</li>
                         
                     </ul>
-                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm(this)">Editar Formulário</button>
+                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm(this)" data-target="box1">Editar Formulário</button>
                 </div>
             </div>
         </div>

@@ -1,25 +1,33 @@
-var currentEditingElement = null; // Variável para armazenar a div que está sendo editada
+var currentEditingElement; // Variável global para armazenar o elemento atual sendo editado
 
 // Função para abrir o modal de edição e carregar as informações da div selecionada
 function editForm(button) {
-     // Abre o modal de edição
-     $('#editFormModal').modal('show');
-    // Obtém o elemento pai do botão clicado, que é o contêiner do componente
-    currentEditingElement = button.closest('.drop-area.dragover');
-
+    // Obtém o ID da div .drop-area associada ao botão
+    var dropAreaId = button.getAttribute('data-target');
+    
+    // Obtém o elemento da drop-area
+    currentEditingElement = document.getElementById(dropAreaId);
+    
     if (currentEditingElement) {
-        // Preenche o nome/conteúdo do componente
-        document.getElementById('componentName').value = currentEditingElement.innerText;
+        // Carrega as informações da drop-area no modal
 
-        // Preenche o ID atual do componente
-        document.getElementById('componentId').value = currentEditingElement.id;
+        // Nome
+        document.getElementById('componentName').value = currentEditingElement.querySelector('p') ? currentEditingElement.querySelector('p').innerText : '';
 
-        // Estilos de borda
+        // Exibir borda
+        document.getElementById('exibirBorda').checked = window.getComputedStyle(currentEditingElement).borderStyle !== 'none';
+
+        // Largura da borda
         document.getElementById('borderWidth').value = parseInt(window.getComputedStyle(currentEditingElement).borderWidth);
+
+        // Cor da borda
         document.getElementById('borderColor').value = window.getComputedStyle(currentEditingElement).borderColor;
 
-        // Verifica se a borda é circular
-        document.getElementById('borderRadius').checked = window.getComputedStyle(currentEditingElement).borderRadius !== '0px';
+        // Borda circular (border-radius)
+        document.getElementById('borderRadius').value = parseInt(window.getComputedStyle(currentEditingElement).borderRadius);
+
+        // Cor de fundo
+        document.getElementById('backgroundColor').value = window.getComputedStyle(currentEditingElement).backgroundColor;
 
         // Padding
         const padding = window.getComputedStyle(currentEditingElement).padding.split(' ');
@@ -28,36 +36,64 @@ function editForm(button) {
         document.getElementById('paddingBottom').value = parseInt(padding[2]);
         document.getElementById('paddingLeft').value = parseInt(padding[3]);
 
+        // Descrição
+        document.getElementById('description').value = currentEditingElement.querySelector('p') ? currentEditingElement.querySelector('p').innerText : '';
+
+        // Abrir o modal
+        $('#editFormModal').modal('show');
+    } else {
+        console.error("Elemento .drop-area não encontrado");
     }
 }
 
-// Função para salvar as mudanças feitas na div
+// Função para salvar as mudanças feitas no modal
 function saveFormChanges() {
     if (currentEditingElement) {
-        // Obtém o novo nome inserido pelo usuário
-        var newName = document.getElementById('componentName').value;
+        // Aplicar as alterações na div atual
 
-        // Obtém as novas opções de estilo
-        var borderColor = document.getElementById('borderColor').value;
-        var borderWidth = document.getElementById('borderWidth').value + 'px';
-        var isCircular = document.getElementById('borderRadius').checked;
-        var paddingTop = document.getElementById('paddingTop').value + 'px';
-        var paddingRight = document.getElementById('paddingRight').value + 'px';
-        var paddingBottom = document.getElementById('paddingBottom').value + 'px';
-        var paddingLeft = document.getElementById('paddingLeft').value + 'px';
+        // Nome (usando um <p> para exibir o nome)
+        let componentName = document.getElementById('componentName').value;
+        let nameElement = currentEditingElement.querySelector('p');
+        if (!nameElement) {
+            nameElement = document.createElement('p');
+            currentEditingElement.appendChild(nameElement);
+        }
+        nameElement.innerText = componentName;
 
-        // Atualiza o texto da div
-        currentEditingElement.innerText = newName;
+        // Exibir borda
+        if (document.getElementById('exibirBorda').checked) {
+            currentEditingElement.style.borderStyle = 'solid';
+        } else {
+            currentEditingElement.style.borderStyle = 'none';
+        }
 
-        // Atualiza os estilos de borda
-        currentEditingElement.style.borderColor = borderColor;
-        currentEditingElement.style.borderWidth = borderWidth;
-        currentEditingElement.style.borderRadius = isCircular ? '50%' : '0';
+        // Largura da borda
+        currentEditingElement.style.borderWidth = document.getElementById('borderWidth').value + 'px';
 
-        // Atualiza o padding
-        currentEditingElement.style.padding = `${paddingTop} ${paddingRight} ${paddingBottom} ${paddingLeft}`;
+        // Cor da borda
+        currentEditingElement.style.borderColor = document.getElementById('borderColor').value;
+
+        // Borda circular (border-radius)
+        currentEditingElement.style.borderRadius = document.getElementById('borderRadius').value + 'px';
+
+        // Cor de fundo
+        currentEditingElement.style.backgroundColor = document.getElementById('backgroundColor').value;
+
+        // Padding
+        currentEditingElement.style.paddingTop = document.getElementById('paddingTop').value + 'px';
+        currentEditingElement.style.paddingRight = document.getElementById('paddingRight').value + 'px';
+        currentEditingElement.style.paddingBottom = document.getElementById('paddingBottom').value + 'px';
+        currentEditingElement.style.paddingLeft = document.getElementById('paddingLeft').value + 'px';
+
+        // Descrição
+        let description = document.getElementById('description').value;
+        if (nameElement) {
+            nameElement.innerText = description;
+        }
+
+        // Fechar o modal
+        $('#editFormModal').modal('hide');
+    } else {
+        console.error("Nenhum elemento está sendo editado");
     }
-
-    // Fecha o modal após salvar as alterações
-    $('#editFormModal').modal('hide');
 }
