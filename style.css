@@ -20,13 +20,12 @@
 
 .drop-area {
     width: 100%; /* Define a largura da área de drop como 90% da tela */
-    min-height: 600px;
-    border: 2px dashed #aaa;
+    max-height: 650px;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    background-color: #fafafa;
     margin: 0 auto; /* Centraliza horizontalmente */
+    overflow-y: auto; 
 }
 
 .drop-area.dragover {

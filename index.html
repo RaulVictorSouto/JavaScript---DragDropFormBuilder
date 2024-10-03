@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,7 +52,7 @@
                         <li class="list-group-item draggable-item" id="in25" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='button' class='btn btn-primary' id='digitalizar'>Digitalizar</button></div>" data-type="button">Botão Digitalizar</li>
                         
                     </ul>
-                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm()">Editar Formulário</button>
+                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm(this)">Editar Formulário</button>
                 </div>
             </div>
         </div>
@@ -186,16 +186,24 @@
                     <input type="text" class="form-control" id="componentName">
                 </div>
                 <div class="form-group">
-                    <label for="borderColor">Cor da Borda</label>
-                    <input type="color" class="form-control" id="borderColor">
+                    <label for="borderColor">Exibir Borda</label>
+                    <input type="checkbox" id="exibirBorda">
                 </div>
                 <div class="form-group">
                     <label for="borderWidth">Largura da Borda</label>
                     <input type="number" class="form-control" id="borderWidth" min="0">
                 </div>
                 <div class="form-group">
+                    <label for="borderColor">Cor da Borda</label>
+                    <input type="color" class="form-control" id="borderColor">
+                </div>
+                <div class="form-group">
                     <label for="borderRadius">Borda Circular</label>
-                    <input type="checkbox" id="borderRadius">
+                    <input type="number" class="form-control" id="borderRadius" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="borderColor">Cor de Fundo</label>
+                    <input type="color" class="form-control" id="backgroundColor">
                 </div>
                 <div class="form-group">
                     <label for="description">Descrição</label>
@@ -226,6 +234,25 @@
                     <label for="backgroundImage">Imagem de Fundo</label>
                     <input type="file" class="form-control" id="backgroundImage" accept="image/*">
                 </div>
+
+                <!--Apenas divs-->
+                <div class="form-group">
+                    <label for="backgroundImage">Finalização</label>
+                    <input type="text" class="form-control" id="finalizacao">
+                </div>
+                <div class="form-group">
+                    <label for="backgroundImage">Funções JS</label>
+                    <input type="text" class="form-control" id="funcoes">
+                </div>
+                <div class="form-group">
+                    <label for="backgroundImage">Inicialização</label>
+                    <input type="text" class="form-control" id="inicializacao">
+                </div>
+                <div class="form-group">
+                    <label for="backgroundImage">Validação</label>
+                    <input type="text" class="form-control" id="validacao">
+                </div>
+                <!--Apenas divs-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
