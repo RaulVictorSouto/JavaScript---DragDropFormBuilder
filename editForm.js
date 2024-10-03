@@ -2,31 +2,16 @@ var currentEditingElement; // Variável global para armazenar o elemento atual s
 
 // Função para abrir o modal de edição e carregar as informações da div selecionada
 function editForm(button) {
-    // Obtém o ID da div .drop-area associada ao botão
     var dropAreaId = button.getAttribute('data-target');
-    
-    // Obtém o elemento da drop-area
     currentEditingElement = document.getElementById(dropAreaId);
     
     if (currentEditingElement) {
-        // Carrega as informações da drop-area no modal
-
-        // Nome
-        document.getElementById('componentName').value = currentEditingElement.querySelector('p') ? currentEditingElement.querySelector('p').innerText : '';
-
-        // Exibir borda
+        // Carregar informações no modal
+        document.getElementById('componentName').value = currentEditingElement.dataset.componentName || '';
         document.getElementById('exibirBorda').checked = window.getComputedStyle(currentEditingElement).borderStyle !== 'none';
-
-        // Largura da borda
         document.getElementById('borderWidth').value = parseInt(window.getComputedStyle(currentEditingElement).borderWidth);
-
-        // Cor da borda
         document.getElementById('borderColor').value = window.getComputedStyle(currentEditingElement).borderColor;
-
-        // Borda circular (border-radius)
         document.getElementById('borderRadius').value = parseInt(window.getComputedStyle(currentEditingElement).borderRadius);
-
-        // Cor de fundo
         document.getElementById('backgroundColor').value = window.getComputedStyle(currentEditingElement).backgroundColor;
 
         // Padding
@@ -46,54 +31,51 @@ function editForm(button) {
     }
 }
 
-// Função para salvar as mudanças feitas no modal
 function saveFormChanges() {
     if (currentEditingElement) {
-        // Aplicar as alterações na div atual
+        // Armazenar as propriedades no dataset da drop-area
+        currentEditingElement.dataset.componentName = document.getElementById('componentName').value;
+        currentEditingElement.dataset.borderStyle = document.getElementById('exibirBorda').checked ? 'solid' : 'none';
+        currentEditingElement.dataset.borderWidth = document.getElementById('borderWidth').value + 'px';
+        currentEditingElement.dataset.borderColor = document.getElementById('borderColor').value;
+        currentEditingElement.dataset.borderRadius = document.getElementById('borderRadius').value + 'px';
+        currentEditingElement.dataset.backgroundColor = document.getElementById('backgroundColor').value;
+        currentEditingElement.dataset.paddingTop = document.getElementById('paddingTop').value + 'px';
+        currentEditingElement.dataset.paddingRight = document.getElementById('paddingRight').value + 'px';
+        currentEditingElement.dataset.paddingBottom = document.getElementById('paddingBottom').value + 'px';
+        currentEditingElement.dataset.paddingLeft = document.getElementById('paddingLeft').value + 'px';
+        currentEditingElement.dataset.description = document.getElementById('description').value;
 
-        // Nome (usando um <p> para exibir o nome)
-        let componentName = document.getElementById('componentName').value;
-        let nameElement = currentEditingElement.querySelector('p');
-        if (!nameElement) {
-            nameElement = document.createElement('p');
-            currentEditingElement.appendChild(nameElement);
-        }
-        nameElement.innerText = componentName;
-
-        // Exibir borda
-        if (document.getElementById('exibirBorda').checked) {
-            currentEditingElement.style.borderStyle = 'solid';
-        } else {
-            currentEditingElement.style.borderStyle = 'none';
-        }
-
-        // Largura da borda
-        currentEditingElement.style.borderWidth = document.getElementById('borderWidth').value + 'px';
-
-        // Cor da borda
-        currentEditingElement.style.borderColor = document.getElementById('borderColor').value;
-
-        // Borda circular (border-radius)
-        currentEditingElement.style.borderRadius = document.getElementById('borderRadius').value + 'px';
-
-        // Cor de fundo
-        currentEditingElement.style.backgroundColor = document.getElementById('backgroundColor').value;
-
-        // Padding
-        currentEditingElement.style.paddingTop = document.getElementById('paddingTop').value + 'px';
-        currentEditingElement.style.paddingRight = document.getElementById('paddingRight').value + 'px';
-        currentEditingElement.style.paddingBottom = document.getElementById('paddingBottom').value + 'px';
-        currentEditingElement.style.paddingLeft = document.getElementById('paddingLeft').value + 'px';
-
-        // Descrição
-        let description = document.getElementById('description').value;
-        if (nameElement) {
-            nameElement.innerText = description;
-        }
+        // Aplicar as alterações visualmente
+        applyChanges(currentEditingElement);
 
         // Fechar o modal
         $('#editFormModal').modal('hide');
     } else {
         console.error("Nenhum elemento está sendo editado");
     }
+}
+
+// Função para aplicar as alterações visuais a uma drop-area
+function applyChanges(element) {
+    if (!element) return;
+
+    // Aplicar as propriedades salvas
+    element.style.borderStyle = element.dataset.borderStyle || 'none';
+    element.style.borderWidth = element.dataset.borderWidth || '0px';
+    element.style.borderColor = element.dataset.borderColor || 'transparent';
+    element.style.borderRadius = element.dataset.borderRadius || '0px';
+    element.style.backgroundColor = element.dataset.backgroundColor || 'transparent';
+    element.style.paddingTop = element.dataset.paddingTop || '0px';
+    element.style.paddingRight = element.dataset.paddingRight || '0px';
+    element.style.paddingBottom = element.dataset.paddingBottom || '0px';
+    element.style.paddingLeft = element.dataset.paddingLeft || '0px';
+
+    // Atualizar o nome ou descrição (usando um <p> para exibir)
+    let nameElement = element.querySelector('p');
+    if (!nameElement) {
+        nameElement = document.createElement('p');
+        element.appendChild(nameElement);
+    }
+    nameElement.innerText = element.dataset.description || element.dataset.componentName || '';
 }

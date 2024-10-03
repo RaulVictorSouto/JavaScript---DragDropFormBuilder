@@ -28,6 +28,7 @@ function editComponent(button) {
 
     // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
     if (targetElement) {
+
         // Preenche o nome/conteúdo do componente
         document.getElementById('componentName').value = targetElement.innerText;
 
