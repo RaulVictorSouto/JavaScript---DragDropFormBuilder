@@ -7,22 +7,21 @@ function editForm(button) {
     
     if (currentEditingElement) {
         // Carregar informações no modal
-        document.getElementById('componentName').value = currentEditingElement.dataset.componentName || '';
-        document.getElementById('exibirBorda').checked = window.getComputedStyle(currentEditingElement).borderStyle !== 'none';
-        document.getElementById('borderWidth').value = parseInt(window.getComputedStyle(currentEditingElement).borderWidth);
-        document.getElementById('borderColor').value = window.getComputedStyle(currentEditingElement).borderColor;
+        document.getElementById('formName').value = currentEditingElement.dataset.formName || '';
+        //document.getElementById('exibirBorda').checked = window.getComputedStyle(currentEditingElement).borderStyle !== 'none';
+        document.getElementById('formBorderWidth').value = parseInt(window.getComputedStyle(currentEditingElement).borderWidth);
+        document.getElementById('formBorderColor').value = window.getComputedStyle(currentEditingElement).borderColor;
         document.getElementById('borderRadius').value = parseInt(window.getComputedStyle(currentEditingElement).borderRadius);
         document.getElementById('backgroundColor').value = window.getComputedStyle(currentEditingElement).backgroundColor;
 
         // Padding
-        const padding = window.getComputedStyle(currentEditingElement).padding.split(' ');
-        document.getElementById('paddingTop').value = parseInt(padding[0]);
-        document.getElementById('paddingRight').value = parseInt(padding[1]);
-        document.getElementById('paddingBottom').value = parseInt(padding[2]);
-        document.getElementById('paddingLeft').value = parseInt(padding[3]);
+        document.getElementById('paddingTop').value = parseInt(window.getComputedStyle(currentEditingElement).paddingTop);
+        document.getElementById('paddingRight').value = parseInt(window.getComputedStyle(currentEditingElement).paddingRight);
+        document.getElementById('paddingBottom').value = parseInt(window.getComputedStyle(currentEditingElement).paddingBottom);
+        document.getElementById('paddingLeft').value = parseInt(window.getComputedStyle(currentEditingElement).paddingLeft);
 
         // Descrição
-        document.getElementById('description').value = currentEditingElement.querySelector('p') ? currentEditingElement.querySelector('p').innerText : '';
+        document.getElementById('description').value = currentEditingElement.dataset.description || '';
 
         // Abrir o modal
         $('#editFormModal').modal('show');
@@ -32,14 +31,32 @@ function editForm(button) {
 }
 
 function saveFormChanges() {
+
+    var isTransparent = document.getElementById('formTransparentCheckbox').checked; // Fundo Transparente
+    var isBorderTrue = document.getElementById('formExibirBorda').checked; // Fundo Transparente
+
     if (currentEditingElement) {
         // Armazenar as propriedades no dataset da drop-area
-        currentEditingElement.dataset.componentName = document.getElementById('componentName').value;
-        currentEditingElement.dataset.borderStyle = document.getElementById('exibirBorda').checked ? 'solid' : 'none';
-        currentEditingElement.dataset.borderWidth = document.getElementById('borderWidth').value + 'px';
-        currentEditingElement.dataset.borderColor = document.getElementById('borderColor').value;
-        currentEditingElement.dataset.borderRadius = document.getElementById('borderRadius').value + 'px';
-        currentEditingElement.dataset.backgroundColor = document.getElementById('backgroundColor').value;
+        currentEditingElement.dataset.formName = document.getElementById('formName').value;
+
+        if (isBorderTrue === true){
+            currentEditingElement.dataset.borderStyle = 'solid';
+            document.getElementById('formBorderWidth').value = 1;
+            currentEditingElement.dataset.borderColor = document.getElementById('formBorderColor').value;
+            currentEditingElement.dataset.borderRadius = document.getElementById('borderRadius').value + 'px';
+        } else {
+            currentEditingElement.dataset.borderStyle = 'none';
+            currentEditingElement.dataset.borderColor = 'transparent';
+        }
+
+        currentEditingElement.dataset.borderWidth = document.getElementById('formBorderWidth').value + 'px';
+
+        if (isTransparent === true) {
+            currentEditingElement.dataset.backgroundColor = 'transparent'; // Para um fundo transparente
+        } else {
+            currentEditingElement.dataset.backgroundColor = document.getElementById('formBackgroundColor').value;
+        }
+
         currentEditingElement.dataset.paddingTop = document.getElementById('paddingTop').value + 'px';
         currentEditingElement.dataset.paddingRight = document.getElementById('paddingRight').value + 'px';
         currentEditingElement.dataset.paddingBottom = document.getElementById('paddingBottom').value + 'px';
@@ -74,8 +91,7 @@ function applyChanges(element) {
     // Atualizar o nome ou descrição (usando um <p> para exibir)
     let nameElement = element.querySelector('p');
     if (!nameElement) {
-        nameElement = document.createElement('p');
+        nameElement = document.createElement('div');
         element.appendChild(nameElement);
     }
-    nameElement.innerText = element.dataset.description || element.dataset.componentName || '';
 }
