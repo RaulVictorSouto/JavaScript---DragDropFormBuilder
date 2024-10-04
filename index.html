@@ -188,8 +188,7 @@
                     <input type="text" class="form-control" id="formName">
                 </div>
                 <div class="form-group">
-                    <label for="borderColor">Exibir Borda</label>
-                    <input type="checkbox" id="formExibirBorda">
+                    <input type="checkbox" id="formExibirBorda"> Exibir Borda
                 </div>
                 <div class="form-group">
                     <label for="borderWidth">Largura da Borda</label>
@@ -201,7 +200,7 @@
                 </div>
                 <div class="form-group">
                     <label for="borderRadius">Borda Circular</label>
-                    <input type="number" class="form-control" id="borderRadius" min="0">
+                    <input type="number" class="form-control" id="formBorderRadius" min="0">
                 </div>
                 <div class="form-group">
                     <label for="borderColor">Cor de Fundo</label>
@@ -239,6 +238,7 @@
                 <div class="form-group">
                     <label for="backgroundImage">Imagem de Fundo</label>
                     <input type="file" class="form-control" id="backgroundImage" accept="image/*">
+                    <button type="button" class="btn btn-danger mt-2" id="removeBackgroundImage" onclick="removeBackgroundImage()">Remover Imagem</button>
                 </div>
 
                 <!--Apenas divs-->
