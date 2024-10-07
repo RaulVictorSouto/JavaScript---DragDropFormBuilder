@@ -1,49 +1,45 @@
 function previewForm() {
-    $('#previewFormModal').modal('show'); // Exibe o modal de visualização
+    // Exibe o modal de visualização
+    $('#previewFormModal').modal('show');
     $('#previewFormModal .modal-dialog').addClass('modal-lg'); // Classe para aumentar o modal
+
     if (currentEditingElement) {
         // Limpar conteúdo anterior
         var formPreview = document.getElementById('formPreview');
         var formPreviewHeader = document.getElementById('formPreviewHeader');
-
+        
         formPreview.innerHTML = ''; // Limpa o conteúdo anterior do modal
         formPreviewHeader.innerHTML = ''; // Limpa o conteúdo anterior do cabeçalho
 
-        // Adiciona o nome e descrição do formulário
-        var formName = currentEditingElement.dataset.formName || 'Nome do Formulário';
-        var description = currentEditingElement.dataset.description || 'Descrição do Formulário';
+        // Adiciona o nome e descrição do formulário ao cabeçalho
+        var formName = currentEditingElement.dataset.formName || '';
+        var description = currentEditingElement.dataset.description || '';
         
         formPreviewHeader.innerHTML += `<h4>${formName}</h4>`;
         formPreviewHeader.innerHTML += `<p>${description}</p>`;
 
-        // Seleciona todos os elementos com a classe "conteudo" dentro do elemento atual
-        var contentElements = currentEditingElement.querySelectorAll('.conteudo');
+        // Copia a estrutura da drop-area com as form_row e seus estilos
+        var dropArea = document.querySelector('.drop-area');
+        if (dropArea) {
+            var dropAreaClone = dropArea.cloneNode(true); // Clona a drop-area inteira
 
-        // Itera sobre os elementos e adiciona ao preview
-        contentElements.forEach(function(contentElement) {
-            var clone = contentElement.cloneNode(true); // Clona o elemento
-            formPreview.appendChild(clone); // Adiciona o clone ao preview
-        });
+            // Itera sobre as divs form_row para garantir que seus estilos inline sejam preservados
+            var formRows = dropAreaClone.querySelectorAll('.form_row');
+            formRows.forEach(function(formRow) {
+                // Remove qualquer div com a classe 'control-buttons' dentro de form_row
+                var controlButtons = formRow.querySelectorAll('.control-buttons');
+                controlButtons.forEach(function(container) {
+                    container.remove(); // Remove a div control-buttons
+                });
 
-        // Adiciona a imagem de fundo, se houver
-        if (currentEditingElement.style.backgroundImage) {
-            formPreview.style.backgroundImage = currentEditingElement.style.backgroundImage;
-            formPreview.style.backgroundSize = 'cover';
-            formPreview.style.backgroundPosition = 'center';
-        } else {
-            formPreview.style.backgroundImage = 'none';
+                var computedStyle = window.getComputedStyle(formRow);
+                formRow.style.cssText = computedStyle.cssText; // Aplica os estilos calculados para a visualização
+            });
+
+            // Adiciona a drop-area clonada ao preview
+            formPreview.appendChild(dropAreaClone);
         }
-
-        // Aplicar estilos do elemento atual ao preview
-        formPreview.style.borderWidth = currentEditingElement.dataset.borderWidth || '0px';
-        formPreview.style.borderColor = currentEditingElement.dataset.borderColor || 'transparent';
-        formPreview.style.borderRadius = currentEditingElement.dataset.borderRadius || '0px';
-        formPreview.style.paddingTop = currentEditingElement.dataset.paddingTop || '0px';
-        formPreview.style.paddingRight = currentEditingElement.dataset.paddingRight || '0px';
-        formPreview.style.paddingBottom = currentEditingElement.dataset.paddingBottom || '0px';
-        formPreview.style.paddingLeft = currentEditingElement.dataset.paddingLeft || '0px';
     } else {
         console.error("Nenhum elemento está sendo editado para visualizar");
     }
 }
-

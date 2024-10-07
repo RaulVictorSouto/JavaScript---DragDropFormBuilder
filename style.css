@@ -18,14 +18,6 @@
     flex: 1;
 }
 
-.drop-area {
-    width: 100%; /* Define a largura da área de drop como 90% da tela */
-    max-height: 650px;
-    text-align: center;
-    margin: 0 auto; /* Centraliza horizontalmente */
-    overflow-y: auto; 
-}
-
 .drop-area.dragover {
     background-color: #e3f2fd;
     border-color: #2196f3;
@@ -106,7 +98,6 @@
 }
 
 #formPreview {
-    min-height: 400px; /* Define uma altura mínima para o conteúdo do formulário */
     padding: 20px;
 }
 

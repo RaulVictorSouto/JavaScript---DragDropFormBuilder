@@ -1,9 +1,11 @@
 let elementCount = 0; // Contador global para IDs de elementos
 
+/*
 function back() {
     document.getElementById("box1").style.background = "none";
     document.getElementById("box1").style.border = "none";
 }
+*/
 
 function allowDrop(event) {
     event.preventDefault();
