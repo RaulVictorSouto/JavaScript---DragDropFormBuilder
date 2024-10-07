@@ -100,3 +100,16 @@
 .botaoEdicaoFormulario{
     margin-top: 10px;
 }
+
+.modal-xl {
+    max-width: 90%; /* Define o tamanho do modal como 90% da tela */
+}
+
+#formPreview {
+    min-height: 400px; /* Define uma altura mínima para o conteúdo do formulário */
+    padding: 20px;
+}
+
+#formPreviewHeader{
+    display: block;
+}
