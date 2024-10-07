@@ -11,6 +11,7 @@ function addRow() {
     // Cria um novo elemento 'div' para a linha
     var row = document.createElement('div');
     row.classList.add('form_row'); // Adiciona a classe 'form_row' à linha
+    row.id = "row";
 
     // Cria um contêiner para os componentes
     var componentsContainer = document.createElement('div');
@@ -59,9 +60,28 @@ function addRow() {
         }
     };
 
+     // Cria o botão de movimentação de linha 
+     var moveRowButton = document.createElement('button');
+     moveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'down-button'); 
+     moveRowButton.innerHTML = '<i class="bi bi-arrows-move"></i>'; 
+     // Define a ação de clique para mover a linha para baixo
+     moveRowButton.onmousedown = function() {
+        var div = moveRowButton.closest('.form_row');
+        div.setAttribute('draggable', 'true');
+        div.style.opacity = "0.5";
+        window.currentMovingElement = div;
+     };
+     moveRowButton.onmouseup = function() {
+        var div = moveRowButton.closest('.form_row');
+        div.setAttribute('draggable', 'false');
+        div.style.opacity = "1";
+        window.currentMovingElement = null;
+     };
+
     // Adiciona os botões ao contêiner de botões
     buttonsContainer.appendChild(removeRowButton); // Adiciona o botão de remoção
     buttonsContainer.appendChild(upMoveRowButton); // Adiciona o botão de subir
+    buttonsContainer.appendChild(moveRowButton); // Adiciona o botão de subir
     buttonsContainer.appendChild(downMoveRowButton); // Adiciona o botão de descer
 
     // Adiciona o contêiner de botões à linha
