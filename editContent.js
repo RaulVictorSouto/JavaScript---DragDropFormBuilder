@@ -150,3 +150,59 @@ function saveChanges() {
     // Fechar o modal
     $('#editComponentModal').modal('hide');
 }
+
+function previewImage(event) {
+    var input = event.target; // O input file que disparou o evento
+    var imagePreview = input.parentElement.querySelector('#imagePreview'); // O elemento img onde a pré-visualização será exibida
+    var removeImageButton = input.parentElement.querySelector('#removeImageButton'); // O botão de remover imagem
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            // Definir o src da imagem com o conteúdo carregado
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block'; // Mostrar a imagem
+
+            // Ocultar a label e o input
+            input.style.display = 'none';
+            input.previousElementSibling.style.display = 'none'; // Ocultar a label
+            removeImageButton.style.display = 'inline'; // Mostrar o botão de remover
+        };
+
+        reader.readAsDataURL(input.files[0]); // Ler o arquivo como URL base64
+    }
+}
+
+function removeImage(button) {
+    var imagePreview = button.parentElement.querySelector('#imagePreview');
+    var input = button.parentElement.querySelector('#imagem');
+
+    // Limpa a pré-visualização da imagem
+    imagePreview.src = '';
+    imagePreview.style.display = 'none'; // Oculta a imagem
+
+    // Oculta o botão de remover imagem
+    button.style.display = 'none';
+
+    // Mostra novamente a label e o input
+    input.style.display = 'block';
+    input.previousElementSibling.style.display = 'block'; // Mostrar a label
+
+    // Limpa o campo de input
+    input.value = '';
+}
+
+function showControls(row) {
+    var removeImageButton = row.querySelector('#removeImageButton');
+
+    // Mostra o botão de remover imagem ao passar o mouse sobre o form_row
+    removeImageButton.style.display = 'inline'; // Mostrar o botão de remover
+}
+
+function hideControls(row) {
+    var removeImageButton = row.querySelector('#removeImageButton');
+
+    // Oculta o botão de remover imagem ao sair o mouse do form_row
+    removeImageButton.style.display = 'none'; // Ocultar o botão de remover
+}

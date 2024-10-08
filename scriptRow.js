@@ -74,9 +74,11 @@ function addRow() {
 
     row.onmouseover = function() {
         buttonsContainer.style.display = 'block';
+        showControls(this);
     };
     row.onmouseout = function() {
         buttonsContainer.style.display = 'none';
+        hideControls(this);
     };
 
     dropArea.appendChild(row);

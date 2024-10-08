@@ -44,7 +44,19 @@
                         <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
                         <li class="list-group-item draggable-item" id="in16" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
                         <li class="list-group-item draggable-item" id="in17" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
-                        <li class="list-group-item draggable-item" id="in18" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='imagem'>Imagem:</label><input type='file' class='form-control' id='imagem' name='imagem' accept='image/*'></div>" data-type="file">Campo de Imagem</li>
+                        
+                        <li class="list-group-item draggable-item" id="in18" draggable="true" 
+                            ondragstart="drag(event)" 
+                            data-input="<div class='conteudo'>
+                                            <label for='imagem'>Imagem:</label>
+                                            <input type='file' class='form-control' id='imagem' name='imagem' accept='image/*' onchange='previewImage(event)'>
+                                            <img src='' id='imagePreview' alt='Pré-visualização da Imagem' style='max-width: 100%; height: auto; display: none;'>
+                                            <button type='button' class='btn btn-danger' id='removeImageButton' style='display: none;' onclick='removeImage(this)'>Remover Imagem</button>
+                                        </div>" 
+                            data-type="file">
+                            Campo de Imagem
+                        </li>
+
                         <li class="list-group-item draggable-item" id="in19" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Assinatura:</label><input type='text' class='form-control' id='assinatura' name='assinatura' style='font-style: italic;'></div>" data-type="text">Campo de Assinatura</li>
                         <li class="list-group-item draggable-item" id="in20" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Caixa Grid:</label><input type='text' class='form-control' id='caixaGrid' name='caixaGrid'></div>" data-type="text">Caixa Grid</li>
                         <li class="list-group-item draggable-item" id="in21" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Visualizador 3A:</label><input type='text' class='form-control' id='visualizador3A' name='visualizador3A'></div>" data-type="text">Visualizador 3A</li>

@@ -104,8 +104,6 @@
     display: block;
 }
 
-
-
 .form_row {
     transition: all 0.3s ease; /* Transição suave para mudanças */
 }
@@ -127,4 +125,8 @@
         transform: scale(1);
         opacity: 1;
     }
+}
+
+#removeImageButton{
+    margin-top: 15px;
 }
