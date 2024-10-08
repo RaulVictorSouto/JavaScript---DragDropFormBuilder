@@ -31,7 +31,23 @@
                         <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div style='height: 20px;'></div>" data-type="empty-space">Espaço Vazio</li>
                         <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-primary botao-componente'>Botão</button></div>" data-type="button">Botão</li>
                         <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaTexto'>Texto:</label><input type='text' class='form-control' id='caixaTexto' name='texto'></div>" data-type="input">Caixa de Texto</li>
-                        <li class="list-group-item draggable-item" id="in5" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='switch'>Marque a opção: </label><input type='checkbox' class='switch' id='switch' name='switch'></div>" data-type="switch">Caixa de Marcação (Switch)</li>
+                      
+                        <li class="list-group-item draggable-item" id="in5" draggable="true" 
+                            ondragstart="drag(event)" 
+                            data-input="
+                                <div class='conteudo'>
+                                    <label for='switch'>Marque a opção: </label><br/>
+                                    <div class='switch'>
+                                        <input type='checkbox' class='switch-input' id='switch' name='switch'>
+                                        <label class='switch-label' for='switch'>
+                                            <span class='switch-button'></span>
+                                        </label>
+                                    </div>
+                                </div>" 
+                            data-type="switch">
+                            Caixa de Marcação (Switch)
+                        </li>
+
                         <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaSelecao'>Escolha uma opção:</label><select class='form-control' id='caixaSelecao' name='caixaSelecao'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option></select></div>" data-type="select">Caixa de Seleção</li>
                         <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
                         <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>

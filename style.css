@@ -130,3 +130,47 @@
 #removeImageButton{
     margin-top: 15px;
 }
+
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Largura do switch */
+    height: 34px; /* Altura do switch */
+}
+
+.switch-input {
+    opacity: 0; /* Ocultar o checkbox original */
+    width: 0;
+    height: 0;
+}
+
+.switch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    height: 34px;
+    border-radius: 34px; /* Bordas arredondadas */
+    background: #ccc; /* Cor de fundo quando desligado */
+    transition: background 0.3s; /* Transição de cor */
+}
+
+.switch-label:before {
+    display: block;
+    content: '';
+    width: 26px; /* Largura do botão */
+    height: 26px; /* Altura do botão */
+    margin: 4px; /* Margem para posicionamento */
+    background: white; /* Cor do botão */
+    border-radius: 50%; /* Botão arredondado */
+    transition: transform 0.3s; /* Transição de movimento */
+}
+
+.switch-input:checked + .switch-label {
+    background: #2196f3; /* Cor de fundo quando ligado */
+}
+
+.switch-input:checked + .switch-label:before {
+    transform: translateX(26px); /* Mover o botão para a direita */
+}
