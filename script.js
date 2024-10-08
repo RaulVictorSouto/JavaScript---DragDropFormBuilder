@@ -148,4 +148,3 @@ function dropComponentInRow(event) {
         newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
     }
 }
-

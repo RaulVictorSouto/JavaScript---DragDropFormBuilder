@@ -38,38 +38,33 @@ function addRow() {
     };
 
     var upMoveRowButton = document.createElement('button');
-    upMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'up-button'); // Adiciona classes ao botão
-    upMoveRowButton.innerHTML = '<i class="bi bi-arrow-up"></i>'; // Define o conteúdo HTML do botão como um ícone de subir
-    // Define a ação de clique para mover a linha para cima
+    upMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'up-button');
+    upMoveRowButton.innerHTML = '<i class="bi bi-arrow-up"></i>';
     upMoveRowButton.onclick = function() {
-        const div = upMoveRowButton.closest('.form_row'); // Seleciona a linha atual
-        const previousDiv = div.previousElementSibling; // Obtém a linha anterior
+        const div = upMoveRowButton.closest('.form_row');
+        const previousDiv = div.previousElementSibling;
 
-        // Se houver uma linha anterior, move a linha atual para cima
         if (previousDiv) {
-            div.parentNode.insertBefore(div, previousDiv); // Insere a linha atual antes da linha anterior
+            div.parentNode.insertBefore(div, previousDiv);
         }
     };
 
-    // Cria o botão de movimentação de linha (descer)
     var downMoveRowButton = document.createElement('button');
-    downMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'down-button'); // Adiciona classes ao botão
-    downMoveRowButton.innerHTML = '<i class="bi bi-arrow-down"></i>'; // Define o conteúdo HTML do botão como um ícone de descer
-    // Define a ação de clique para mover a linha para baixo
+    downMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'down-button');
+    downMoveRowButton.innerHTML = '<i class="bi bi-arrow-down"></i>';
     downMoveRowButton.onclick = function() {
-        const div = downMoveRowButton.closest('.form_row'); // Seleciona a linha atual
-        const nextDiv = div.nextElementSibling; // Obtém a próxima linha
+        const div = downMoveRowButton.closest('.form_row');
+        const nextDiv = div.nextElementSibling;
 
-        // Se houver uma próxima linha, move a linha atual para baixo
         if (nextDiv) {
-            div.parentNode.insertBefore(nextDiv, div); // Insere a próxima linha antes da linha atual
+            div.parentNode.insertBefore(nextDiv, div);
         }
     };
 
     buttonsContainer.appendChild(removeRowButton);
     buttonsContainer.appendChild(moveRowButton);
-    buttonsContainer.appendChild(upMoveRowButton); // Adiciona o botão de subir
-    buttonsContainer.appendChild(downMoveRowButton); // Adiciona o botão de descer
+    buttonsContainer.appendChild(upMoveRowButton);
+    buttonsContainer.appendChild(downMoveRowButton);
 
     row.appendChild(buttonsContainer);
     row.appendChild(componentsContainer);
@@ -87,24 +82,52 @@ function addRow() {
     dropArea.appendChild(row);
 }
 
-function allowDrop(event) {
-    event.preventDefault();
-}
 
 function dropComponentInRow(event) {
-    event.preventDefault();
-    var draggedRow = window.currentMovingElement;
-    var dropArea = document.getElementById("box1");
-    var afterElement = getDragAfterElement(dropArea, event.clientY);
+    event.preventDefault(); // Impede o comportamento padrão do evento.
 
-    if (afterElement == null) {
-        dropArea.appendChild(draggedRow); // Se não houver próximo elemento, coloca no final
-    } else {
-        dropArea.insertBefore(draggedRow, afterElement); // Insere antes do próximo elemento
+    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado.
+    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um elemento com a classe 'form_row'.
+
+    // Se não for um 'form_row', não permite o drop e retorna.
+    if (!targetRow) {
+        alert('Você deve soltar o componente dentro de uma linha (form_row)!');
+        return; 
     }
 
-    draggedRow.style.opacity = "1";
+    targetRow.classList.remove('dragover'); // Remove a classe de arrastar se estiver aplicada.
+
+    // Verifica se o elemento arrastado é uma 'form_row'
+    if (draggedRow.classList.contains('form_row')) {
+        // Trocar de lugar a linha arrastada com a linha alvo
+        var parentContainer = targetRow.parentNode; // Obter o container pai de targetRow
+        // Inserir a linha arrastada antes da linha alvo
+        parentContainer.insertBefore(draggedRow, targetRow.nextSibling); // Colocar draggedRow antes do próximo elemento de targetRow
+        parentContainer.insertBefore(targetRow, draggedRow); // Colocar targetRow antes do draggedRow (que já foi inserido)
+        window.currentMovingElement = null; // Reseta a referência do elemento que estava sendo movido.
+        return; // Finaliza a função, já que a linha foi movida
+    }
+
+    // Criar um novo elemento na nova linha com os mesmos dados
+    var newElement = document.createElement('div');
+    newElement.classList.add('conteudo_inserido');
+    newElement.innerHTML = draggedRow.innerHTML;
+
+    // Atribuir IDs aos elementos internos apenas se eles não tiverem
+    assignIDsToInnerElements(newElement); // Isso não deve adicionar novos IDs ao mover
+
+    // Adiciona o novo elemento dentro da containers de componentes da linha de destino
+    targetRow.querySelector('.components-container').appendChild(newElement);
+
+    // Remover o componente da linha anterior
+    draggedRow.remove(); // Remove o elemento arrastado da linha anterior.
+    window.currentMovingElement = null; // Reseta a referência do elemento que estava sendo movido.
+
+    newElement.setAttribute('onmouseover', 'showControlButtons(this)'); // Adiciona eventos para mostrar botões de controle ao passar o mouse.
+    newElement.setAttribute('onmouseout', 'hideControlButtons(this)'); // Adiciona eventos para esconder botões de controle ao retirar o mouse.
 }
+
+
 
 function getDragAfterElement(container, y) {
     var draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
@@ -135,3 +158,4 @@ document.addEventListener('dragend', function(e) {
         e.target.style.opacity = "1";
     }
 });
+
