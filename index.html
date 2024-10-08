@@ -48,7 +48,21 @@
                             Caixa de Marcação (Switch)
                         </li>
 
-                        <li class="list-group-item draggable-item" id="in6" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaSelecao'>Escolha uma opção:</label><select class='form-control' id='caixaSelecao' name='caixaSelecao'><option value='op1'>Opção 1</option><option value='op2'>Opção 2</option></select></div>" data-type="select">Caixa de Seleção</li>
+                        <li class="list-group-item draggable-item" id="in6" draggable="true" 
+                            ondragstart="drag(event)" 
+                            data-input="
+                                <div class='conteudo'>
+                                    <label for='caixaSelecao'>Escolha uma opção:</label>
+                                    <select class='form-control' id='caixaSelecao' name='caixaSelecao'>
+                                        <option value='op1'>Opção 1</option>
+                                    </select>
+                                    <button type='button' class='btn btn-primary addOptionButton' onclick='addOption(this)'>Adicionar Opção</button>
+                                    <button type='button' class='btn btn-danger removeOptionButton' onclick='removeOption(this)'>Remover Opção</button>
+                                </div>" 
+                            data-type="select">
+                            Caixa de Seleção
+                        </li>
+
                         <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
                         <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>
                         <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroInteiro'>Número Inteiro:</label><input type='number' class='form-control' id='numeroInteiro' name='numeroInteiro' step='1' min='0'></div>" data-type="integer">Campo de Número Inteiro</li>

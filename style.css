@@ -174,3 +174,11 @@
 .switch-input:checked + .switch-label:before {
     transform: translateX(26px); /* Mover o botão para a direita */
 }
+
+.addOptionButton {
+    margin-top: 15px;
+}
+
+.removeOptionButton{
+    margin-top: 15px;
+}

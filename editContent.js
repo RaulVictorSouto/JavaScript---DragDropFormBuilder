@@ -193,16 +193,74 @@ function removeImage(button) {
     input.value = '';
 }
 
-function showControls(row) {
+function showControlsImage(row) {
     var removeImageButton = row.querySelector('#removeImageButton');
 
     // Mostra o botão de remover imagem ao passar o mouse sobre o form_row
     removeImageButton.style.display = 'inline'; // Mostrar o botão de remover
 }
 
-function hideControls(row) {
+function hideControlsImage(row) {
     var removeImageButton = row.querySelector('#removeImageButton');
 
     // Oculta o botão de remover imagem ao sair o mouse do form_row
     removeImageButton.style.display = 'none'; // Ocultar o botão de remover
+}
+
+function showControlsOption(row) {
+    // Buscar botões usando classes
+    var removeOptionButton = row.querySelector('.removeOptionButton'); 
+    var addOptionButton = row.querySelector('.addOptionButton');
+
+    // Exibir botões ao passar o mouse
+    removeOptionButton.style.display = 'inline';
+    addOptionButton.style.display = 'inline';
+}
+
+function hideControlsOption(row) {
+    // Buscar botões usando classes
+    var removeOptionButton = row.querySelector('.removeOptionButton'); 
+    var addOptionButton = row.querySelector('.addOptionButton');
+
+    // Esconder botões ao retirar o mouse
+    removeOptionButton.style.display = 'none';
+    addOptionButton.style.display = 'none';
+}
+
+
+
+function addOption(button) {
+    // Obtém o contêiner onde o dropdown está localizado
+    var container = button.closest('.conteudo');
+    var select = container.querySelector('select');
+
+    // Cria uma nova opção
+    var newOptionValue = prompt("Insira o valor da nova opção:");
+    var newOptionText = prompt("Insira o texto da nova opção:");
+
+    // Se o usuário inseriu um valor e texto, adiciona a nova opção
+    if (newOptionValue && newOptionText) {
+        var newOption = document.createElement("option");
+        newOption.value = newOptionValue;
+        newOption.text = newOptionText;
+        select.add(newOption);
+    } else {
+        alert("Valor e texto da opção são obrigatórios.");
+    }
+}
+
+function removeOption(button) {
+    // Obtém o contêiner onde o dropdown está localizado
+    var container = button.closest('.conteudo');
+    var select = container.querySelector('select');
+
+    // Obtém a opção selecionada
+    var selectedOption = select.options[select.selectedIndex];
+
+    // Remove a opção selecionada se existir
+    if (selectedOption) {
+        select.remove(selectedOption.index);
+    } else {
+        alert("Por favor, selecione uma opção para remover.");
+    }
 }
