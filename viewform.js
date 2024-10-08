@@ -2,8 +2,11 @@ function previewForm() {
     // Exibe o modal de visualização
     $('#previewFormModal').modal('show');
     $('#previewFormModal .modal-dialog').addClass('modal-lg'); // Classe para aumentar o modal
-
+    currentEditingElement = document.getElementById('box1');
+    
     if (currentEditingElement) {
+        console.log(currentEditingElement); // Verifique se currentEditingElement está definido
+        
         // Limpar conteúdo anterior
         var formPreview = document.getElementById('formPreview');
         var formPreviewHeader = document.getElementById('formPreviewHeader');
@@ -18,27 +21,26 @@ function previewForm() {
         formPreviewHeader.innerHTML += `<h4>${formName}</h4>`;
         formPreviewHeader.innerHTML += `<p>${description}</p>`;
 
-        // Copia a estrutura da drop-area com as form_row e seus estilos
-        var dropArea = document.querySelector('.drop-area');
-        if (dropArea) {
-            var dropAreaClone = dropArea.cloneNode(true); // Clona a drop-area inteira
+        // Clona o currentEditingElement, que é a div .drop-area que está sendo editada
+        var dropAreaClone = currentEditingElement.cloneNode(true); // Clona o elemento editado
 
-            // Itera sobre as divs form_row para garantir que seus estilos inline sejam preservados
-            var formRows = dropAreaClone.querySelectorAll('.form_row');
-            formRows.forEach(function(formRow) {
-                // Remove qualquer div com a classe 'control-buttons' dentro de form_row
-                var controlButtons = formRow.querySelectorAll('.control-buttons');
-                controlButtons.forEach(function(container) {
-                    container.remove(); // Remove a div control-buttons
-                });
-
-                var computedStyle = window.getComputedStyle(formRow);
-                formRow.style.cssText = computedStyle.cssText; // Aplica os estilos calculados para a visualização
+        // Itera sobre as divs form_row dentro do currentEditingElement para garantir que seus estilos inline sejam preservados
+        var formRows = dropAreaClone.querySelectorAll('.form_row');
+        formRows.forEach(function(formRow) {
+            // Remove qualquer div com a classe 'control-buttons' dentro de form_row
+            var controlButtons = formRow.querySelectorAll('.control-buttons');
+            controlButtons.forEach(function(container) {
+                container.remove(); // Remove a div control-buttons
             });
 
-            // Adiciona a drop-area clonada ao preview
-            formPreview.appendChild(dropAreaClone);
-        }
+            // Aplicar os estilos calculados para a visualização
+            var computedStyle = window.getComputedStyle(formRow);
+            formRow.style.cssText = computedStyle.cssText;
+        });
+
+        // Adiciona a drop-area clonada ao preview
+        formPreview.appendChild(dropAreaClone);
+        
     } else {
         console.error("Nenhum elemento está sendo editado para visualizar");
     }

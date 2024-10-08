@@ -146,5 +146,8 @@ function dropComponentInRow(event) {
 
         newElement.setAttribute('onmouseover', 'showControlButtons(this)');
         newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
+
+        // Atualizar a pré-visualização sempre que um componente é adicionado ou movido
+        updateFormPreview();
     }
 }

@@ -6,6 +6,7 @@ function editForm(button) {
     currentEditingElement = document.getElementById(dropAreaId);
     
     if (currentEditingElement) {
+        console.log(currentEditingElement);
         // Carregar informações no modal
         document.getElementById('formName').value = currentEditingElement.dataset.formName || '';
 
