@@ -5,32 +5,38 @@ window.onload = function() {
 
 // Função que adiciona uma nova linha à área de drop
 function addRow() {
-    // Seleciona a área onde as linhas serão adicionadas
     var dropArea = document.getElementById("box1");
     
-    // Cria um novo elemento 'div' para a linha
     var row = document.createElement('div');
-    row.classList.add('form_row'); // Adiciona a classe 'form_row' à linha
-    row.id = "row";
+    row.classList.add('form_row');
+    row.id = "row-" + Date.now();
 
-    // Cria um contêiner para os componentes
     var componentsContainer = document.createElement('div');
-    componentsContainer.classList.add('components-container'); // Adiciona a classe 'components-container' ao contêiner
+    componentsContainer.classList.add('components-container');
 
-    // Cria uma div para os botões
     var buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('buttons-container'); // Adiciona uma classe para estilização dos botões
+    buttonsContainer.classList.add('buttons-container');
 
-    // Cria o botão de remoção de linha
     var removeRowButton = document.createElement('button');
-    removeRowButton.classList.add('btn', 'btn-secondary', 'btn-sm', 'btn-remove', 'remove-row-button', 'move-button'); // Adiciona classes ao botão
-    removeRowButton.innerHTML = '<i class="bi bi-x"></i>'; // Define o conteúdo HTML do botão como um ícone de remoção
-    // Define a ação de clique para remover a linha
+    removeRowButton.classList.add('btn', 'btn-secondary', 'btn-sm', 'btn-remove');
+    removeRowButton.innerHTML = '<i class="bi bi-x"></i>';
     removeRowButton.onclick = function() {
-        removeRow(row); // Chama a função removeRow passando a linha atual
+        row.remove(); // Remove a linha
     };
 
-    // Cria o botão de movimentação de linha (subir)
+    var moveRowButton = document.createElement('button');
+    moveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button');
+    moveRowButton.innerHTML = '<i class="bi bi-arrows-move"></i>';
+    moveRowButton.onmousedown = function() {
+        row.setAttribute('draggable', 'true');
+        row.style.opacity = "0.5";
+        window.currentMovingElement = row;
+    };
+    moveRowButton.onmouseup = function() {
+        row.setAttribute('draggable', 'false');
+        row.style.opacity = "1";
+    };
+
     var upMoveRowButton = document.createElement('button');
     upMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'up-button'); // Adiciona classes ao botão
     upMoveRowButton.innerHTML = '<i class="bi bi-arrow-up"></i>'; // Define o conteúdo HTML do botão como um ícone de subir
@@ -60,62 +66,72 @@ function addRow() {
         }
     };
 
-     // Cria o botão de movimentação de linha 
-     var moveRowButton = document.createElement('button');
-     moveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'down-button'); 
-     moveRowButton.innerHTML = '<i class="bi bi-arrows-move"></i>'; 
-     // Define a ação de clique para mover a linha para baixo
-     moveRowButton.onmousedown = function() {
-        var div = moveRowButton.closest('.form_row');
-        div.setAttribute('draggable', 'true');
-        div.style.opacity = "0.5";
-        window.currentMovingElement = div;
-     };
-     moveRowButton.onmouseup = function() {
-        var div = moveRowButton.closest('.form_row');
-        div.setAttribute('draggable', 'false');
-        div.style.opacity = "1";
-        window.currentMovingElement = null;
-     };
-
-    // Adiciona os botões ao contêiner de botões
-    buttonsContainer.appendChild(removeRowButton); // Adiciona o botão de remoção
+    buttonsContainer.appendChild(removeRowButton);
+    buttonsContainer.appendChild(moveRowButton);
     buttonsContainer.appendChild(upMoveRowButton); // Adiciona o botão de subir
-    buttonsContainer.appendChild(moveRowButton); // Adiciona o botão de subir
     buttonsContainer.appendChild(downMoveRowButton); // Adiciona o botão de descer
 
-    // Adiciona o contêiner de botões à linha
-    row.appendChild(buttonsContainer); // Adiciona o contêiner de botões à linha
-    row.appendChild(componentsContainer); // Adiciona o contêiner de componentes à linha
-    buttonsContainer.style.display = 'none';
+    row.appendChild(buttonsContainer);
+    row.appendChild(componentsContainer);
+    
+    row.ondragover = allowDrop;
+    row.ondrop = dropComponentInRow;
 
-    // Define eventos de "drop" na linha para que componentes possam ser movidos
-    row.ondrop = dropComponentInRow; // Define a função que lida com o evento de drop
-    row.ondragover = allowDrop; // Define a função que permite o drag over
-
-        // Adiciona os eventos onmouseover e onmouseout para mostrar/esconder os botões
     row.onmouseover = function() {
-       showButtons(buttonsContainer); // Mostra os botões ao passar o mouse sobre a linha
+        buttonsContainer.style.display = 'block';
     };
     row.onmouseout = function() {
-        hideButtons(buttonsContainer); // Esconde os botões ao tirar o mouse da linha
+        buttonsContainer.style.display = 'none';
     };
 
-    // Adiciona a nova linha à área de drop
     dropArea.appendChild(row);
 }
 
-// Função que remove uma linha
-function removeRow(row) {
-    row.remove(); // Remove a linha do DOM
+function allowDrop(event) {
+    event.preventDefault();
 }
 
-// Função para mostrar os botões
-function showButtons(buttonsContainer) {
-    buttonsContainer.style.display = 'block'; // Mostra os botões
+function dropComponentInRow(event) {
+    event.preventDefault();
+    var draggedRow = window.currentMovingElement;
+    var dropArea = document.getElementById("box1");
+    var afterElement = getDragAfterElement(dropArea, event.clientY);
+
+    if (afterElement == null) {
+        dropArea.appendChild(draggedRow); // Se não houver próximo elemento, coloca no final
+    } else {
+        dropArea.insertBefore(draggedRow, afterElement); // Insere antes do próximo elemento
+    }
+
+    draggedRow.style.opacity = "1";
 }
 
-// Função para esconder os botões
-function hideButtons(buttonsContainer) {
-    buttonsContainer.style.display = 'none'; // Esconde os botões
+function getDragAfterElement(container, y) {
+    var draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+        var box = child.getBoundingClientRect();
+        var offset = y - box.top - box.height / 2;
+
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
+
+// Detectar quando o item começa a ser arrastado
+document.addEventListener('dragstart', function(e) {
+    if (e.target.classList.contains('form_row')) {
+        e.target.classList.add('dragging');
+    }
+});
+
+// Detectar quando o item deixa de ser arrastado
+document.addEventListener('dragend', function(e) {
+    if (e.target.classList.contains('dragging')) {
+        e.target.classList.remove('dragging');
+        e.target.style.opacity = "1";
+    }
+});
