@@ -195,39 +195,47 @@ function removeImage(button) {
 
 function showControlsImage(row) {
     var removeImageButton = row.querySelector('#removeImageButton');
-
-    // Mostra o botão de remover imagem ao passar o mouse sobre o form_row
-    removeImageButton.style.display = 'inline'; // Mostrar o botão de remover
+    
+    // Verificar se o botão existe antes de tentar acessá-lo
+    if (removeImageButton) {
+        removeImageButton.style.display = 'inline'; // Mostrar o botão de remover
+    }
 }
 
 function hideControlsImage(row) {
     var removeImageButton = row.querySelector('#removeImageButton');
-
-    // Oculta o botão de remover imagem ao sair o mouse do form_row
-    removeImageButton.style.display = 'none'; // Ocultar o botão de remover
+    
+    // Verificar se o botão existe antes de tentar acessá-lo
+    if (removeImageButton) {
+        removeImageButton.style.display = 'none'; // Ocultar o botão de remover
+    }
 }
 
 function showControlsOption(row) {
-    // Buscar botões usando classes
     var removeOptionButton = row.querySelector('.removeOptionButton'); 
     var addOptionButton = row.querySelector('.addOptionButton');
-
-    // Exibir botões ao passar o mouse
-    removeOptionButton.style.display = 'inline';
-    addOptionButton.style.display = 'inline';
+    
+    // Verificar se os botões existem antes de tentar acessá-los
+    if (removeOptionButton) {
+        removeOptionButton.style.display = 'inline';
+    }
+    if (addOptionButton) {
+        addOptionButton.style.display = 'inline';
+    }
 }
 
 function hideControlsOption(row) {
-    // Buscar botões usando classes
     var removeOptionButton = row.querySelector('.removeOptionButton'); 
     var addOptionButton = row.querySelector('.addOptionButton');
-
-    // Esconder botões ao retirar o mouse
-    removeOptionButton.style.display = 'none';
-    addOptionButton.style.display = 'none';
+    
+    // Verificar se os botões existem antes de tentar acessá-los
+    if (removeOptionButton) {
+        removeOptionButton.style.display = 'none';
+    }
+    if (addOptionButton) {
+        addOptionButton.style.display = 'none';
+    }
 }
-
-
 
 function addOption(button) {
     // Obtém o contêiner onde o dropdown está localizado
