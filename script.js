@@ -196,18 +196,24 @@ function dragComponent(event) {
 }
 
 function dropComponentInRow(event) {
-    event.preventDefault(); // Impede o comportamento padrão do evento.
+    event.preventDefault();
 
-    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado.
-    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um elemento com a classe 'form_row'.
+    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
+    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
 
-    // Se não for um 'form_row', não permite o drop e retorna.
-    if (!targetRow) {
-        alert('Você deve soltar o componente dentro de uma linha (form_row)!');
-        return; 
+    // Verifica se o drop é em uma linha e não no próprio contêiner
+    if (!targetRow || draggedRow === targetRow) {
+        return; // Evita que a linha seja solta nela mesma
     }
 
-    targetRow.classList.remove('dragover'); // Remove a classe de arrastar se estiver aplicada.
-
+    // Adiciona a linha no local correto, antes ou depois da linha alvo
+    const container = targetRow.parentElement;
+    const afterElement = getDragAfterElement(container, event.clientY);
+    
+    if (afterElement === null) {
+        container.appendChild(draggedRow); // Se não houver linha depois, coloca no final
+    } else {
+        container.insertBefore(draggedRow, afterElement); // Caso contrário, insere antes do elemento encontrado
+    }
 }
 
