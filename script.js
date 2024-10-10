@@ -14,7 +14,9 @@ function drag(event) {
     event.dataTransfer.setData("a", event.target.id);
 }
 
+
 function drop(event) {
+    console.log('dropou');
     event.preventDefault();
     event.target.classList.remove('dragover');
     var data = event.dataTransfer.getData("a");
@@ -39,6 +41,8 @@ function drop(event) {
 
     targetRow.querySelector('.components-container').appendChild(newElement);
 }
+
+
 
 // Função para atribuir IDs aos elementos internos
 function assignIDsToInnerElements(conteudoInserido) {

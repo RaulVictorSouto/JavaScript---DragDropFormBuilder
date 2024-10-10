@@ -87,26 +87,27 @@ function addRow() {
     dropArea.appendChild(row);
 }
 
-// Função para determinar onde a row arrastada deve ser posicionado
+// Função para determinar onde a row arrastada deve ser posicionada
 function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')]; // Seleciona todas as linhas que não estão sendo arrastadas
+    const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
 
-    // Encontra o elemento mais próximo que deve ficar após a row arrastado
+    // Encontra o elemento mais próximo que deve ficar após a row arrastada
     return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect(); // Obtém a posição da
-        const offset = y - box.top - box.height / 2; // Calcula o deslocamento em relação ao centro da
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
         if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child }; // Atualiza a mais próximo se estiver dentro dos limites
+            return { offset: offset, element: child };
         } else {
-            return closest; // Retorna a mais próximo encontrado
+            return closest;
         }
-    }, { offset: Number.NEGATIVE_INFINITY }).element; // Inicializa com um valor negativo infinito para encontrar o mais próximo
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 // Detectar quando o item começa a ser arrastado
 document.addEventListener('dragstart', function(e) {
     if (e.target.classList.contains('form_row')) {
         e.target.classList.add('dragging');
+        window.currentMovingElement = e.target; // Armazena o elemento que está sendo arrastado
     }
 });
 
@@ -117,4 +118,3 @@ document.addEventListener('dragend', function(e) {
         e.target.style.opacity = "1";
     }
 });
-
