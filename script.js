@@ -101,9 +101,86 @@ function getControlButtons() {
 function moveComponent(button) {
     var element = button.closest('.conteudo_inserido');
     element.setAttribute('draggable', 'true');
-    element.addEventListener('dragstart', dragComponent);
+    element.addEventListener('dragstart', handleDragStart);
     element.style.opacity = "0.5";
     window.currentMovingElement = element;
+}
+
+function handleDragStart(event) {
+    const draggedElement = event.target;
+    draggedElement.classList.add('dragging');
+    window.currentMovingElement = draggedElement;
+    
+    // Adiciona eventos ao contêiner
+    document.querySelectorAll('.components-container').forEach(container => {
+        container.addEventListener('dragover', handleDragOver);
+        container.addEventListener('drop', handleDrop);
+    });
+}
+
+function handleDragOver(event) {
+    event.preventDefault(); // Necessário para permitir o drop
+    const container = event.currentTarget;
+    const afterElement = getDragAfterContainer(container, event.clientY); // Posição vertical
+
+    const dragging = document.querySelector('.dragging');
+    if (afterElement == null) {
+        container.appendChild(dragging); // Se não houver nada abaixo, coloca no final
+    } else {
+        container.insertBefore(dragging, afterElement); // Coloca antes do elemento encontrado
+    }
+}
+
+function handleDrop(event) {
+    const container = event.currentTarget;
+    const dragging = document.querySelector('.dragging');
+    
+    // Remover evento de arrastar
+    dragging.classList.remove('dragging');
+    dragging.style.opacity = "1";
+    
+    // Lógica de reciclagem: Verificar se o elemento foi movido para um novo container
+    if (window.currentMovingElement.parentElement !== container) {
+        const newElement = document.createElement('div');
+        newElement.classList.add('conteudo_inserido');
+        newElement.innerHTML = window.currentMovingElement.innerHTML;
+        
+        assignIDsToInnerElements(newElement); // Atribuir IDs aos elementos internos, se necessário
+        
+        // Adiciona o novo elemento no contêiner alvo
+        container.appendChild(newElement);
+        
+        // Remover o elemento original do contêiner anterior
+        window.currentMovingElement.remove();
+        
+        // Atribuir eventos de controle ao novo elemento
+        newElement.setAttribute('onmouseover', 'showControlButtons(this)');
+        newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
+    }
+
+    // Limpar referência do item movido
+    window.currentMovingElement = null;
+    
+    // Remover listeners de dragover e drop
+    document.querySelectorAll('.components-container').forEach(container => {
+        container.removeEventListener('dragover', handleDragOver);
+        container.removeEventListener('drop', handleDrop);
+    });
+}
+
+function getDragAfterContainer(container, y) {
+    const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')]; // Excluir o item que está sendo arrastado
+    
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2; // Verifica se o mouse está acima ou abaixo do centro do item
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 function stopMove() {
@@ -119,35 +196,18 @@ function dragComponent(event) {
 }
 
 function dropComponentInRow(event) {
-    event.preventDefault();
-    event.target.classList.remove('dragover');
+    event.preventDefault(); // Impede o comportamento padrão do evento.
 
-    if (window.currentMovingElement) {
-        var targetRow = event.target.closest('.form_row');
+    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado.
+    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um elemento com a classe 'form_row'.
 
-        if (!targetRow) {
-            alert('Adicione uma linha primeiro!');
-            return;
-        }
-
-        // Criar um novo elemento na nova linha com os mesmos dados
-        var newElement = document.createElement('div');
-        newElement.classList.add('conteudo_inserido');
-        newElement.innerHTML = window.currentMovingElement.innerHTML;
-
-        // Atribuir IDs aos elementos internos apenas se eles não tiverem
-        assignIDsToInnerElements(newElement); // Isso não deve adicionar novos IDs ao mover
-
-        targetRow.querySelector('.components-container').appendChild(newElement);
-
-        // Remover o componente da linha anterior
-        window.currentMovingElement.remove();
-        window.currentMovingElement = null;
-
-        newElement.setAttribute('onmouseover', 'showControlButtons(this)');
-        newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
-
-        // Atualizar a pré-visualização sempre que um componente é adicionado ou movido
-        updateFormPreview();
+    // Se não for um 'form_row', não permite o drop e retorna.
+    if (!targetRow) {
+        alert('Você deve soltar o componente dentro de uma linha (form_row)!');
+        return; 
     }
+
+    targetRow.classList.remove('dragover'); // Remove a classe de arrastar se estiver aplicada.
+
 }
+

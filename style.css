@@ -28,7 +28,7 @@
     border: 1px dashed #bbb;
     display: flex;
     flex-wrap: wrap;
-    min-height: 60px;
+    min-height: 80px;
 }
 
 .form_row:hover{
