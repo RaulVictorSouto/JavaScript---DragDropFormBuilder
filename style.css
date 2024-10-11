@@ -30,6 +30,7 @@
 .drop-area {
     overflow-y: auto; /* Permite rolagem apenas vertical */
     width: 100%;
+    max-height: 700px;
 }
 
 .conteudo_inserido input{
@@ -225,4 +226,19 @@
     padding: 10px;
     border: 1px solid #ddd; /* Adiciona bordas visíveis às colunas */
     margin: 5px; /* Espaçamento entre as colunas */
+}
+
+.button-container-col {
+    display: flex;
+    justify-content: flex-start; /* Distribui os botões de forma espaçada */
+    margin-bottom: 10px; /* Adiciona um espaço inferior */
+    width: 100%;
+}
+
+.button-container-col .btn-remove {
+    margin-top: 0;
+}
+
+.button-container-col .btn-left {
+    margin-right: 5px;
 }
