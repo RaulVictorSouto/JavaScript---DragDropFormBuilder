@@ -10,97 +10,91 @@
     <title>Form Builder</title>
 </head>
 <body class="bg-light text-dark">
-    <main class="container mt-5">
-        <h1 class="text-center">Formulário Drag and Drop</h1><br><br>
+ <main class="container-fluid mt-5">
+    <h1 class="text-center">Formulário Drag and Drop</h1><br><br>
 
-        <div class="container-fluid">
-            <div class="row justify-content-around">
-                <!-- Ajusta a largura da drop-area para 90% da tela -->
-                <div class="col-lg-10">
-                    <div class="drop-area" id="box1" ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
-                        <!-- A primeira row é criada automaticamente -->
-                        
-                    </div>
-                    
-                </div>
-                
-                <div class="col-lg-2">
-                    <button class="btn btn-primary mb-3" onclick="addRow()">Adicionar Linha</button>
-                    <ul class="list-group">
-                        <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><h3>Título</h3></div>" data-type="title">Título</li>
-                        <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div style='height: 20px;'></div>" data-type="empty-space">Espaço Vazio</li>
-                        <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-primary botao-componente'>Botão</button></div>" data-type="button">Botão</li>
-                        <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaTexto'>Texto:</label><input type='text' class='form-control' id='caixaTexto' name='texto'></div>" data-type="input">Caixa de Texto</li>
-                      
-                        <li class="list-group-item draggable-item" id="in5" draggable="true" 
-                            ondragstart="drag(event)" 
-                            data-input="
-                                <div class='conteudo'>
-                                    <label for='switch'>Marque a opção: </label><br/>
-                                    <div class='switch'>
-                                        <input type='checkbox' class='switch-input' id='switch' name='switch'>
-                                        <label class='switch-label' for='switch'>
-                                            <span class='switch-button'></span>
-                                        </label>
-                                    </div>
-                                </div>" 
-                            data-type="switch">
-                            Caixa de Marcação (Switch)
-                        </li>
-
-                        <li class="list-group-item draggable-item" id="in6" draggable="true" 
-                            ondragstart="drag(event)" 
-                            data-input="
-                                <div class='conteudo'>
-                                    <label for='caixaSelecao'>Escolha uma opção:</label>
-                                    <select class='form-control' id='caixaSelecao' name='caixaSelecao'>
-                                    </select>
-                                    <button type='button' class='btn btn-primary addOptionButton' onclick='addOption(this)'>Adicionar Opção</button>
-                                    <button type='button' class='btn btn-danger removeOptionButton' onclick='removeOption(this)'>Remover Opção</button>
-                                </div>" 
-                            data-type="select">
-                            Caixa de Seleção
-                        </li>
-
-                        <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
-                        <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>
-                        <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroInteiro'>Número Inteiro:</label><input type='number' class='form-control' id='numeroInteiro' name='numeroInteiro' step='1' min='0'></div>" data-type="integer">Campo de Número Inteiro</li>
-                        <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroFloat'>Número com Ponto Flutuante:</label><input type='number' class='form-control' id='numeroFloat' name='numeroFloat' step='0.01' min='0'></div>" data-type="float">Campo de Número Float</li>
-                        <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='memorando'>Memorando:</label><textarea class='form-control' id='memorando' name='memorando' rows='5'></textarea></div>" data-type="textarea">Campo de Memorando</li>
-                        <li class="list-group-item draggable-item" id="in12" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='data'>Data:</label><input type='date' class='form-control' id='data' name='data'></div>" data-type="date">Campo de Data</li>
-                        <li class="list-group-item draggable-item" id="in13" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='hora'>Hora:</label><input type='time' class='form-control' id='hora' name='hora'></div>" data-type="time">Campo de Hora</li>
-                        <li class="list-group-item draggable-item" id="in14" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='url'>URL:</label><input type='url' class='form-control' id='url' name='url'></div>" data-type="url">Campo de URL</li>
-                        <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
-                        <li class="list-group-item draggable-item" id="in16" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
-                        <li class="list-group-item draggable-item" id="in17" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
-                        
-                        <li class="list-group-item draggable-item" id="in18" draggable="true" 
-                            ondragstart="drag(event)" 
-                            data-input="<div class='conteudo'>
-                                            <label for='imagem'>Imagem:</label>
-                                            <input type='file' class='form-control' id='imagem' name='imagem' accept='image/*' onchange='previewImage(event)'>
-                                            <img src='' id='imagePreview' alt='Pré-visualização da Imagem' style='max-width: 100%; height: auto; display: none;'>
-                                            <button type='button' class='btn btn-danger' id='removeImageButton' style='display: none;' onclick='removeImage(this)'>Remover Imagem</button>
-                                        </div>" 
-                            data-type="file">
-                            Campo de Imagem
-                        </li>
-
-                        <li class="list-group-item draggable-item" id="in19" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Assinatura:</label><input type='text' class='form-control' id='assinatura' name='assinatura' style='font-style: italic;'></div>" data-type="text">Campo de Assinatura</li>
-                        <li class="list-group-item draggable-item" id="in20" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Caixa Grid:</label><input type='text' class='form-control' id='caixaGrid' name='caixaGrid'></div>" data-type="text">Caixa Grid</li>
-                        <li class="list-group-item draggable-item" id="in21" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Visualizador 3A:</label><input type='text' class='form-control' id='visualizador3A' name='visualizador3A'></div>" data-type="text">Visualizador 3A</li>
-                        <li class="list-group-item draggable-item" id="in22" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Multivalor:</label><input type='text' class='form-control' id='multivalor' name='multivalor'></div>" data-type="text">Multivalor</li>
-                        <li class="list-group-item draggable-item" id="in23" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Geolocalização:</label><input type='text' class='form-control' id='geolocalizacao' name='geolocalizacao'></div>" data-type="text">Geolocalização</li>
-                        <li class="list-group-item draggable-item" id="in24" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='html'>HTML:</label><textarea class='form-control' id='html' name='html' rows='5'></textarea></div>" data-type="textarea">Campo de HTML</li>
-                        <li class="list-group-item draggable-item" id="in25" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='button' class='btn btn-primary' id='digitalizar'>Digitalizar</button></div>" data-type="button">Botão Digitalizar</li>
-                        
-                    </ul>
-                    <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm(this)" data-target="box1">Editar Formulário</button>
-                    <button type="button" class="btn btn-primary mb-3" id="previewFormButton" onclick="previewForm()">Visualizar Formulário</button>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <!-- Ajusta a largura da drop-area para 80% da tela -->
+            <div class="col-lg-9 col-md-10 col-sm-12">
+                <div class="drop-area" id="box1" ondragenter="back()" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    <!-- A primeira row é criada automaticamente -->
                 </div>
             </div>
+
+            <div class="col-lg-2 col-md-10 col-sm-12">
+                <button class="btn btn-primary mb-3" onclick="addRow()">Adicionar Linha</button>
+                <ul class="list-group">
+                    <li class="list-group-item draggable-item" id="in1" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><h3>Título</h3></div>" data-type="title">Título</li>
+                    <li class="list-group-item draggable-item" id="in2" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><div style='height: 20px;'></div>" data-type="empty-space">Espaço Vazio</li>
+                    <li class="list-group-item draggable-item" id="in3" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><button type='submit' class='btn btn-primary botao-componente'>Botão</button></div>" data-type="button">Botão</li>
+                    <li class="list-group-item draggable-item" id="in4" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaTexto'>Texto:</label><input type='text' class='form-control' id='caixaTexto' name='texto'></div>" data-type="input">Caixa de Texto</li>
+                    
+                    <li class="list-group-item draggable-item" id="in5" draggable="true" 
+                        ondragstart="drag(event)" 
+                        data-input="
+                            <div class='conteudo'>
+                                <label for='switch'>Marque a opção: </label><br/>
+                                <div class='switch'>
+                                    <input type='checkbox' class='switch-input' id='switch' name='switch'>
+                                    <label class='switch-label' for='switch'>
+                                        <span class='switch-button'></span>
+                                    </label>
+                                </div>
+                            </div>" 
+                        data-type="switch">
+                        Caixa de Marcação (Switch)
+                    </li>
+
+                    <li class="list-group-item draggable-item" id="in6" draggable="true" 
+                        ondragstart="drag(event)" 
+                        data-input="
+                            <div class='conteudo'>
+                                <label for='caixaSelecao'>Escolha uma opção:</label>
+                                <select class='form-control' id='caixaSelecao' name='caixaSelecao'>
+                                </select>
+                                <button type='button' class='btn btn-primary addOptionButton' onclick='addOption(this)'>Adicionar Opção</button>
+                                <button type='button' class='btn btn-danger removeOptionButton' onclick='removeOption(this)'>Remover Opção</button>
+                            </div>" 
+                        data-type="select">
+                        Caixa de Seleção
+                    </li>
+
+                    <li class="list-group-item draggable-item" id="in7" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='caixaMoeda'>Valor:</label><input type='text' class='form-control' id='caixaMoeda' name='moeda' pattern='^\d+(\.\d{1,2})?$' placeholder='0.00'></div>" data-type="currency">Caixa de Moeda</li>
+                    <li class="list-group-item draggable-item" id="in8" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='uploadArquivo'>Envio de Arquivo:</label><input type='file' class='form-control' id='uploadArquivo' name='arquivo'></div>" data-type="file">Subir Arquivo</li>
+                    <li class="list-group-item draggable-item" id="in9" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroInteiro'>Número Inteiro:</label><input type='number' class='form-control' id='numeroInteiro' name='numeroInteiro' step='1' min='0'></div>" data-type="integer">Campo de Número Inteiro</li>
+                    <li class="list-group-item draggable-item" id="in10" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='numeroFloat'>Número com Ponto Flutuante:</label><input type='number' class='form-control' id='numeroFloat' name='numeroFloat' step='0.01' min='0'></div>" data-type="float">Campo de Número Float</li>
+                    <li class="list-group-item draggable-item" id="in11" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='memorando'>Memorando:</label><textarea class='form-control' id='memorando' name='memorando' rows='5'></textarea></div>" data-type="textarea">Campo de Memorando</li>
+                    <li class="list-group-item draggable-item" id="in12" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='data'>Data:</label><input type='date' class='form-control' id='data' name='data'></div>" data-type="date">Campo de Data</li>
+                    <li class="list-group-item draggable-item" id="in13" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='hora'>Hora:</label><input type='time' class='form-control' id='hora' name='hora'></div>" data-type="time">Campo de Hora</li>
+                    <li class="list-group-item draggable-item" id="in14" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='url'>URL:</label><input type='url' class='form-control' id='url' name='url'></div>" data-type="url">Campo de URL</li>
+                    <li class="list-group-item draggable-item" id="in15" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='telefone'>Telefone:</label><input type='tel' class='form-control' id='telefone' name='telefone'></div>" data-type="tel">Campo de Telefone</li>
+                    <li class="list-group-item draggable-item" id="in16" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='intervalo'>Intervalo:</label><input type='range' class='form-control' id='intervalo' name='intervalo' min='0' max='100'></div>" data-type="range">Campo de Intervalo (Slider)</li>
+                    <li class="list-group-item draggable-item" id="in17" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='password'>Senha:</label><input type='password' class='form-control' id='password' name='password'></div>" data-type="password">Campo de Senha</li>
+                    
+                    <li class="list-group-item draggable-item" id="in18" draggable="true" 
+                        ondragstart="drag(event)" 
+                        data-input="<div class='conteudo'>
+                                        <label for='imagem'>Imagem:</label>
+                                        <input type='file' class='form-control' id='imagem' name='imagem' accept='image/*' onchange='previewImage(event)'>
+                                        <img src='' id='imagePreview' alt='Pré-visualização da Imagem' style='max-width: 100%; height: auto; display: none;'>
+                                        <button type='button' class='btn btn-danger' id='removeImageButton' style='display: none;' onclick='removeImage(this)'>Remover Imagem</button>
+                                    </div>" 
+                        data-type="file">
+                        Campo de Imagem
+                    </li>
+
+                    <li class="list-group-item draggable-item" id="in19" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><label for='assinatura'>Assinatura:</label><input type='text' class='form-control' id='assinatura' name='assinatura' style='font-style: italic;'></div>" data-type="text">Campo de Assinatura</li>
+                    <li class="list-group-item draggable-item" id="in20" draggable="true" ondragstart="drag(event)" data-input="<div class='conteudo'><h3>Caixa Grid</h3></div>" data-type="grid">Caixa Grid</li>
+                </ul>
+                <button class="btn btn-primary mb-3 botaoEdicaoFormulario" onclick="editForm(this)" data-target="box1">Editar Formulário</button>
+                <button type="button" class="btn btn-primary mb-3" id="previewFormButton" onclick="previewForm()">Visualizar Formulário</button>
+            </div>
         </div>
-    </main>
+    </div>
+</main>
+
+    
 
     <!-- Modal para visualizar o formulário -->
     <div class="modal fade" id="previewFormModal" tabindex="-1" role="dialog" aria-labelledby="previewFormModalLabel" aria-hidden="true">

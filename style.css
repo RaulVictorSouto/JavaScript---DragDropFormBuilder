@@ -1,3 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Adicionado para evitar que margens e padding aumentem a largura */
+}
+
+.container-fluid {
+    padding: 0; /* Remove padding se necessário */
+    margin: 0; /* Remove margens se necessário */
+    width: 100%;
+    overflow-x: hidden;
+}
+
 .row {
     margin-bottom: 10px;
     padding: 5px;
@@ -11,6 +24,11 @@
     padding: 5px;
     text-align: start;
     align-items: baseline;
+    width: 100%;
+}
+
+.drop-area {
+    overflow-y: auto; /* Permite rolagem apenas vertical */
     width: 100%;
 }
 
