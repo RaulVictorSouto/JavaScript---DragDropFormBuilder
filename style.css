@@ -79,6 +79,7 @@
     display: flex; /* Usando flexbox para alinhar os botões */
     margin-bottom: 20px;
     margin-top: 5px;
+    width: 100%;
 }
 
 .buttons-container .btn {

@@ -17,6 +17,9 @@ function addRow() {
 
     var buttonsContainer = document.createElement('div');
     buttonsContainer.classList.add('buttons-container');
+    buttonsContainer.ondrop = function() {
+        handleDropInButtonsContainer(event);
+    }
 
     var removeRowButton = document.createElement('button');
     removeRowButton.classList.add('btn', 'btn-secondary', 'btn-sm', 'btn-remove');

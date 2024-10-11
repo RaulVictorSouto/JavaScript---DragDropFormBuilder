@@ -16,7 +16,6 @@ function drag(event) {
 
 
 function drop(event) {
-    console.log('dropou');
     event.preventDefault();
     event.target.classList.remove('dragover');
     var data = event.dataTransfer.getData("a");
@@ -135,28 +134,31 @@ function handleDragOver(event) {
     }
 }
 
+
 function handleDrop(event) {
+    event.preventDefault(); // Impede o comportamento padrão do navegador
+
     const container = event.currentTarget;
     const dragging = document.querySelector('.dragging');
-    
-    // Remover evento de arrastar
+
+    // Remover classe de arrastando
     dragging.classList.remove('dragging');
     dragging.style.opacity = "1";
-    
+
     // Lógica de reciclagem: Verificar se o elemento foi movido para um novo container
     if (window.currentMovingElement.parentElement !== container) {
         const newElement = document.createElement('div');
         newElement.classList.add('conteudo_inserido');
         newElement.innerHTML = window.currentMovingElement.innerHTML;
-        
+
         assignIDsToInnerElements(newElement); // Atribuir IDs aos elementos internos, se necessário
-        
+
         // Adiciona o novo elemento no contêiner alvo
         container.appendChild(newElement);
-        
+
         // Remover o elemento original do contêiner anterior
         window.currentMovingElement.remove();
-        
+
         // Atribuir eventos de controle ao novo elemento
         newElement.setAttribute('onmouseover', 'showControlButtons(this)');
         newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
@@ -164,13 +166,14 @@ function handleDrop(event) {
 
     // Limpar referência do item movido
     window.currentMovingElement = null;
-    
+
     // Remover listeners de dragover e drop
     document.querySelectorAll('.components-container').forEach(container => {
         container.removeEventListener('dragover', handleDragOver);
         container.removeEventListener('drop', handleDrop);
     });
 }
+
 
 function getDragAfterContainer(container, y) {
     const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')]; // Excluir o item que está sendo arrastado
@@ -219,5 +222,25 @@ function dropComponentInRow(event) {
     } else {
         container.insertBefore(draggedRow, afterElement); // Caso contrário, insere antes do elemento encontrado
     }
+}
+
+function handleDropInButtonsContainer(event) {
+    event.preventDefault(); // Impede o comportamento padrão do navegador
+
+    // Caso o elemento tenha sido arrastado, podemos restaurar sua posição ou cancelar o drop
+    if (window.currentMovingElement) {
+        // Cancelar o drop: o elemento voltará à posição original
+        window.currentMovingElement.style.opacity = "1";
+        window.currentMovingElement.setAttribute('draggable', 'false');
+
+        // Limpar a referência do item movido
+        window.currentMovingElement = null;
+    }
+
+    // Remover listeners de dragover e drop das outras containers
+    document.querySelectorAll('.components-container').forEach(container => {
+        container.removeEventListener('dragover', handleDragOver);
+        container.removeEventListener('drop', handleDrop);
+    });
 }
 
