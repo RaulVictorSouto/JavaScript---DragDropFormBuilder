@@ -225,12 +225,17 @@
     flex-direction: column; /* Componentes dentro de cada coluna */
     flex: 1; /* Faz com que as colunas tenham tamanhos iguais */
     padding: 10px;
-    border: 1px solid #ddd; /* Adiciona bordas visíveis às colunas */
+    border: 1px dashed #bbb; /* Adiciona bordas visíveis às colunas */
     margin: 5px; /* Espaçamento entre as colunas */
+    height: 80px;
+}
+
+.components-container.col:hover {
+    border: 2px dashed #B0C4DE; /* Adiciona bordas visíveis às colunas */
 }
 
 .button-container-col {
-    display: flex;
+    display: none;
     justify-content: flex-start; /* Distribui os botões de forma espaçada */
     margin-bottom: 10px; /* Adiciona um espaço inferior */
     width: 100%;

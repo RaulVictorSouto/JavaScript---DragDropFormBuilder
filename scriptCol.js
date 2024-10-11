@@ -42,8 +42,9 @@ function addNewCol(button) {
         // Insira a nova 'components-container col' dentro da form_row
         formRow.appendChild(newComponentsContainer);
 
-        // Exibir um aviso no console
         console.log("Nova coluna adicionada dentro da form_row.");
+  
+        initializeDragAndDropCol();
     }
 }
 
@@ -65,8 +66,14 @@ function createButtons(container, formRow) {
     var moveColButton = document.createElement('button');
     moveColButton.classList.add('btn', 'btn-info', 'btn-sm', 'btn-move');
     moveColButton.innerHTML = '<i class="bi bi-arrows-move"></i>'; // Use innerHTML para adicionar o ícone
-    moveColButton.onclick = function() {
-        //removeCol(container, formRow);
+    moveColButton.onmousedown = function() {
+        container.setAttribute('draggable', 'true');
+        container.style.opacity = "0.5";
+        window.currentMovingElement = container;
+    };
+    moveColButton.onmouseup = function() {
+        container.setAttribute('draggable', 'false');
+        container.style.opacity = "1";
     };
 
     // Mover para esquerda
@@ -103,6 +110,15 @@ function createButtons(container, formRow) {
 
     // Adicionar div de botões ao novo container de colunas
     container.appendChild(buttonContainer);
+
+     // Adicionar eventos para mostrar e esconder os botões
+     container.addEventListener('mouseenter', function() {
+        buttonContainer.style.display = 'flex'; // Exibe os botões ao passar o mouse
+    });
+
+    container.addEventListener('mouseleave', function() {
+        buttonContainer.style.display = 'none'; // Esconde os botões ao sair o mouse
+    });
 }
 
 // Função para remover coluna
@@ -137,3 +153,98 @@ function removeCol(container, formRow) {
         console.log("Uma coluna foi removida.");
     }
 }
+
+
+
+
+//Sistema arrasta e solta
+
+function initializeDragAndDropCol() {
+    document.querySelectorAll('.components-container.col').forEach(col => {
+        col.setAttribute('draggable', 'true');
+        col.addEventListener('dragstart', handleColDragStart);
+        col.addEventListener('dragend', handleColDragEnd);
+    });
+}
+
+function handleColDragStart(event) {
+    const draggedElement = event.target;
+    draggedElement.classList.add('dragging');
+    window.currentMovingCol = draggedElement;
+
+    // Permite o drop em todas as colunas e linhas
+    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
+        target.addEventListener('dragover', handleColDragOver);
+        target.addEventListener('drop', handleColDrop);
+    });
+}
+
+function handleColDragEnd(event) {
+    const draggedElement = event.target;
+    draggedElement.classList.remove('dragging');
+
+    // Remove os eventos de dragover e drop
+    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
+        target.removeEventListener('dragover', handleColDragOver);
+        target.removeEventListener('drop', handleColDrop);
+    });
+}
+
+function handleColDragOver(event) {
+    event.preventDefault(); // Necessário para permitir o drop
+    const container = event.currentTarget;
+
+    if (container.classList.contains('form_row')) {
+        // Se estiver sobre uma linha, adiciona no final da linha
+        container.appendChild(window.currentMovingCol);
+    } else if (container.classList.contains('col')) {
+        // Se estiver sobre outra coluna, ajusta a posição
+        const afterElement = getDragAfterContainerCol(container, event.clientY);
+        const dragging = document.querySelector('.dragging');
+
+        if (afterElement == null) {
+            container.parentElement.appendChild(dragging); // Adiciona no final
+        } else {
+            container.parentElement.insertBefore(dragging, afterElement);
+        }
+    }
+}
+
+function handleColDrop(event) {
+    event.preventDefault();
+    const container = event.currentTarget;
+    const draggedElement = document.querySelector('.dragging');
+    
+    draggedElement.classList.remove('dragging');
+    draggedElement.style.opacity = "1";
+
+    if (window.currentMovingCol && window.currentMovingCol !== container) {
+        container.appendChild(window.currentMovingCol);
+    }
+
+    window.currentMovingCol = null;
+
+    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
+        target.removeEventListener('dragover', handleColDragOver);
+        target.removeEventListener('drop', handleColDrop);
+    });
+}
+
+function getDragAfterContainerCol(container, y) {
+    const elements = [...container.parentElement.querySelectorAll('.components-container.col:not(.dragging)')];
+
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDragAndDropCol();
+});
+
