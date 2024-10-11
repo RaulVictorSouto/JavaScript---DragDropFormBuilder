@@ -65,10 +65,18 @@ function addRow() {
         }
     };
 
+    var adicionarColButton = document.createElement('button');
+    adicionarColButton.classList.add('btn', 'btn-info', 'btn-sm', 'addCol-button');
+    adicionarColButton.innerHTML = '<i class="bi bi-plus-square"> Adicionar Coluna</i>';
+    adicionarColButton.onclick = function() {
+        addNewCol(this); // Passa o botão clicado para a função
+    };
+
     buttonsContainer.appendChild(removeRowButton);
     buttonsContainer.appendChild(moveRowButton);
     buttonsContainer.appendChild(upMoveRowButton);
     buttonsContainer.appendChild(downMoveRowButton);
+    buttonsContainer.appendChild(adicionarColButton);
 
     row.appendChild(buttonsContainer);
     row.appendChild(componentsContainer);
