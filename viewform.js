@@ -33,13 +33,35 @@ function previewForm() {
                 container.remove(); // Remove a div control-buttons
             });
 
-            // Aplicar os estilos calculados para a visualização
+            // Remover borda e ajustar margens e padding
+            formRow.style.border = 'none'; 
+            formRow.style.padding = '0'; 
+            formRow.style.marginBottom = '10px'; 
+
+            // Obter os estilos computados
             var computedStyle = window.getComputedStyle(formRow);
-            formRow.style.cssText = computedStyle.cssText;
+            
+            // Aplicar manualmente os estilos importantes
+            formRow.style.display = computedStyle.display;
+            formRow.style.flexDirection = computedStyle.flexDirection;
+            formRow.style.justifyContent = computedStyle.justifyContent;
+            formRow.style.alignItems = computedStyle.alignItems;
+            formRow.style.width = computedStyle.width;
+            formRow.style.height = computedStyle.height;
+            formRow.style.backgroundColor = computedStyle.backgroundColor;
+            // Adicione outros estilos que você queira preservar
+
+        });
+
+        // Itera sobre as divs .components-container.col para remover as bordas
+        var componentCols = dropAreaClone.querySelectorAll('.components-container.col');
+        componentCols.forEach(function(col) {
+            col.style.border = 'none'; // Remove a borda da coluna
         });
 
         // Adiciona a drop-area clonada ao preview
         formPreview.appendChild(dropAreaClone);
+
         
     } else {
         console.error("Nenhum elemento está sendo editado para visualizar");

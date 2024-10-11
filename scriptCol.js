@@ -61,6 +61,14 @@ function createButtons(container, formRow) {
         removeCol(container, formRow); // Chama a função para remover
     };
 
+    //Botão de movimentação arrasta e solta
+    var moveColButton = document.createElement('button');
+    moveColButton.classList.add('btn', 'btn-info', 'btn-sm', 'btn-move');
+    moveColButton.innerHTML = '<i class="bi bi-arrows-move"></i>'; // Use innerHTML para adicionar o ícone
+    moveColButton.onclick = function() {
+        //removeCol(container, formRow);
+    };
+
     // Mover para esquerda
     var moveLeftColButton = document.createElement('button');
     moveLeftColButton.classList.add('btn', 'btn-info', 'btn-sm', 'btn-left');
@@ -89,6 +97,7 @@ function createButtons(container, formRow) {
 
     // Adicionar botões à div de botões
     buttonContainer.appendChild(removeColButton);
+    buttonContainer.appendChild(moveColButton);
     buttonContainer.appendChild(moveLeftColButton);
     buttonContainer.appendChild(moveRightColButton);
 
@@ -111,10 +120,12 @@ function removeCol(container, formRow) {
 
         // Remover os botões (se houver)
         var removeButton = colContainers[0].querySelector('.btn-remove');
+        var moveButton = colContainers[0].querySelector('.btn-move');
         var lButton = colContainers[0].querySelector('.btn-left');
         var rButton = colContainers[0].querySelector('.btn-right');
-        if (removeButton && lButton && rButton) {
+        if (removeButton && moveButton && lButton && rButton) {
             removeButton.remove(); // Remove o botão de remoção
+            moveButton.remove();
             lButton.remove();
             rButton.remove();
             console.log("Botões removidos.");
