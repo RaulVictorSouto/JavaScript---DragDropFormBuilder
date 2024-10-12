@@ -113,11 +113,11 @@ function createButtons(container, formRow) {
 
      // Adicionar eventos para mostrar e esconder os botões
      container.addEventListener('mouseenter', function() {
-        buttonContainer.style.display = 'flex'; // Exibe os botões ao passar o mouse
-    });
+       buttonContainer.style.display = 'flex'; // Exibe os botões ao passar o mouse
+   });
 
-    container.addEventListener('mouseleave', function() {
-        buttonContainer.style.display = 'none'; // Esconde os botões ao sair o mouse
+     container.addEventListener('mouseleave', function() {
+       buttonContainer.style.display = 'none'; // Esconde os botões ao sair o mouse
     });
 }
 

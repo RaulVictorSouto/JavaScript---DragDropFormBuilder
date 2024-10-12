@@ -227,7 +227,6 @@
     padding: 10px;
     border: 1px dashed #bbb; /* Adiciona bordas visíveis às colunas */
     margin: 5px; /* Espaçamento entre as colunas */
-    height: 80px;
 }
 
 .components-container.col:hover {
@@ -235,7 +234,7 @@
 }
 
 .button-container-col {
-    display: none;
+    display: flex;
     justify-content: flex-start; /* Distribui os botões de forma espaçada */
     margin-bottom: 10px; /* Adiciona um espaço inferior */
     width: 100%;
