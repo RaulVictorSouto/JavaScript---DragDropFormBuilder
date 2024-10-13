@@ -217,11 +217,11 @@ function dropComponentInRow(event) {
     const container = targetRow.parentElement;
     const afterElement = getDragAfterElement(container, event.clientY);
     
+    
     if (afterElement === null) {
         container.appendChild(draggedRow); // Se não houver linha depois, coloca no final
-    } else {
-        container.insertBefore(draggedRow, afterElement); // Caso contrário, insere antes do elemento encontrado
-    }
+    } 
+    
 }
 
 function handleDropInButtonsContainer(event) {

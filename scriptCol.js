@@ -193,49 +193,59 @@ function handleColDragEnd(event) {
 function handleColDragOver(event) {
     event.preventDefault(); // Necessário para permitir o drop
     const container = event.currentTarget;
+    const dragging = document.querySelector('.dragging');
 
     if (container.classList.contains('form_row')) {
-        // Se estiver sobre uma linha, adiciona no final da linha
-        container.appendChild(window.currentMovingCol);
+        // Permitir o drop somente se o dragging for uma coluna
+        if (dragging.classList.contains('col')) {
+            // Garante que o elemento seja adicionado ao final da form_row correta
+            container.appendChild(dragging);
+        }
     } else if (container.classList.contains('col')) {
         // Se estiver sobre outra coluna, ajusta a posição
         const afterElement = getDragAfterContainerCol(container, event.clientY);
-        const dragging = document.querySelector('.dragging');
 
-        if (afterElement == null) {
-            container.parentElement.appendChild(dragging); // Adiciona no final
-        } else {
-            container.parentElement.insertBefore(dragging, afterElement);
+        const formRow = container.closest('.form_row'); // Obtém a form_row pai
+
+        if (formRow) {
+            if (afterElement == null) {
+                formRow.appendChild(dragging); // Adiciona no final da form_row
+            } else {
+                formRow.insertBefore(dragging, afterElement);
+            }
         }
     }
 }
 
 function handleColDrop(event) {
     event.preventDefault();
-    const container = event.currentTarget;
     const draggedElement = document.querySelector('.dragging');
     
     draggedElement.classList.remove('dragging');
     draggedElement.style.opacity = "1";
 
-    if (window.currentMovingCol && window.currentMovingCol !== container) {
-        container.appendChild(window.currentMovingCol);
+    // Garante que o elemento seja adicionado à form_row correta
+    const formRow = draggedElement.closest('.form_row');
+    if (formRow) {
+        formRow.appendChild(draggedElement);
     }
 
     window.currentMovingCol = null;
 
+    // Remove os eventos de dragover e drop
     document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
         target.removeEventListener('dragover', handleColDragOver);
         target.removeEventListener('drop', handleColDrop);
     });
 }
 
+
 function getDragAfterContainerCol(container, y) {
     const elements = [...container.parentElement.querySelectorAll('.components-container.col:not(.dragging)')];
 
     return elements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
+        const offset = y - (box.top + box.height / 2);
         if (offset < 0 && offset > closest.offset) {
             return { offset: offset, element: child };
         } else {
@@ -247,4 +257,3 @@ function getDragAfterContainerCol(container, y) {
 document.addEventListener('DOMContentLoaded', function() {
     initializeDragAndDropCol();
 });
-
