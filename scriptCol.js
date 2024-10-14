@@ -50,28 +50,28 @@ function createColumn(formRow, regularContainer) {
 }
 
 // Função para criar os botões de mover e remover
-function createButtons(container, formRow) {
+function createButtons(colContainer, formRow) {
     var buttonContainer = document.createElement('div');
     buttonContainer.classList.add('button-container-col');
 
     // Criação dos botões
-    createButton(buttonContainer, 'btn-remove', '<i class="bi bi-x"></i>', () => removeCol(container, formRow), 'btn-secondary');
+    createButton(buttonContainer, 'btn-remove', '<i class="bi bi-x"></i>', () => removeCol(colContainer, formRow), 'btn-secondary');
     createButton(buttonContainer, 'btn-move', '<i class="bi bi-arrows-move"></i>', () => {
-        container.setAttribute('draggable', 'true');
-        container.style.opacity = "0.5";
-        window.currentMovingElement = container;
+        colContainer.setAttribute('draggable', 'true');
+        colContainer.style.opacity = "0.5";
+        window.currentMovingElement = colContainer;
     }, 'btn-info'); // Mantém a classe primary
     createButton(buttonContainer, 'btn-left', '<i class="bi bi-arrow-left"></i>', moveColLeft, 'btn-info'); // Mantém a classe primary
     createButton(buttonContainer, 'btn-right', '<i class="bi bi-arrow-right"></i>', moveColRight, 'btn-info'); // Mantém a classe primary
 
     // Adicionar div de botões ao novo container de colunas
-    container.appendChild(buttonContainer);
+    colContainer.appendChild(buttonContainer);
 
     // Adicionar eventos para mostrar e esconder os botões
-    toggleButtonVisibility(container, buttonContainer);
+    toggleButtonVisibility(colContainer, buttonContainer);
 }
 
-function createButton(container, className, innerHTML, onClick, additionalClass) {
+function createButton(colContainer, className, innerHTML, onClick, additionalClass) {
     var button = document.createElement('button');
     button.classList.add('btn', 'btn-sm', className);
     if (additionalClass) {
@@ -79,18 +79,18 @@ function createButton(container, className, innerHTML, onClick, additionalClass)
     }
     button.innerHTML = innerHTML; // Use innerHTML para adicionar o ícone
     button.onclick = onClick;
-    container.appendChild(button);
+    colContainer.appendChild(button);
 }
 
 
 
 // Funções para mover colunas para esquerda e direita
 function moveColLeft() {
-    moveColumn(this, -1);
+    moveColumn(this, -1); // Passa -1 para mover para a esquerda
 }
 
 function moveColRight() {
-    moveColumn(this, 1);
+    moveColumn(this, 1); // Passa 1 para mover para a direita
 }
 
 function moveColumn(button, direction) {
@@ -98,24 +98,31 @@ function moveColumn(button, direction) {
     const siblingCol = direction === -1 ? colDiv.previousElementSibling : colDiv.nextElementSibling;
 
     if (siblingCol && siblingCol.classList.contains('col')) {
-        colDiv.parentNode.insertBefore(colDiv, siblingCol);
+        if (direction === -1) {
+            // Mover para a esquerda
+            colDiv.parentNode.insertBefore(colDiv, siblingCol);
+        } else {
+            // Mover para a direita
+            colDiv.parentNode.insertBefore(siblingCol, colDiv);
+        }
     }
 }
 
+
 // Função para mostrar e esconder os botões
-function toggleButtonVisibility(container, buttonContainer) {
-    container.addEventListener('mouseenter', () => {
+function toggleButtonVisibility(colContainer, buttonContainer) {
+    colContainer.addEventListener('mouseenter', () => {
         buttonContainer.style.display = 'flex'; // Exibe os botões ao passar o mouse
     });
 
-    container.addEventListener('mouseleave', () => {
+    colContainer.addEventListener('mouseleave', () => {
         buttonContainer.style.display = 'none'; // Esconde os botões ao sair o mouse
     });
 }
 
 // Função para remover coluna
-function removeCol(container, formRow) {
-    container.remove();
+function removeCol(colContainer, formRow) {
+    colContainer.remove();
     var colContainers = formRow.querySelectorAll('.components-container.col');
 
     if (colContainers.length === 1) {
@@ -130,8 +137,8 @@ function removeCol(container, formRow) {
 }
 
 // Função para remover botões
-function removeButtons(container) {
-    var buttons = container.querySelectorAll('.btn-remove, .btn-move, .btn-left, .btn-right');
+function removeButtons(colContainer) {
+    var buttons = colContainer.querySelectorAll('.btn-remove, .btn-move, .btn-left, .btn-right');
     buttons.forEach(button => button.remove());
 }
 
@@ -157,6 +164,7 @@ function handleColDragStart(event) {
 }
 
 function handleColDragEnd(event) {
+    console.log('cccccccccccccc');
     const draggedElement = event.target;
     draggedElement.classList.remove('dragging');
 
@@ -168,23 +176,18 @@ function handleColDragEnd(event) {
 
 function handleColDragOver(event) {
     event.preventDefault();
-    const container = event.currentTarget;
+    const colContainer = event.currentTarget;
     const dragging = document.querySelector('.dragging');
 
-    if (container.classList.contains('form_row')) {
-        if (dragging.classList.contains('col')) {
-            container.appendChild(dragging);
-        }
-    } else if (container.classList.contains('col')) {
-        const afterElement = getDragAfterContainerCol(container, event.clientY);
-        const formRow = container.closest('.form_row');
+    if (dragging.classList.contains('col')) {
+        // Se a coluna está sendo arrastada e o alvo é uma coluna, ajuste a posição
+        const afterElement = getDragAfterContainerCol(colContainer, event.clientY);
+        const formRow = colContainer.closest('.form_row');
 
-        if (formRow) {
-            if (afterElement == null) {
-                formRow.appendChild(dragging);
-            } else {
-                formRow.insertBefore(dragging, afterElement);
-            }
+        if (afterElement == null) {
+            formRow.appendChild(dragging);
+        } else {
+            formRow.insertBefore(dragging, afterElement);
         }
     }
 }
@@ -208,8 +211,8 @@ function handleColDrop(event) {
     });
 }
 
-function getDragAfterContainerCol(container, y) {
-    const elements = [...container.parentElement.querySelectorAll('.components-container.col:not(.dragging)')];
+function getDragAfterContainerCol(colContainer, y) {
+    const elements = [...colContainer.parentElement.querySelectorAll('.components-container.col:not(.dragging)')];
 
     return elements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();

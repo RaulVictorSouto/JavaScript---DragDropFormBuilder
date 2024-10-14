@@ -228,6 +228,7 @@
     padding: 10px;
     border: 1px dashed #bbb; /* Adiciona bordas visíveis às colunas */
     margin: 5px; /* Espaçamento entre as colunas */
+    min-height: 100px;
 }
 
 .components-container.col:hover {

@@ -21,14 +21,16 @@ function drop(event) {
     var data = event.dataTransfer.getData("a");
     var getinput = document.getElementById(data).getAttribute('data-input');
 
-    // Identifica a linha onde o componente foi solto
-    var targetRow = event.target.closest('.form_row');
-    if (!targetRow) {
-        alert('Adicione uma linha primeiro!');
-        return;
+    // Identifica o contêiner alvo onde o componente foi solto
+    var targetContainer = event.target.closest('.components-container, .components-container.col');
+
+    // Verifica se o alvo do drop é um contêiner válido
+    if (!targetContainer) {
+        alert('O componente deve ser adicionado em um contêiner válido.');
+        return; // Impede o drop se não estiver em um contêiner permitido
     }
 
-    // Adiciona o componente na linha correta
+    // Adiciona o componente no contêiner correto
     var newElement = document.createElement('div');
     newElement.classList.add('conteudo_inserido');
     newElement.setAttribute('onmouseover', 'showControlButtons(this)');
@@ -39,7 +41,8 @@ function drop(event) {
     // Atribui IDs aos elementos internos
     assignIDsToInnerElements(newElement);
 
-    targetRow.querySelector('.components-container').appendChild(newElement);
+    // Adiciona o novo componente no contêiner alvo
+    targetContainer.appendChild(newElement);
 }
 
 
@@ -116,23 +119,28 @@ function handleDragStart(event) {
     window.currentMovingElement = draggedElement;
     
     // Adiciona eventos ao contêiner
-    document.querySelectorAll('.components-container', '.form_row').forEach(container => {
+    document.querySelectorAll('.components-container', '.components-container col').forEach(container => {
         container.addEventListener('dragover', handleDragOver);
         container.addEventListener('drop', handleDrop);
     });
 }
 
 function handleDragOver(event) {
+    console.log('bbbbbbbbbbbbbbbbbbbbbbb');
     event.preventDefault(); // Necessário para permitir o drop
     const container = event.currentTarget;
+    console.log(container);
     const afterElement = getDragAfterContainer(container, event.clientY); // Posição vertical
 
     const dragging = document.querySelector('.dragging');
+
+   
     if (afterElement == null) {
         container.appendChild(dragging); // Se não houver nada abaixo, coloca no final
     } else {
         container.insertBefore(dragging, afterElement); // Coloca antes do elemento encontrado
     }
+        
 }
 
 
@@ -146,30 +154,37 @@ function handleDrop(event) {
     dragging.classList.remove('dragging');
     dragging.style.opacity = "1";
 
-    // Lógica de reciclagem: Verificar se o elemento foi movido para um novo container
-    if (window.currentMovingElement.parentElement !== container) {
-        const newElement = document.createElement('div');
-        newElement.classList.add('conteudo_inserido');
-        newElement.innerHTML = window.currentMovingElement.innerHTML;
-
-        assignIDsToInnerElements(newElement); // Atribuir IDs aos elementos internos, se necessário
-
-        // Adiciona o novo elemento no contêiner alvo
-        container.appendChild(newElement);
-
-        // Remover o elemento original do contêiner anterior
-        window.currentMovingElement.remove();
-
-        // Atribuir eventos de controle ao novo elemento
-        newElement.setAttribute('onmouseover', 'showControlButtons(this)');
-        newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
+    // Verifica se o drop ocorreu em um contêiner permitido
+    const targetContainer = event.target.closest('.components-container, .components-container.col');
+    console.log(container);
+    if (!targetContainer) {
+        alert('O componente deve ser adicionado em um contêiner válido.');
+        return; // Cancela a operação se não for um contêiner permitido
     }
 
-    // Limpar referência do item movido
+    // Lógica para adicionar o elemento ao novo contêiner
+    const newElement = document.createElement('div');
+    newElement.classList.add('conteudo_inserido');
+    newElement.innerHTML = window.currentMovingElement.innerHTML;
+
+    // Atribui IDs aos elementos internos
+    assignIDsToInnerElements(newElement);
+
+    // Adiciona o novo elemento no contêiner alvo
+    targetContainer.appendChild(newElement);
+
+    // Remove o elemento original do contêiner anterior
+    window.currentMovingElement.remove();
+
+    // Atribui eventos de controle ao novo elemento
+    newElement.setAttribute('onmouseover', 'showControlButtons(this)');
+    newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
+
+    // Limpa a referência do item movido
     window.currentMovingElement = null;
 
-    // Remover listeners de dragover e drop
-    document.querySelectorAll('.components-container').forEach(container => {
+    // Remove listeners de dragover e drop das outras containers
+    document.querySelectorAll('.components-container, .components-container.col').forEach(container => {
         container.removeEventListener('dragover', handleDragOver);
         container.removeEventListener('drop', handleDrop);
     });
@@ -218,7 +233,7 @@ function handleDropInButtonsContainer(event) {
     }
 
     // Remover listeners de dragover e drop das outras containers
-    document.querySelectorAll('.components-container').forEach(container => {
+    document.querySelectorAll('.components-container, .components-container.col').forEach(container => {
         container.removeEventListener('dragover', handleDragOver);
         container.removeEventListener('drop', handleDrop);
     });
@@ -228,16 +243,17 @@ function dropComponentInRow(event) {
     console.log('função para colocar componente'); // Log para verificar chamada
     // Impede o comportamento padrão do navegador ao soltar o elemento
     event.preventDefault();
-    
-    // Verifica se o drop é em um contêiner components-container
-    var targetContainer = event.target.closest('.components-container');
+
+    // Verifica se o drop é em um contêiner components-container ou components-container col
+    var targetContainer = event.target.closest('.components-container, .components-container.col');
     console.log(targetContainer);
 
-    // Se o alvo do drop não for um contêiner components-container, evita o drop
+    // Se o alvo do drop não for um contêiner válido, cancela a operação
     if (!targetContainer) {
         console.log('cancelou');
         return; // Impede o drop se não estiver em um contêiner válido
     }
 
     console.log('Component dropped in:', targetContainer);
+    // Lógica para manipular o componente arrastado e inseri-lo no novo container
 }

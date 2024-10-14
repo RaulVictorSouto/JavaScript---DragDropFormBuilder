@@ -125,7 +125,6 @@ function dropRowInRow(event) {
     var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
     var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
     var targetContainer = event.target.closest('.components-container'); // Verifica se o alvo do drop é um components-container
-
     // Verifica se o alvo do drop é um form_row, se não é um filho, e se não é um components-container
     if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || targetContainer) {
         return; // Evita que a linha seja solta se não for um form_row, se for o próprio, ou se estiver dentro de components-container
