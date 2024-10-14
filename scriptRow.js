@@ -10,10 +10,12 @@ function addRow() {
     var row = document.createElement('div');
     row.classList.add('form_row');
     row.id = "row-" + Date.now();
+    row.ondrop = dropRowInRow;
 
     var componentsContainer = document.createElement('div');
     componentsContainer.classList.add('components-container');
     componentsContainer.id = "components-container-" + Date.now();
+    componentsContainer.ondrop = dropComponentInRow;
 
     var buttonsContainer = document.createElement('div');
     buttonsContainer.classList.add('buttons-container');
@@ -82,7 +84,7 @@ function addRow() {
     row.appendChild(componentsContainer);
     
     row.ondragover = allowDrop;
-    row.ondrop = dropComponentInRow;
+    row.ondrop = dropRowInRow;
 
     row.onmouseover = function() {
         buttonsContainer.style.display = 'block';
@@ -98,21 +100,6 @@ function addRow() {
     dropArea.appendChild(row);
 }
 
-// Função para determinar onde a row arrastada deve ser posicionada
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
-
-    // Encontra o elemento mais próximo que deve ficar após a row arrastada
-    return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-        } else {
-            return closest;
-        }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
 
 // Detectar quando o item começa a ser arrastado
 document.addEventListener('dragstart', function(e) {
@@ -129,3 +116,52 @@ document.addEventListener('dragend', function(e) {
         e.target.style.opacity = "1";
     }
 });
+
+
+function dropRowInRow(event) {
+    console.log('dropRowInRow'); // Log para verificar a chamada da função
+    event.preventDefault(); // Impede o comportamento padrão do navegador ao soltar o elemento
+
+    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
+    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
+    var targetContainer = event.target.closest('.components-container'); // Verifica se o alvo do drop é um components-container
+
+    // Verifica se o alvo do drop é um form_row, se não é um filho, e se não é um components-container
+    if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || targetContainer) {
+        return; // Evita que a linha seja solta se não for um form_row, se for o próprio, ou se estiver dentro de components-container
+    }
+
+    // Adiciona a linha no local correto, antes ou depois da linha alvo
+    const container = targetRow.parentElement; // Obtém o contêiner pai da linha alvo
+    const afterElement = getDragAfterElement(container, event.clientY); // Obtém o elemento após o qual a linha arrastada deve ser inserida
+
+    if (afterElement === null) {
+        container.appendChild(draggedRow); // Se não houver linha depois, coloca no final
+    } else {
+        container.insertBefore(draggedRow, afterElement); // Caso contrário, insere antes do elemento encontrado
+    }
+
+    console.log('Linha arrastada:', draggedRow);
+    console.log('Linha alvo:', targetRow);
+}
+
+
+
+
+
+// Função para determinar onde a row arrastada deve ser posicionada
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2; // Calcula a posição vertical do mouse
+
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+

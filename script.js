@@ -34,6 +34,7 @@ function drop(event) {
     newElement.setAttribute('onmouseover', 'showControlButtons(this)');
     newElement.setAttribute('onmouseout', 'hideControlButtons(this)');
     newElement.innerHTML = getinput + getControlButtons();
+    newElement.ondrop = dropComponentInRow;
 
     // Atribui IDs aos elementos internos
     assignIDsToInnerElements(newElement);
@@ -115,7 +116,7 @@ function handleDragStart(event) {
     window.currentMovingElement = draggedElement;
     
     // Adiciona eventos ao contêiner
-    document.querySelectorAll('.components-container').forEach(container => {
+    document.querySelectorAll('.components-container', '.form_row').forEach(container => {
         container.addEventListener('dragover', handleDragOver);
         container.addEventListener('drop', handleDrop);
     });
@@ -202,27 +203,6 @@ function dragComponent(event) {
     event.dataTransfer.setData("component", window.currentMovingElement.innerHTML);
 }
 
-function dropComponentInRow(event) {
-    event.preventDefault();
-
-    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
-    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
-
-    // Verifica se o drop é em uma linha e não no próprio contêiner
-    if (!targetRow || draggedRow === targetRow) {
-        return; // Evita que a linha seja solta nela mesma
-    }
-
-    // Adiciona a linha no local correto, antes ou depois da linha alvo
-    const container = targetRow.parentElement;
-    const afterElement = getDragAfterElement(container, event.clientY);
-    
-    
-    if (afterElement === null) {
-        container.appendChild(draggedRow); // Se não houver linha depois, coloca no final
-    } 
-    
-}
 
 function handleDropInButtonsContainer(event) {
     event.preventDefault(); // Impede o comportamento padrão do navegador
@@ -244,5 +224,20 @@ function handleDropInButtonsContainer(event) {
     });
 }
 
+function dropComponentInRow(event) {
+    console.log('função para colocar componente'); // Log para verificar chamada
+    // Impede o comportamento padrão do navegador ao soltar o elemento
+    event.preventDefault();
+    
+    // Verifica se o drop é em um contêiner components-container
+    var targetContainer = event.target.closest('.components-container');
+    console.log(targetContainer);
 
+    // Se o alvo do drop não for um contêiner components-container, evita o drop
+    if (!targetContainer) {
+        console.log('cancelou');
+        return; // Impede o drop se não estiver em um contêiner válido
+    }
 
+    console.log('Component dropped in:', targetContainer);
+}
