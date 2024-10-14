@@ -55,14 +55,14 @@ function createButtons(colContainer, formRow) {
     buttonContainer.classList.add('button-container-col');
 
     // Criação dos botões
-    createButton(buttonContainer, 'btn-remove', '<i class="bi bi-x"></i>', () => removeCol(colContainer, formRow), 'btn-secondary');
-    createButton(buttonContainer, 'btn-move', '<i class="bi bi-arrows-move"></i>', () => {
+    createButton(buttonContainer, 'btn-remove-col', '<i class="bi bi-x"></i>', () => removeCol(colContainer, formRow), 'btn-secondary');
+    createButton(buttonContainer, 'btn-move-col', '<i class="bi bi-arrows-move"></i>', () => {
         colContainer.setAttribute('draggable', 'true');
         colContainer.style.opacity = "0.5";
         window.currentMovingElement = colContainer;
     }, 'btn-info'); // Mantém a classe primary
-    createButton(buttonContainer, 'btn-left', '<i class="bi bi-arrow-left"></i>', moveColLeft, 'btn-info'); // Mantém a classe primary
-    createButton(buttonContainer, 'btn-right', '<i class="bi bi-arrow-right"></i>', moveColRight, 'btn-info'); // Mantém a classe primary
+    createButton(buttonContainer, 'btn-left-col', '<i class="bi bi-arrow-left"></i>', moveColLeft, 'btn-info'); // Mantém a classe primary
+    createButton(buttonContainer, 'btn-right-col', '<i class="bi bi-arrow-right"></i>', moveColRight, 'btn-info'); // Mantém a classe primary
 
     // Adicionar div de botões ao novo container de colunas
     colContainer.appendChild(buttonContainer);
@@ -138,7 +138,7 @@ function removeCol(colContainer, formRow) {
 
 // Função para remover botões
 function removeButtons(colContainer) {
-    var buttons = colContainer.querySelectorAll('.btn-remove, .btn-move, .btn-left, .btn-right');
+    var buttons = colContainer.querySelectorAll('.btn-remove-col, .btn-move-col, .btn-left-col, .btn-right-col');
     buttons.forEach(button => button.remove());
 }
 

@@ -15,6 +15,7 @@ function addRow() {
     var componentsContainer = document.createElement('div');
     componentsContainer.classList.add('components-container');
     componentsContainer.id = "components-container-" + Date.now();
+    componentsContainer.ondragstart = drag;
     componentsContainer.ondrop = dropComponentInRow;
 
     var buttonsContainer = document.createElement('div');

@@ -148,6 +148,7 @@ function handleDrop(event) {
     event.preventDefault(); // Impede o comportamento padrão do navegador
 
     const container = event.currentTarget;
+    console.log('Container: ', container);
     const dragging = document.querySelector('.dragging');
 
     // Remover classe de arrastando
@@ -156,7 +157,7 @@ function handleDrop(event) {
 
     // Verifica se o drop ocorreu em um contêiner permitido
     const targetContainer = event.target.closest('.components-container, .components-container.col');
-    console.log(container);
+    console.log('targetContainer: ', targetContainer);
     if (!targetContainer) {
         alert('O componente deve ser adicionado em um contêiner válido.');
         return; // Cancela a operação se não for um contêiner permitido
@@ -189,6 +190,8 @@ function handleDrop(event) {
         container.removeEventListener('drop', handleDrop);
     });
 }
+
+
 
 
 function getDragAfterContainer(container, y) {
