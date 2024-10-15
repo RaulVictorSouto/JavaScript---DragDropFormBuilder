@@ -116,6 +116,7 @@ function moveComponent(button) {
 function handleDragStart(event) {
     const draggedElement = event.target;
     draggedElement.classList.add('dragging');
+
     window.currentMovingElement = draggedElement;
     
     // Adiciona eventos ao contêiner
@@ -125,26 +126,29 @@ function handleDragStart(event) {
     });
 }
 
+// Função para lidar com o evento de arrasto
 function handleDragOver(event) {
-    console.log('bbbbbbbbbbbbbbbbbbbbbbb');
+    console.log('handleDragOver');
     event.preventDefault(); // Necessário para permitir o drop
+
     const container = event.currentTarget;
-    console.log(container);
+    const dragging = document.querySelector('.dragging'); // Certifique-se de que o elemento arrastado tem a classe .dragging
+
     const afterElement = getDragAfterContainer(container, event.clientY); // Posição vertical
 
-    const dragging = document.querySelector('.dragging');
-
-   
-    if (afterElement == null) {
+    // Mova o componente para a esquerda ou para a direita baseado na posição do mouse
+    if (afterElement === null) {
         container.appendChild(dragging); // Se não houver nada abaixo, coloca no final
     } else {
         container.insertBefore(dragging, afterElement); // Coloca antes do elemento encontrado
     }
-        
 }
 
 
+
+/*
 function handleDrop(event) {
+    console.log('handleDrop');
     event.preventDefault(); // Impede o comportamento padrão do navegador
 
     const container = event.currentTarget;
@@ -190,24 +194,53 @@ function handleDrop(event) {
         container.removeEventListener('drop', handleDrop);
     });
 }
+    */
 
+// Função para lidar com o evento de drop
+function handleDrop(event) {
+    console.log('handleDrop');
+    const container = event.currentTarget;
+    const dragging = document.querySelector('.dragging'); // O elemento que está sendo arrastado
 
-
-
-function getDragAfterContainer(container, y) {
-    const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')]; // Excluir o item que está sendo arrastado
-    
-    return elements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2; // Verifica se o mouse está acima ou abaixo do centro do item
-        
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
+    // Se o elemento arrastado existe, mova-o para a nova posição
+    if (dragging) {
+        const afterElement = getDragAfterContainer(container, event.clientY);
+        if (afterElement === null) {
+            container.appendChild(dragging);
         } else {
-            return closest;
+            container.insertBefore(dragging, afterElement);
         }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
 }
+
+// Adicione os manipuladores de eventos ao contêiner
+const container = document.querySelector('.components-container');
+container.addEventListener('dragover', handleDragOver);
+container.addEventListener('drop', handleDrop);
+
+
+
+
+// Função para determinar qual elemento está mais próximo do mouse
+function getDragAfterContainer(container, mouseY) {
+    const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')];
+
+    let closestElement = null;
+    let closestOffset = Number.NEGATIVE_INFINITY;
+
+    elements.forEach(child => {
+        const box = child.getBoundingClientRect();
+        const offset = mouseY - (box.top + box.height / 2);
+
+        if (offset < 0 && offset > closestOffset) {
+            closestOffset = offset;
+            closestElement = child;
+        }
+    });
+
+    return closestElement;
+}
+
 
 function stopMove() {
     if (window.currentMovingElement) {

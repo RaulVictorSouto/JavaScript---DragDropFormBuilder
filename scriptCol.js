@@ -30,7 +30,7 @@ function createNewColumns(formRow) {
 function createColumn(formRow, regularContainer) {
     var newComponentsContainer = document.createElement('div');
     newComponentsContainer.classList.add('components-container', 'col');
-    newComponentsContainer.ondrop = handleColDrop;
+    //newComponentsContainer.ondrop = handleColDrop;
 
     // Chamar função para criar os botões e adicionar ao container
     createButtons(newComponentsContainer, formRow);
@@ -56,11 +56,7 @@ function createButtons(colContainer, formRow) {
 
     // Criação dos botões
     createButton(buttonContainer, 'btn-remove-col', '<i class="bi bi-x"></i>', () => removeCol(colContainer, formRow), 'btn-secondary');
-    createButton(buttonContainer, 'btn-move-col', '<i class="bi bi-arrows-move"></i>', () => {
-        colContainer.setAttribute('draggable', 'true');
-        colContainer.style.opacity = "0.5";
-        window.currentMovingElement = colContainer;
-    }, 'btn-info'); // Mantém a classe primary
+    createButton(buttonContainer, 'btn-move-col', '<i class="bi bi-arrows-move"></i>', () => turnColDrag(buttonContainer, colContainer), 'btn-info');
     createButton(buttonContainer, 'btn-left-col', '<i class="bi bi-arrow-left"></i>', moveColLeft, 'btn-info'); // Mantém a classe primary
     createButton(buttonContainer, 'btn-right-col', '<i class="bi bi-arrow-right"></i>', moveColRight, 'btn-info'); // Mantém a classe primary
 
@@ -142,7 +138,34 @@ function removeButtons(colContainer) {
     buttons.forEach(button => button.remove());
 }
 
+
+
 // Sistema arrasta e solta
+
+function turnColDrag(buttonContainer, colContainer){
+    // Seleciona o botão que foi criado para adicionar os eventos
+    const moveButton = buttonContainer.querySelector('.btn-move-col');
+
+    // Adiciona o evento onmousedown para iniciar o arrasto
+    moveButton.onmousedown = () => {
+        initializeDragAndDropCol();
+        console.log('Iniciar arrasto');
+        colContainer.setAttribute('draggable', 'true');
+        colContainer.style.opacity = "0.5";
+        window.currentMovingElement = colContainer;
+    };
+
+    // Adiciona o evento onmouseup para finalizar o arrasto
+    moveButton.onmouseup = () => {
+        console.log('Terminar arrasto');
+        colContainer.setAttribute('draggable', 'false');
+        colContainer.style.opacity = "1";
+        window.currentMovingElement = null;
+    };
+}
+
+
+
 function initializeDragAndDropCol() {
     document.querySelectorAll('.form_row .components-container.col').forEach(col => {
         col.setAttribute('draggable', 'true');
@@ -225,5 +248,4 @@ function getDragAfterContainerCol(colContainer, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// Inicializa o sistema de arrastar e soltar ao carregar a página
-document.addEventListener('DOMContentLoaded', initializeDragAndDropCol);
+
