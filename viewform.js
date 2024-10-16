@@ -59,6 +59,12 @@ function previewForm() {
             col.style.border = 'none'; // Remove a borda da coluna
         });
 
+        // Oculta todos os botões no formulário
+        var buttons = dropAreaClone.querySelectorAll('.btn-form'); // Seleciona todos os botões com a classe 'btn-form'
+        buttons.forEach(function(button) {
+            button.style.display = 'none'; // Define o display como none para ocultar
+        });
+
         // Adiciona a drop-area clonada ao preview
         formPreview.appendChild(dropAreaClone);
 

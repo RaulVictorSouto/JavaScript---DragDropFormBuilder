@@ -1,4 +1,5 @@
 function addNewCol(button) {
+    console.log('AAAAAAAAAA');
     // Encontre a div form_row mais próxima do botão clicado
     var formRow = button.closest('.form_row');
     var colContainers = formRow.querySelectorAll('.components-container.col');
@@ -68,15 +69,17 @@ function createButtons(colContainer, formRow) {
 }
 
 function createButton(colContainer, className, innerHTML, onClick, additionalClass) {
-    var button = document.createElement('button');
-    button.classList.add('btn', 'btn-sm', className);
+    var button = document.createElement('button'); // Cria um novo elemento de botão
+    button.classList.add('btn', 'btn-sm', 'btn-form', className); // Adiciona classes padrão, btn-form e a classe fornecida
     if (additionalClass) {
         button.classList.add(additionalClass); // Adiciona a classe adicional, se fornecida
     }
-    button.innerHTML = innerHTML; // Use innerHTML para adicionar o ícone
-    button.onclick = onClick;
-    colContainer.appendChild(button);
+    button.innerHTML = innerHTML; // Define o conteúdo interno do botão
+    button.onclick = onClick; // Define a função de clique
+    colContainer.appendChild(button); // Adiciona o botão ao contêiner
 }
+
+
 
 
 
@@ -166,86 +169,101 @@ function turnColDrag(buttonContainer, colContainer){
 
 
 
+// Função que é chamada quando uma coluna começa a ser arrastada
+function handleColDragStart(event) {
+    const draggedElement = event.target; // O elemento que está sendo arrastado
+    draggedElement.classList.add('dragging-col'); // Adiciona uma classe visual para indicar que está sendo arrastado
+    window.currentMovingCol = draggedElement; // Armazena a coluna atualmente arrastada
+
+    // Adiciona eventos para permitir arrastar sobre outras colunas
+    document.querySelectorAll('.form_row .components-container.col').forEach(target => {
+        target.addEventListener('dragover', handleColDragOver); // Evento ao passar o mouse sobre a coluna
+        target.addEventListener('drop', handleColDrop); // Evento ao soltar a coluna
+    });
+}
+
+// Função chamada quando o arrasto termina
+function handleColDragEnd(event) {
+    const draggedElement = event.target; // O elemento que foi arrastado
+    draggedElement.classList.remove('dragging-col'); // Remove a classe visual de arraste
+    draggedElement.style.opacity = "1"; // Restaura a opacidade original do elemento
+
+    // Remove os eventos de arrastar e soltar das colunas
+    document.querySelectorAll('.form_row .components-container.col').forEach(target => {
+        target.removeEventListener('dragover', handleColDragOver); // Remove o evento de arrastar
+        target.removeEventListener('drop', handleColDrop); // Remove o evento de soltar
+    });
+
+    window.currentMovingCol = null; // Limpa a referência do elemento arrastado
+}
+
+// Função que lida com o evento de arrastar sobre uma coluna
+function handleColDragOver(event) {
+    console.log('1'); // Log para depuração, indicando que o evento está ativo
+    event.preventDefault(); // Impede o comportamento padrão para permitir que o elemento seja solto
+
+    const dragging = document.querySelector('.dragging-col'); // Seleciona o elemento que está sendo arrastado
+
+    // Verifica se há um elemento sendo arrastado e se o alvo é uma coluna
+    if (!dragging || !event.currentTarget.classList.contains('col')) return;
+
+    const formRow = dragging.closest('.form_row'); // Obtém a linha do formulário onde a coluna está
+    const afterElement = getDragAfterContainerCol(formRow, event.clientX); // Encontra a posição de inserção com base na posição do mouse
+
+    // Se não houver um elemento após o que está sendo arrastado, adiciona ao final
+    if (afterElement == null) {
+        formRow.appendChild(dragging); // Anexa o elemento arrastado ao final da linha
+    } else {
+        // Insere o elemento arrastado antes do elemento encontrado
+        formRow.insertBefore(dragging, afterElement);
+    }
+}
+
+// Função chamada quando um elemento é solto em uma coluna
+function handleColDrop(event) {
+    event.preventDefault(); // Impede o comportamento padrão do evento
+    const draggedElement = document.querySelector('.dragging-col'); // Seleciona o elemento que foi arrastado
+    if (draggedElement) {
+        draggedElement.classList.remove('dragging-col'); // Remove a classe de arraste
+        draggedElement.style.opacity = "1"; // Restaura a opacidade original
+    }
+
+    // Remove os eventos de arrastar e soltar das colunas
+    document.querySelectorAll('.form_row .components-container.col').forEach(target => {
+        target.removeEventListener('dragover', handleColDragOver);
+        target.removeEventListener('drop', handleColDrop);
+    });
+
+    window.currentMovingCol = null; // Limpa a referência do elemento arrastado
+}
+
+// Função para encontrar a coluna mais próxima para inserção com base na posição horizontal
+function getDragAfterContainerCol(formRow, x) {
+    // Seleciona todas as colunas que não estão sendo arrastadas
+    const elements = [...formRow.querySelectorAll('.components-container.col:not(.dragging)')];
+
+    // Usa reduce para determinar qual elemento está mais próximo da posição x do mouse
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect(); // Obtém a posição e tamanho da coluna
+        const offset = x - (box.left + box.width / 2); // Calcula a distância do mouse ao centro da coluna
+
+        // Verifica se a coluna atual é mais próxima do mouse que a anterior
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child }; // Atualiza o mais próximo
+        } else {
+            return closest; // Mantém o mais próximo encontrado
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element; // Retorna o elemento mais próximo
+}
+
+// Função para inicializar o sistema de arrastar e soltar para as colunas
 function initializeDragAndDropCol() {
     document.querySelectorAll('.form_row .components-container.col').forEach(col => {
-        col.setAttribute('draggable', 'true');
-        col.addEventListener('dragstart', handleColDragStart);
-        col.addEventListener('dragend', handleColDragEnd);
+        col.setAttribute('draggable', 'true'); // Define a coluna como arrastável
+        col.addEventListener('dragstart', handleColDragStart); // Adiciona o evento para iniciar o arrasto
+        col.addEventListener('dragend', handleColDragEnd); // Adiciona o evento para o fim do arrasto
     });
 }
 
-// Funções de arrastar e soltar
-function handleColDragStart(event) {
-    const draggedElement = event.target;
-    draggedElement.classList.add('dragging');
-    window.currentMovingCol = draggedElement;
-
-    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
-        target.addEventListener('dragover', handleColDragOver);
-        target.addEventListener('drop', handleColDrop);
-    });
-}
-
-function handleColDragEnd(event) {
-    console.log('cccccccccccccc');
-    const draggedElement = event.target;
-    draggedElement.classList.remove('dragging');
-
-    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
-        target.removeEventListener('dragover', handleColDragOver);
-        target.removeEventListener('drop', handleColDrop);
-    });
-}
-
-function handleColDragOver(event) {
-    event.preventDefault();
-    const colContainer = event.currentTarget;
-    const dragging = document.querySelector('.dragging');
-
-    if (dragging.classList.contains('col')) {
-        // Se a coluna está sendo arrastada e o alvo é uma coluna, ajuste a posição
-        const afterElement = getDragAfterContainerCol(colContainer, event.clientY);
-        const formRow = colContainer.closest('.form_row');
-
-        if (afterElement == null) {
-            formRow.appendChild(dragging);
-        } else {
-            formRow.insertBefore(dragging, afterElement);
-        }
-    }
-}
-
-function handleColDrop(event) {
-    event.preventDefault();
-    const draggedElement = document.querySelector('.dragging');
-    draggedElement.classList.remove('dragging');
-    draggedElement.style.opacity = "1";
-
-    const formRow = draggedElement.closest('.form_row');
-    if (formRow) {
-        formRow.appendChild(draggedElement);
-    }
-
-    window.currentMovingCol = null;
-
-    document.querySelectorAll('.form_row, .components-container.col').forEach(target => {
-        target.removeEventListener('dragover', handleColDragOver);
-        target.removeEventListener('drop', handleColDrop);
-    });
-}
-
-function getDragAfterContainerCol(colContainer, y) {
-    const elements = [...colContainer.parentElement.querySelectorAll('.components-container.col:not(.dragging)')];
-
-    return elements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - (box.top + box.height / 2);
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-        } else {
-            return closest;
-        }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
 
 

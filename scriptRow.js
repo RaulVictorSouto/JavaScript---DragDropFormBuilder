@@ -25,14 +25,14 @@ function addRow() {
     }
 
     var removeRowButton = document.createElement('button');
-    removeRowButton.classList.add('btn', 'btn-secondary', 'btn-sm', 'btn-remove');
+    removeRowButton.classList.add('btn', 'btn-form', 'btn-secondary', 'btn-sm', 'btn-remove');
     removeRowButton.innerHTML = '<i class="bi bi-x"></i>';
     removeRowButton.onclick = function() {
         row.remove(); // Remove a linha
     };
 
     var moveRowButton = document.createElement('button');
-    moveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button');
+    moveRowButton.classList.add('btn', 'btn-form', 'btn-info', 'btn-sm', 'move-button');
     moveRowButton.innerHTML = '<i class="bi bi-arrows-move"></i>';
     moveRowButton.onmousedown = function() {
         row.setAttribute('draggable', 'true');
@@ -45,7 +45,7 @@ function addRow() {
     };
 
     var upMoveRowButton = document.createElement('button');
-    upMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'up-button');
+    upMoveRowButton.classList.add('btn', 'btn-form', 'btn-info', 'btn-sm', 'move-button', 'up-button');
     upMoveRowButton.innerHTML = '<i class="bi bi-arrow-up"></i>';
     upMoveRowButton.onclick = function() {
         const div = upMoveRowButton.closest('.form_row');
@@ -57,7 +57,7 @@ function addRow() {
     };
 
     var downMoveRowButton = document.createElement('button');
-    downMoveRowButton.classList.add('btn', 'btn-info', 'btn-sm', 'move-button', 'down-button');
+    downMoveRowButton.classList.add('btn', 'btn-form', 'btn-info', 'btn-sm', 'move-button', 'down-button');
     downMoveRowButton.innerHTML = '<i class="bi bi-arrow-down"></i>';
     downMoveRowButton.onclick = function() {
         const div = downMoveRowButton.closest('.form_row');
@@ -69,7 +69,7 @@ function addRow() {
     };
 
     var adicionarColButton = document.createElement('button');
-    adicionarColButton.classList.add('btn', 'btn-info', 'btn-sm', 'addCol-button');
+    adicionarColButton.classList.add('btn', 'btn-form', 'btn-info', 'btn-sm', 'addCol-button');
     adicionarColButton.innerHTML = '<i class="bi bi-plus-square"> Adicionar Coluna</i>';
     adicionarColButton.onclick = function() {
         addNewCol(this); // Passa o botão clicado para a função
