@@ -126,7 +126,6 @@ function handleDragStart(event) {
     });
 }
 
-// Função para lidar com o evento de arrasto
 function handleDragOver(event) {
     event.preventDefault(); // Necessário para permitir o drop
 
@@ -136,25 +135,28 @@ function handleDragOver(event) {
     // Verifica se o alvo é uma div .components-container.col
     const targetCol = event.target.closest('.components-container.col');
     
-    // Se o alvo for uma .components-container.col, mova o componente para dentro dela
     if (targetCol) {
-        const afterElement = getDragAfterContainer(targetCol, event.clientY); // Posição vertical
-        
+        // Se o alvo for uma .components-container.col, use a função para movimentação vertical
+        const afterElement = getDragAfterContainerInColumn(targetCol, event.clientY);
+       
         if (afterElement === null) {
             targetCol.appendChild(dragging); // Coloca o componente no final se não houver elemento após
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         } else {
             targetCol.insertBefore(dragging, afterElement); // Insere o componente antes do elemento encontrado
+            console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
         }
     } else {
-        // Caso contrário, realiza o comportamento padrão
-        const afterElement = getDragAfterContainer(container, event.clientY);
+        // Caso contrário, realiza o comportamento para movimentação horizontal
+        const afterElement = getDragAfterContainer(container, event.clientX);
         
         if (afterElement === null) {
-            container.appendChild(dragging); // Se não houver nada abaixo, coloca no final
+            container.appendChild(dragging); // Se não houver nada à direita, coloca no final
         } else {
             container.insertBefore(dragging, afterElement); // Coloca antes do elemento encontrado
         }
     }
+    console.log('targetCol: ', targetCol);
 }
 
 
@@ -163,17 +165,39 @@ function handleDragOver(event) {
 // Função para lidar com o evento de drop
 function handleDrop(event) {
     console.log('handleDrop');
+    event.preventDefault(); // Impede o comportamento padrão do navegador
+
     const container = event.currentTarget;
     const dragging = document.querySelector('.dragging'); // O elemento que está sendo arrastado
 
-    // Se o elemento arrastado existe, mova-o para a nova posição
+    // Se o elemento arrastado existe
     if (dragging) {
-        const afterElement = getDragAfterContainer(container, event.clientY);
-        if (afterElement === null) {
-            container.appendChild(dragging);
-        } else {
-            container.insertBefore(dragging, afterElement);
+        // Verifica se o drop é em um contêiner de coluna ou um contêiner normal
+        const targetContainer = event.target.closest('.components-container, .components-container.col');
+
+        // Se o alvo do drop não for um contêiner válido, cancela a operação
+        if (!targetContainer) {
+            console.log('O componente deve ser adicionado em um contêiner válido.');
+            return; // Impede o drop se não estiver em um contêiner válido
         }
+
+        // Determina se o contêiner é uma coluna ou não
+        const isColumn = targetContainer.classList.contains('col');
+
+        // Usa a função apropriada para encontrar o elemento após o qual o dragging deve ser inserido
+        const afterElement = isColumn 
+            ? getDragAfterContainerinColumn(targetContainer, event.clientY) 
+            : getDragAfterContainer(targetContainer, event.clientX);
+
+        // Insere o elemento arrastado no lugar correto
+        if (afterElement === null) {
+            targetContainer.appendChild(dragging); // Coloca no final do contêiner
+        } else {
+            targetContainer.insertBefore(dragging, afterElement); // Insere antes do elemento encontrado
+        }
+
+        // Remove a classe 'dragging' do elemento que foi arrastado
+        dragging.classList.remove('dragging');
     }
 }
 
@@ -185,25 +209,52 @@ container.addEventListener('drop', handleDrop);
 
 
 
-// Função para determinar qual elemento está mais próximo do mouse
-function getDragAfterContainer(container, mouseY) {
+// Função para determinar qual elemento está mais próximo do mouse (movimentação horizontal)
+function getDragAfterContainer(container, mouseX) {
     const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')];
+    console.log('elements: ', elements);
 
     let closestElement = null;
-    let closestOffset = Number.NEGATIVE_INFINITY;
+    let closestOffset = Number.POSITIVE_INFINITY;
 
     elements.forEach(child => {
         const box = child.getBoundingClientRect();
-        const offset = mouseY - (box.top + box.height / 2);
+        const offset = mouseX - (box.left + box.width / 2);
 
-        if (offset < 0 && offset > closestOffset) {
-            closestOffset = offset;
+        // Se o offset for menor que zero, significa que o mouse está à esquerda do centro do elemento
+        if (offset < 0 && Math.abs(offset) < closestOffset) {
+            closestOffset = Math.abs(offset);
             closestElement = child;
         }
     });
 
     return closestElement;
 }
+
+// Função para determinar qual elemento está mais próximo do mouse (movimentação vertical)
+function getDragAfterContainerInColumn(container, mouseY) {
+
+    console.log('getDragAfterContainerInColumn');
+    const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')];
+    console.log('elements: ', elements);
+
+    let closestElement = null;
+    let closestOffset = Number.POSITIVE_INFINITY;
+
+    elements.forEach(child => {
+        const box = child.getBoundingClientRect();
+        const offset = mouseY - (box.top + box.height / 2);
+
+        // Se o offset for menor que zero, significa que o mouse está acima do centro do elemento
+        if (offset < 0 && Math.abs(offset) < closestOffset) {
+            closestOffset = Math.abs(offset);
+            closestElement = child;
+        }
+    });
+
+    return closestElement;
+}
+
 
 
 function stopMove() {

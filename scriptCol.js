@@ -80,9 +80,6 @@ function createButton(colContainer, className, innerHTML, onClick, additionalCla
 }
 
 
-
-
-
 // Funções para mover colunas para esquerda e direita
 function moveColLeft() {
     moveColumn(this, -1); // Passa -1 para mover para a esquerda
@@ -145,25 +142,24 @@ function removeButtons(colContainer) {
 
 // Sistema arrasta e solta
 
-function turnColDrag(buttonContainer, colContainer){
+function turnColDrag(buttonContainer, colContainer) {
     // Seleciona o botão que foi criado para adicionar os eventos
     const moveButton = buttonContainer.querySelector('.btn-move-col');
 
     // Adiciona o evento onmousedown para iniciar o arrasto
     moveButton.onmousedown = () => {
-        initializeDragAndDropCol();
+        initializeDragAndDropCol(colContainer);
         console.log('Iniciar arrasto');
-        colContainer.setAttribute('draggable', 'true');
-        colContainer.style.opacity = "0.5";
-        window.currentMovingElement = colContainer;
+        colContainer.style.opacity = "0.5"; // Diminuir a opacidade para indicar arrasto
     };
 
     // Adiciona o evento onmouseup para finalizar o arrasto
     moveButton.onmouseup = () => {
         console.log('Terminar arrasto');
+        colContainer.style.opacity = "1"; // Restaurar a opacidade original
+        // Remover o draggable e limpar referências
         colContainer.setAttribute('draggable', 'false');
-        colContainer.style.opacity = "1";
-        window.currentMovingElement = null;
+        window.currentMovingCol = null;
     };
 }
 
@@ -171,9 +167,17 @@ function turnColDrag(buttonContainer, colContainer){
 
 // Função que é chamada quando uma coluna começa a ser arrastada
 function handleColDragStart(event) {
-    const draggedElement = event.target; // O elemento que está sendo arrastado
-    draggedElement.classList.add('dragging-col'); // Adiciona uma classe visual para indicar que está sendo arrastado
-    window.currentMovingCol = draggedElement; // Armazena a coluna atualmente arrastada
+    const draggedElementCol = event.target; // O elemento que está sendo arrastado
+
+    // Verifica se o elemento arrastado é uma coluna
+    if (!draggedElementCol.classList.contains('col')) {
+        return; // Se não for uma coluna, não faça nada
+    }
+
+    draggedElementCol.classList.add('dragging-col'); // Adiciona uma classe visual para indicar que está sendo arrastado
+    window.currentMovingCol = draggedElementCol; // Armazena a coluna atualmente arrastada
+
+    console.log("draggedElementCol: ", draggedElementCol);
 
     // Adiciona eventos para permitir arrastar sobre outras colunas
     document.querySelectorAll('.form_row .components-container.col').forEach(target => {
@@ -181,6 +185,8 @@ function handleColDragStart(event) {
         target.addEventListener('drop', handleColDrop); // Evento ao soltar a coluna
     });
 }
+
+    
 
 // Função chamada quando o arrasto termina
 function handleColDragEnd(event) {
@@ -239,8 +245,10 @@ function handleColDrop(event) {
 
 // Função para encontrar a coluna mais próxima para inserção com base na posição horizontal
 function getDragAfterContainerCol(formRow, x) {
+    console.log('******************************************************');
     // Seleciona todas as colunas que não estão sendo arrastadas
     const elements = [...formRow.querySelectorAll('.components-container.col:not(.dragging)')];
+    console.log('elements: ', elements);
 
     // Usa reduce para determinar qual elemento está mais próximo da posição x do mouse
     return elements.reduce((closest, child) => {
@@ -249,11 +257,15 @@ function getDragAfterContainerCol(formRow, x) {
 
         // Verifica se a coluna atual é mais próxima do mouse que a anterior
         if (offset < 0 && offset > closest.offset) {
+            console.log('offset: ', offset);
+            console.log('closest: ', closest);
             return { offset: offset, element: child }; // Atualiza o mais próximo
         } else {
+            console.log('closest: ', closest);
             return closest; // Mantém o mais próximo encontrado
         }
     }, { offset: Number.NEGATIVE_INFINITY }).element; // Retorna o elemento mais próximo
+
 }
 
 // Função para inicializar o sistema de arrastar e soltar para as colunas
