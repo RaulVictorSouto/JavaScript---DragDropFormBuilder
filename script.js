@@ -16,6 +16,7 @@ function drag(event) {
 
 
 function drop(event) {
+    console.log('drop');
     event.preventDefault();
     event.target.classList.remove('dragover');
     var data = event.dataTransfer.getData("a");
@@ -106,6 +107,7 @@ function getControlButtons() {
 }
 
 function moveComponent(button) {
+    console.log('moveComponent');
     var element = button.closest('.conteudo_inserido');
     element.setAttribute('draggable', 'true');
     element.addEventListener('dragstart', handleDragStart);
@@ -114,6 +116,7 @@ function moveComponent(button) {
 }
 
 function handleDragStart(event) {
+    console.log('handleDragStart');
     const draggedElement = event.target;
     draggedElement.classList.add('dragging');
 
@@ -127,10 +130,19 @@ function handleDragStart(event) {
 }
 
 function handleDragOver(event) {
+    console.log('handleDragOver');
     event.preventDefault(); // Necessário para permitir o drop
 
     const container = event.currentTarget;
     const dragging = document.querySelector('.dragging'); // Certifique-se de que o elemento arrastado tem a classe .dragging
+
+    // Verifica se o elemento arrastado é uma .form_row
+    if (dragging.classList.contains('form_row')) {
+        // Impede que .form_row seja arrastada para dentro de qualquer .components-container
+        if (event.target.closest('.components-container')) {
+            return; // Sai da função para evitar a inserção em .components-container
+        }
+    }
 
     // Verifica se o alvo é uma div .components-container.col
     const targetCol = event.target.closest('.components-container.col');
@@ -141,10 +153,8 @@ function handleDragOver(event) {
        
         if (afterElement === null) {
             targetCol.appendChild(dragging); // Coloca o componente no final se não houver elemento após
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         } else {
             targetCol.insertBefore(dragging, afterElement); // Insere o componente antes do elemento encontrado
-            console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
         }
     } else {
         // Caso contrário, realiza o comportamento para movimentação horizontal
@@ -211,6 +221,7 @@ container.addEventListener('drop', handleDrop);
 
 // Função para determinar qual elemento está mais próximo do mouse (movimentação horizontal)
 function getDragAfterContainer(container, mouseX) {
+    console.log('getDragAfterContainer');
     const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')];
     console.log('elements: ', elements);
 
@@ -258,6 +269,7 @@ function getDragAfterContainerInColumn(container, mouseY) {
 
 
 function stopMove() {
+    console.log('stopMove');
     if (window.currentMovingElement) {
         window.currentMovingElement.setAttribute('draggable', 'false');
         window.currentMovingElement.style.opacity = "1";
@@ -266,11 +278,13 @@ function stopMove() {
 }
 
 function dragComponent(event) {
+    console.log('dragComponent');
     event.dataTransfer.setData("component", window.currentMovingElement.innerHTML);
 }
 
 
 function handleDropInButtonsContainer(event) {
+    console.log('handleDropInButtonsContainer');
     event.preventDefault(); // Impede o comportamento padrão do navegador
 
     // Caso o elemento tenha sido arrastado, podemos restaurar sua posição ou cancelar o drop
@@ -292,6 +306,7 @@ function handleDropInButtonsContainer(event) {
 
 //função para colocar novos componentes no formulário
 function dropComponentInRow(event) {
+    console.log('dropComponentInRow');
     console.log('função para colocar componente'); // Log para verificar chamada
     // Impede o comportamento padrão do navegador ao soltar o elemento
     event.preventDefault();

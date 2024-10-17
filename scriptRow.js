@@ -126,9 +126,10 @@ function dropRowInRow(event) {
     var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
     var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
     var targetContainer = event.target.closest('.components-container'); // Verifica se o alvo do drop é um components-container
-    // Verifica se o alvo do drop é um form_row, se não é um filho, e se não é um components-container
-    if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || targetContainer) {
-        return; // Evita que a linha seja solta se não for um form_row, se for o próprio, ou se estiver dentro de components-container
+
+    // Verifica se o alvo do drop é um form_row, se não é um filho, se não é um components-container e se não é .components-container.col
+    if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || (targetContainer && targetContainer.classList.contains('col'))) {
+        return; // Evita que a linha seja solta se não for um form_row, se for o próprio, ou se estiver dentro de .components-container.col
     }
 
     // Adiciona a linha no local correto, antes ou depois da linha alvo
@@ -151,6 +152,7 @@ function dropRowInRow(event) {
 
 // Função para determinar onde a row arrastada deve ser posicionada
 function getDragAfterElement(container, y) {
+    console.log('getDragAfterElement');
     const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
 
     return draggableElements.reduce((closest, child) => {

@@ -205,15 +205,15 @@ function handleColDragEnd(event) {
 
 // Função que lida com o evento de arrastar sobre uma coluna
 function handleColDragOver(event) {
-    console.log('1'); // Log para depuração, indicando que o evento está ativo
+    console.log('handleColDragOver'); // Log para depuração, indicando que o evento está ativo
     event.preventDefault(); // Impede o comportamento padrão para permitir que o elemento seja solto
 
     const dragging = document.querySelector('.dragging-col'); // Seleciona o elemento que está sendo arrastado
 
-    // Verifica se há um elemento sendo arrastado e se o alvo é uma coluna
-    if (!dragging || !event.currentTarget.classList.contains('col')) return;
+    // Verifica se há um elemento sendo arrastado
+    if (!dragging) return;
 
-    const formRow = dragging.closest('.form_row'); // Obtém a linha do formulário onde a coluna está
+    const formRow = event.currentTarget.closest('.form_row'); // Obtém a linha do formulário onde o evento ocorreu
     const afterElement = getDragAfterContainerCol(formRow, event.clientX); // Encontra a posição de inserção com base na posição do mouse
 
     // Se não houver um elemento após o que está sendo arrastado, adiciona ao final
@@ -224,6 +224,7 @@ function handleColDragOver(event) {
         formRow.insertBefore(dragging, afterElement);
     }
 }
+
 
 // Função chamada quando um elemento é solto em uma coluna
 function handleColDrop(event) {
@@ -276,6 +277,3 @@ function initializeDragAndDropCol() {
         col.addEventListener('dragend', handleColDragEnd); // Adiciona o evento para o fim do arrasto
     });
 }
-
-
-
