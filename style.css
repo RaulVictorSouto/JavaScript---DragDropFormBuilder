@@ -43,9 +43,9 @@
 }
 
 .form_row {
-    margin-bottom: 30px;
-    padding-bottom: 30px;
-    padding-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     border: 1px dashed #bbb;
     display: flex;
     flex-wrap: wrap;
@@ -80,7 +80,8 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    min-height: 70px;
+    min-height: 80px;
+    transition: min-height 0.2s ease-in-out;
 }
 
 .container-fluid {
@@ -98,7 +99,7 @@
 }
 
 .buttons-container {
-    display: flex; /* Usando flexbox para alinhar os botões */
+    /* display: flex; */
     margin-bottom: 20px;
     margin-top: 5px;
     width: 100%;

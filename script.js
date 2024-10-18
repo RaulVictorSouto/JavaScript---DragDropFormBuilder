@@ -208,6 +208,7 @@ function handleDrop(event) {
 
         // Remove a classe 'dragging' do elemento que foi arrastado
         dragging.classList.remove('dragging');
+        dragging.style.opacity = '1';
     }
 }
 
