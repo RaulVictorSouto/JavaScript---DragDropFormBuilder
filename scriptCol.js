@@ -254,7 +254,7 @@ function getDragAfterContainerCol(formRow, x) {
     // Usa reduce para determinar qual elemento está mais próximo da posição x do mouse
     return elements.reduce((closest, child) => {
         const box = child.getBoundingClientRect(); // Obtém a posição e tamanho da coluna
-        const offset = x - (box.left + box.width / 2); // Calcula a distância do mouse ao centro da coluna
+        const offset = x - (box.left + box.width / 4); // Calcula a distância do mouse ao centro da coluna
 
         // Verifica se a coluna atual é mais próxima do mouse que a anterior
         if (offset < 0 && offset > closest.offset) {

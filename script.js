@@ -223,6 +223,8 @@ container.addEventListener('drop', handleDrop);
 // Função para determinar qual elemento está mais próximo do mouse (movimentação horizontal)
 function getDragAfterContainer(container, mouseX) {
     console.log('getDragAfterContainer');
+    
+    // Obtém todos os elementos '.conteudo_inserido' que não estão sendo arrastados, dentro do container atual
     const elements = [...container.querySelectorAll('.conteudo_inserido:not(.dragging)')];
     console.log('elements: ', elements);
 
@@ -240,8 +242,18 @@ function getDragAfterContainer(container, mouseX) {
         }
     });
 
+    // Verifica se o elemento mais próximo está dentro do container correto
+    if (closestElement && closestElement.closest('.form_row') !== container.closest('.form_row')) {
+        // Se o elemento mais próximo não pertence ao mesmo 'form_row', ignora
+        closestElement = null;
+    }
+
     return closestElement;
 }
+
+
+
+
 
 // Função para determinar qual elemento está mais próximo do mouse (movimentação vertical)
 function getDragAfterContainerInColumn(container, mouseY) {
