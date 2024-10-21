@@ -102,62 +102,67 @@ function addRow() {
 }
 
 
-// Detectar quando o item começa a ser arrastado
+function dropRowInRow(event) {
+    event.preventDefault();
+
+    var draggedRow = window.currentMovingElement;
+    var targetRow = event.target.closest('.form_row');
+    var targetContainer = event.target.closest('.components-container');
+
+    // Verifica se o alvo é válido
+    if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || (targetContainer && targetContainer.classList.contains('col'))) {
+        return;
+    }
+
+    const container = targetRow.parentElement;
+    const afterElement = getDragAfterElement(container, event.clientY);
+
+    // Remove as classes de destaque
+    clearHoverEffect();
+
+    // Adiciona a linha no local correto
+    if (afterElement === null) {
+        container.appendChild(draggedRow);
+    } else {
+        container.insertBefore(draggedRow, afterElement);
+    }
+
+    // Restaura a opacidade original da linha arrastada
+    draggedRow.style.opacity = '1';
+    draggedRow.classList.remove('dragging');
+    window.currentMovingElement = null;
+}
+
+// Adiciona o estilo de arrastando
 document.addEventListener('dragstart', function(e) {
     if (e.target.classList.contains('form_row')) {
         e.target.classList.add('dragging');
-        window.currentMovingElement = e.target; // Armazena o elemento que está sendo arrastado
+        e.target.style.opacity = '0.5'; // Reduz a opacidade durante o arrasto
+        window.currentMovingElement = e.target;
     }
 });
 
-// Detectar quando o item deixa de ser arrastado
+// Remove o estilo de arrastando e o efeito ao terminar
 document.addEventListener('dragend', function(e) {
     if (e.target.classList.contains('dragging')) {
         e.target.classList.remove('dragging');
-        e.target.style.opacity = "1";
+        e.target.style.opacity = '1'; // Restaura a opacidade original ao terminar o arrasto
     }
+    clearHoverEffect();
 });
 
-
-function dropRowInRow(event) {
-    console.log('dropRowInRow'); // Log para verificar a chamada da função
-    event.preventDefault(); // Impede o comportamento padrão do navegador ao soltar o elemento
-
-    var draggedRow = window.currentMovingElement; // Obtém o elemento que está sendo arrastado
-    var targetRow = event.target.closest('.form_row'); // Verifica se o alvo do drop é um form_row
-    var targetContainer = event.target.closest('.components-container'); // Verifica se o alvo do drop é um components-container
-
-    // Verifica se o alvo do drop é um form_row, se não é um filho, se não é um components-container e se não é .components-container.col
-    if (!targetRow || draggedRow === targetRow || !draggedRow.classList.contains('form_row') || (targetContainer && targetContainer.classList.contains('col'))) {
-        return; // Evita que a linha seja solta se não for um form_row, se for o próprio, ou se estiver dentro de .components-container.col
-    }
-
-    // Adiciona a linha no local correto, antes ou depois da linha alvo
-    const container = targetRow.parentElement; // Obtém o contêiner pai da linha alvo
-    const afterElement = getDragAfterElement(container, event.clientY); // Obtém o elemento após o qual a linha arrastada deve ser inserida
-
-    if (afterElement === null) {
-        container.appendChild(draggedRow); // Se não houver linha depois, coloca no final
-    } else {
-        container.insertBefore(draggedRow, afterElement); // Caso contrário, insere antes do elemento encontrado
-    }
-
-    console.log('Linha arrastada:', draggedRow);
-    console.log('Linha alvo:', targetRow);
+// Função para limpar o efeito de hover
+function clearHoverEffect() {
+    document.querySelectorAll('.form_row.hovered').forEach(el => el.classList.remove('hovered'));
 }
 
-
-
-
-
-// Função para determinar onde a row arrastada deve ser posicionada
+// Função para determinar onde a linha arrastada deve ser posicionada
 function getDragAfterElement(container, y) {
-    console.log('getDragAfterElement');
     const draggableElements = [...container.querySelectorAll('.form_row:not(.dragging)')];
 
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 4; // Calcula a posição vertical do mouse
+        const offset = y - box.top - box.height / 4;
 
         if (offset < 0 && offset > closest.offset) {
             return { offset: offset, element: child };
@@ -166,3 +171,21 @@ function getDragAfterElement(container, y) {
         }
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
+
+// Função para adicionar o efeito de borda quando o usuário arrasta a linha sobre outra linha
+document.addEventListener('dragover', function(e) {
+    e.preventDefault();
+
+    const targetRow = e.target.closest('.form_row');
+
+    if (!targetRow) {
+        return;
+    }
+
+    // Limpa o efeito de hover anterior
+    clearHoverEffect();
+
+    // Adiciona a classe .hovered à linha alvo para mudar a borda
+    targetRow.classList.add('hovered');
+});
+
