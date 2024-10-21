@@ -53,11 +53,6 @@
     transition: all 0.3s ease; /* Transição suave para mudanças */
 }
 
-/* Estilo para a linha alvo com borda colorida durante o arrasto */
-.form_row.hovered {
-    border: 2px dashed #007BFF; /* Cor da borda durante o arrasto */
-    transition: border-color 0.2s ease-in-out; /* Suaviza a mudança de cor */
-}
 
 .dragging {
     opacity: 0.7;

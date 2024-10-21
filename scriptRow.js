@@ -101,7 +101,6 @@ function addRow() {
     dropArea.appendChild(row);
 }
 
-
 function dropRowInRow(event) {
     event.preventDefault();
 
@@ -153,7 +152,10 @@ document.addEventListener('dragend', function(e) {
 
 // Função para limpar o efeito de hover
 function clearHoverEffect() {
-    document.querySelectorAll('.form_row.hovered').forEach(el => el.classList.remove('hovered'));
+    document.querySelectorAll('.form_row.hovered').forEach(el => {
+        el.classList.remove('hovered');
+        el.style.borderImage = ''; // Remove o degradê da borda
+    });
 }
 
 // Função para determinar onde a linha arrastada deve ser posicionada
@@ -172,7 +174,7 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// Função para adicionar o efeito de borda quando o usuário arrasta a linha sobre outra linha
+// Função para adicionar o efeito de borda com degradê ao passar sobre a linha alvo
 document.addEventListener('dragover', function(e) {
     e.preventDefault();
 
@@ -185,7 +187,24 @@ document.addEventListener('dragover', function(e) {
     // Limpa o efeito de hover anterior
     clearHoverEffect();
 
-    // Adiciona a classe .hovered à linha alvo para mudar a borda
+    // Adiciona a classe .hovered à linha alvo para mudar o efeito
     targetRow.classList.add('hovered');
+
+    const box = targetRow.getBoundingClientRect();
+    const offsetY = e.clientY - box.top; // Calcula a posição do mouse em relação ao topo da linha
+    const height = box.height;
+
+    // Define o estilo de borda com degradê dependendo da posição do cursor
+    if (offsetY < height / 3) {
+        // Cursor próximo ao topo - borda superior mais escura
+        targetRow.style.borderImage = 'linear-gradient(to bottom, rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0)) 1';
+    } else if (offsetY > (2 * height) / 3) {
+        // Cursor próximo ao fundo - borda inferior mais escura
+        targetRow.style.borderImage = 'linear-gradient(to top, rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0)) 1';
+    } else {
+        // Cursor no meio - borda uniforme
+        targetRow.style.borderImage = ''; // Remove qualquer degradê
+        targetRow.style.border = '1px dashed #bbb'; // Aplica o estilo padrão
+    }
 });
 
