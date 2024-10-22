@@ -81,7 +81,7 @@ function editComponent(button) {
 
 function saveChanges() {
     // Obtém o novo texto inserido pelo usuário
-    var newName = document.getElementById('componentName').value;
+    var newName = document.getElementById('componentName').value.charAt(0).toUpperCase() + document.getElementById('componentName').value.slice(1);
 
     // Obtém o novo ID inserido pelo usuário
     var newId = document.getElementById('componentId').value;

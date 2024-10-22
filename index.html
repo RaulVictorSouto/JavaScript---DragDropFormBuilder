@@ -54,7 +54,7 @@
                                 <select class='form-control' id='caixaSelecao' name='caixaSelecao'>
                                 </select>
                                 <button type='button' class='btn btn-primary addOptionButton' onclick='addOption(this)'>Adicionar Opção</button>
-                                <button type='button' class='btn btn-danger removeOptionButton' onclick='removeOption(this)'>Remover Opção</button>
+                                <button type='button' class='btn btn-secondary removeOptionButton' onclick='removeOption(this)'>Remover Opção</button>
                             </div>" 
                         data-type="select">
                         Caixa de Seleção
@@ -78,7 +78,7 @@
                                         <label for='imagem'>Imagem:</label>
                                         <input type='file' class='form-control' id='imagem' name='imagem' accept='image/*' onchange='previewImage(event)'>
                                         <img src='' id='imagePreview' alt='Pré-visualização da Imagem' style='max-width: 100%; height: auto; display: none;'>
-                                        <button type='button' class='btn btn-danger' id='removeImageButton' style='display: none;' onclick='removeImage(this)'>Remover Imagem</button>
+                                        <button type='button' class='btn btn-secondary' id='removeImageButton' style='display: none;' onclick='removeImage(this)'>Remover Imagem</button>
                                     </div>" 
                         data-type="file">
                         Campo de Imagem
@@ -276,7 +276,7 @@
                     <textarea class="form-control" id="description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Padding</label>
+                    <label>Espaçamento Interno</label>
                     <div class="row">
                         <div class="col">
                             <label for="paddingTop">Superior</label>
@@ -299,7 +299,7 @@
                 <div class="form-group">
                     <label for="backgroundImage">Imagem de Fundo</label>
                     <input type="file" class="form-control" id="backgroundImage" accept="image/*">
-                    <button type="button" class="btn btn-danger mt-2" id="removeBackgroundImage" onclick="removeBackgroundImage()">Remover Imagem</button>
+                    <button type="button" class="btn btn-secondary mt-2" id="removeBackgroundImage" onclick="removeBackgroundImage()">Remover Imagem</button>
                 </div>
 
                 <!--Apenas divs-->
