@@ -1,49 +1,40 @@
-function editComponent(button) {
-    // Obtém o elemento pai do botão clicado, que é o contêiner do componente
-    var element = button.closest('.conteudo_inserido');
+// Objeto global para armazenar as cores de fundo de cada componente
+var componentBackgroundColors = {};
 
-    // Inicializa uma variável para armazenar o elemento alvo que será editado (label, botão, ou <h3>)
+function editComponent(button) {
+    var element = button.closest('.conteudo_inserido');
     var targetElement;
 
-    // Verifica se o componente contém um campo de input
+    // Selecionando os elementos alvo
     if (element.querySelector('input')) {
-        // Se for um campo de input, pega o label correspondente
         targetElement = element.querySelector('label');
-    } 
-    // Verifica se o componente contém um botão, mas ignora o botão de editar/remover
-    else if (element.querySelector('button') && button !== element.querySelector('button')) {
-        // Se for um botão, define o botão como alvo
+    } else if (element.querySelector('button') && button !== element.querySelector('button')) {
         targetElement = element.querySelector('button');
-    } 
-    // Verifica se o componente contém um campo de seleção (dropdown)
-    else if (element.querySelector('select')) {
-        // Se for um dropdown, pega o label correspondente
+    } else if (element.querySelector('select')) {
         targetElement = element.querySelector('label');
-    }
-    // Verifica se o componente contém um título <h3>
-    else if (element.querySelector('h3')) {
-        // Se for um título <h3>, define como o elemento alvo
+    } else if (element.querySelector('h3')) {
         targetElement = element.querySelector('h3');
     }
 
-    // Se encontrou o elemento correto (label, botão, ou <h3>), continua com o processo de edição
     if (targetElement) {
+        // Preencher nome e ID do componente
+        document.getElementById('componentName').value = targetElement.innerText || '';
+        document.getElementById('componentId').value = targetElement.id || '';
 
-        // Preenche o nome/conteúdo do componente
-        document.getElementById('componentName').value = targetElement.innerText;
+        // Obter estilos computados
+        var computedStyles = window.getComputedStyle(targetElement);
+        document.getElementById('fontSize').value = parseInt(computedStyles.fontSize);
+        document.getElementById('fontColor').value = computedStyles.color;
 
-        // Preenche o ID atual do componente
-        document.getElementById('componentId').value = targetElement.id;
+        // Obter a cor de fundo
+        var backgroundColor = computedStyles.backgroundColor;
 
-        // Preenche os estilos de fonte, cor, etc.
-        document.getElementById('fontSize').value = parseInt(window.getComputedStyle(targetElement).fontSize); // Tamanho da fonte
-        document.getElementById('fontColor').value = window.getComputedStyle(targetElement).color; // Cor da fonte
+        // Armazenar e definir a cor de fundo
+        componentBackgroundColors[targetElement.id] = backgroundColor;
+        document.getElementById('backgroundColor').value = backgroundColor;
 
-        // Obtém a cor de fundo do elemento
-        var backgroundColor = window.getComputedStyle(targetElement).backgroundColor;
-
-        // Se o componente não for um botão, aplica a verificação de fundo transparente
-        if (element.querySelector('button') && button !== element.querySelector('button')) {
+         // Se o componente não for um botão, aplica a verificação de fundo transparente
+         if (element.querySelector('button') && button !== element.querySelector('button')) {
             // Verifica se o fundo está transparente ou indefinido (pode ser 'rgba(0, 0, 0, 0)' ou 'transparent')
             if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
                 // Marca o checkbox de fundo transparente
@@ -58,39 +49,39 @@ function editComponent(button) {
             document.getElementById('fontColor').value = '#ffffff';
         }
 
-        // Verifica estilos como negrito, itálico, sublinhado, cortado
-        document.getElementById('boldCheckbox').checked = window.getComputedStyle(targetElement).fontWeight === 'bold';
-        document.getElementById('italicCheckbox').checked = window.getComputedStyle(targetElement).fontStyle === 'italic';
-        document.getElementById('strikethroughCheckbox').checked = window.getComputedStyle(targetElement).textDecoration.includes('line-through');
+        // Verificações de estilos de fonte
+        document.getElementById('boldCheckbox').checked = computedStyles.fontWeight === 'bold';
+        document.getElementById('italicCheckbox').checked = computedStyles.fontStyle === 'italic';
+        document.getElementById('strikethroughCheckbox').checked = computedStyles.textDecoration.includes('line-through');
 
-        // Verifica o alinhamento de texto
-        document.getElementById('textAlignSelect').value = window.getComputedStyle(targetElement).textAlign;
+        // Estilos de alinhamento de texto e borda
+        document.getElementById('textAlignSelect').value = computedStyles.textAlign;
+        document.getElementById('borderStyleSelect').value = computedStyles.borderStyle;
+        document.getElementById('borderWidth').value = parseInt(computedStyles.borderWidth);
+        document.getElementById('borderColor').value = computedStyles.borderColor;
+        document.getElementById('backgroundColor').value = computedStyles.borderColor;
 
-        // Verifica estilos de borda
-        document.getElementById('borderStyleSelect').value = window.getComputedStyle(targetElement).borderStyle;
-        document.getElementById('borderWidth').value = parseInt(window.getComputedStyle(targetElement).borderWidth);
-        document.getElementById('borderColor').value = window.getComputedStyle(targetElement).borderColor;
-
-        // Abre o modal de edição usando Bootstrap
+        // Mostrar o modal
         $('#editComponentModal').modal('show');
-
-        // Armazena a referência ao elemento que está sendo editado para atualizá-lo mais tarde
         window.currentEditingElement = targetElement;
+
+        console.log('Elemento editado: ', targetElement);
+        console.log('Cor de fundo armazenada: ', componentBackgroundColors[targetElement.id]);
     }
 }
 
 function saveChanges() {
     // Obtém o novo texto inserido pelo usuário
     var newName = document.getElementById('componentName').value.charAt(0).toUpperCase() + document.getElementById('componentName').value.slice(1);
-
-    // Obtém o novo ID inserido pelo usuário
+    
+    // Obtém o novo ID
     var newId = document.getElementById('componentId').value;
-
-    // Obtém as opções de estilo escolhidas pelo usuário
+    
+    // Obtém opções de estilo escolhidas pelo usuário
     var selectedFont = document.getElementById('fontSelect').value;
     var selectedTextAlign = document.getElementById('textAlignSelect').value;
     var selectedBorderStyle = document.getElementById('borderStyleSelect').value;
-
+    
     // Novas opções adicionadas
     var fontSize = document.getElementById('fontSize').value + 'px'; // Tamanho da fonte
     var fontColor = document.getElementById('fontColor').value;      // Cor da fonte
@@ -101,7 +92,6 @@ function saveChanges() {
     var isBold = document.getElementById('boldCheckbox').checked;     // Negrito
     var isItalic = document.getElementById('italicCheckbox').checked; // Itálico
     var isStrikethrough = document.getElementById('strikethroughCheckbox').checked; // Cortado
-
 
     // Atualiza o texto do componente (botão, label ou <h3>)
     if (window.currentEditingElement) {
@@ -122,7 +112,7 @@ function saveChanges() {
         window.currentEditingElement.style.color = fontColor;
 
         // Aplicar cor de fundo
-        if (isTransparent === true) {
+        if (isTransparent) {
             window.currentEditingElement.style.backgroundColor = 'transparent'; // Para um fundo transparente
         } else {
             window.currentEditingElement.style.backgroundColor = backgroundColor;
@@ -140,7 +130,7 @@ function saveChanges() {
         window.currentEditingElement.style.fontWeight = isBold ? 'bold' : 'normal';
         window.currentEditingElement.style.fontStyle = isItalic ? 'italic' : 'normal';
 
-        // Aplicar cortado (tachado) e sublinhado
+        // Aplicar cortado (tachado)
         window.currentEditingElement.style.textDecoration = '';
         if (isStrikethrough) {
             window.currentEditingElement.style.textDecoration += 'line-through ';
@@ -150,6 +140,7 @@ function saveChanges() {
     // Fechar o modal
     $('#editComponentModal').modal('hide');
 }
+
 
 function previewImage(event) {
     var input = event.target; // O input file que disparou o evento
