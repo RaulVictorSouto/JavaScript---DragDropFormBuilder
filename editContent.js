@@ -84,7 +84,14 @@ function editComponent(button) {
         document.getElementById('strikethroughCheckbox').checked = computedStyles.textDecoration.includes('line-through');
 
         // Estilos de alinhamento de texto e largura da borda
-        document.getElementById('textAlignSelect').value = computedStyles.textAlign;
+        var textAlign = computedStyles.textAlign;
+        if (textAlign === 'left' || textAlign === 'start') {
+            document.getElementById('textAlignSelect').value = 'left';
+        } else if (textAlign === 'center') {
+            document.getElementById('textAlignSelect').value = 'center';
+        } else if (textAlign === 'right' || textAlign === 'end') {
+            document.getElementById('textAlignSelect').value = 'right';
+        }
         document.getElementById('borderWidth').value = parseInt(computedStyles.borderWidth);
 
         // Mostrar o modal
@@ -98,8 +105,6 @@ function editComponent(button) {
         console.log('Cor da fonte: ', fontColorHex);
     }
 }
-
-
 
 
 
