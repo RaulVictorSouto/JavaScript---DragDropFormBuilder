@@ -1,5 +1,16 @@
-// Objeto global para armazenar as cores de fundo de cada componente
-var componentBackgroundColors = {};
+// Função para converter cor RGB para hexadecimal
+function rgbToHex(rgb) {
+    // Extrai os valores R, G e B
+    var result = rgb.match(/\d+/g);
+    if (result) {
+        var r = parseInt(result[0]).toString(16).padStart(2, '0');
+        var g = parseInt(result[1]).toString(16).padStart(2, '0');
+        var b = parseInt(result[2]).toString(16).padStart(2, '0');
+        // Retorna o valor hexadecimal no formato #RRGGBB
+        return `#${r}${g}${b}`;
+    }
+    return '#000000'; // Valor padrão se a conversão falhar
+}
 
 function editComponent(button) {
     var element = button.closest('.conteudo_inserido');
@@ -24,29 +35,47 @@ function editComponent(button) {
         // Obter estilos computados
         var computedStyles = window.getComputedStyle(targetElement);
         document.getElementById('fontSize').value = parseInt(computedStyles.fontSize);
-        document.getElementById('fontColor').value = computedStyles.color;
 
-        // Obter a cor de fundo
+        // Converter a cor da fonte para hexadecimal
+        var fontColor = computedStyles.color;
+        var fontColorHex = rgbToHex(fontColor);
+        document.getElementById('fontColor').value = fontColorHex;
+
+        // Obter a cor de fundo e converter para hexadecimal
         var backgroundColor = computedStyles.backgroundColor;
+        var backgroundColorHex = rgbToHex(backgroundColor);
+        document.getElementById('backgroundColor').value = backgroundColorHex;
 
-        // Armazenar e definir a cor de fundo
-        componentBackgroundColors[targetElement.id] = backgroundColor;
-        document.getElementById('backgroundColor').value = backgroundColor;
+        // Converter a cor da borda para hexadecimal
+        var borderColor = computedStyles.borderColor;
+        var borderColorHex = rgbToHex(borderColor);
+        
+        // Verifica se a cor da borda não é transparente ou inexistente
+        if (borderColor === 'transparent' || borderColor === 'rgba(0, 0, 0, 0)') {
+            document.getElementById('borderColor').value = '#000000'; // Define um valor padrão
+        } else {
+            document.getElementById('borderColor').value = borderColorHex;
+        }
 
-         // Se o componente não for um botão, aplica a verificação de fundo transparente
-         if (element.querySelector('button') && button !== element.querySelector('button')) {
-            // Verifica se o fundo está transparente ou indefinido (pode ser 'rgba(0, 0, 0, 0)' ou 'transparent')
-            if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
-                // Marca o checkbox de fundo transparente
-                document.getElementById('transparentCheckbox').checked = true;
-            } else {
-                // Define a cor de fundo no modal, se estiver definida
-                document.getElementById('backgroundColor').value = '#007BFF';
-                document.getElementById('transparentCheckbox').checked = false;
-                document.getElementById('borderColor').value = '#007BFF';
-            }
-            // Define a cor da fonte padrão para botões
+        // Verificar e definir o estilo da borda
+        var borderStyle = computedStyles.borderStyle;
+        if (borderStyle === 'none') {
+            document.getElementById('borderStyleSelect').value = 'solid'; // Define um estilo padrão
+        } else {
+            document.getElementById('borderStyleSelect').value = borderStyle;
+        }
+
+        // Verificação de fundo transparente
+        if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
+            document.getElementById('transparentCheckbox').checked = true;
+        } else {
+            document.getElementById('transparentCheckbox').checked = false;
+        }
+
+        // Se o elemento for um botão, definir cores específicas
+        if (element.querySelector('button') && button !== element.querySelector('button')) {
             document.getElementById('fontColor').value = '#ffffff';
+            document.getElementById('borderColor').value = '#007BFF';
         }
 
         // Verificações de estilos de fonte
@@ -54,21 +83,25 @@ function editComponent(button) {
         document.getElementById('italicCheckbox').checked = computedStyles.fontStyle === 'italic';
         document.getElementById('strikethroughCheckbox').checked = computedStyles.textDecoration.includes('line-through');
 
-        // Estilos de alinhamento de texto e borda
+        // Estilos de alinhamento de texto e largura da borda
         document.getElementById('textAlignSelect').value = computedStyles.textAlign;
-        document.getElementById('borderStyleSelect').value = computedStyles.borderStyle;
         document.getElementById('borderWidth').value = parseInt(computedStyles.borderWidth);
-        document.getElementById('borderColor').value = computedStyles.borderColor;
-        document.getElementById('backgroundColor').value = computedStyles.borderColor;
 
         // Mostrar o modal
         $('#editComponentModal').modal('show');
         window.currentEditingElement = targetElement;
 
         console.log('Elemento editado: ', targetElement);
-        console.log('Cor de fundo armazenada: ', componentBackgroundColors[targetElement.id]);
+        console.log('Cor de fundo armazenada: ', backgroundColorHex);
+        console.log('Cor do campo de background: ', document.getElementById('backgroundColor').value);
+        console.log('Cor da borda: ', borderColorHex);
+        console.log('Cor da fonte: ', fontColorHex);
     }
 }
+
+
+
+
 
 function saveChanges() {
     // Obtém o novo texto inserido pelo usuário
