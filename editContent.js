@@ -301,3 +301,8 @@ function removeOption(button) {
         alert("Por favor, selecione uma opção para remover.");
     }
 }
+
+
+function setColor(inputId, color) {
+    document.getElementById(inputId).value = color;
+}

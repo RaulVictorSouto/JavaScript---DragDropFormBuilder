@@ -130,3 +130,4 @@ function removeBackgroundImage() {
         console.error("Nenhum elemento está sendo editado para remover a imagem de fundo");
     }
 }
+

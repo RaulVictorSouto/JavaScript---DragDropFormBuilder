@@ -257,6 +257,22 @@
 }
 
 
-
+.color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+.color-box {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border: 1px solid #000;
+}
+.color-box:hover {
+    border: 2px solid #000;
+}
 
 
